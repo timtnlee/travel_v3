@@ -1,0 +1,24 @@
+<p>Psersonal page</p>
+<p id='name'></p>
+<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+<img id='usericon' src=''>
+
+<script>
+if(localStorage.logined=='yes')
+$('._loading').css('display','block');
+AjaxPost(
+	'user/personal',
+	{name:localStorage.username},
+	function(res){
+		$('#usericon').attr('src',res.icon);
+		$('._loading').css('display','none');
+	}
+	)
+	$('#name').text(localStorage.username);
+</script>
+
+<style>
+	#usericon{
+		width: 300px;
+	}
+</style>

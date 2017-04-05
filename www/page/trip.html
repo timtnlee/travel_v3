@@ -1,0 +1,243 @@
+<div class="map_article_title">		
+	<h3>地圖文章<a href="mapArticle" reload='true'>新增地圖文章</a></h3>
+	<div id='mapArticleArea'>
+		<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+	</div>
+</div>
+
+<div class="single_map_article">
+	<div id='map'></div>
+
+	<div id='single_article'>
+		<a href='javascript:void(0)' id='map_goback'>
+			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
+		</a>
+		<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+		<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+		<div id='map_article'>
+			<p id='map_title'><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
+			<p id='map_date'></p>
+			<p id='map_author'></p>
+				
+		</div>
+	</div>
+</div>
+
+	<div id='start_page'>
+		
+	</div>
+
+<style>
+	.map_article_title{
+		min-height:50vh; 
+	}
+	.map_article_title img{
+		width: 100px;
+		display: inline;
+	}
+	.map_article_title p{
+		padding: 20px 10px 20px 10px;
+		border-bottom: 1px solid lightgray;
+		margin: 0;
+		cursor: pointer;
+	}
+	.map_article_title p:hover{
+		background-color: lightgray;
+	}
+	.map_article_title h3{
+		padding: 15px;
+		border-bottom: 1px solid lightgray;
+		margin: 0;
+	}
+	.map_article_title a{
+		display: inline-block;
+		color: gray;
+	} 
+	.single_map_article{
+		display:none;
+	}
+	.single_map_article img{
+		max-width: 500px;
+	}
+	.single_map_article a{
+		font-size: 18px;
+		color:#3C3C3C;
+	}
+	#map{
+		width: 50vw;
+		height: 100vh;
+		float: left;
+	}
+	#single_article{
+		width: 45vw;
+		height: 100vh;
+		float: left;
+	}
+	.fa-chevron-left,.fa-chevron-right{
+		color: lightskyblue;
+		cursor: pointer;
+		margin-left: 20px;
+	}
+	#start_page{
+		display: ;
+	}
+</style>
+
+
+<script>
+setButton();
+getTitle(mapArticleTitleClick);
+
+//var
+var map,
+	service,
+	marker=[],
+	mapArticle=[],
+	markCenter=[],
+	pageCount=-1,
+	start,
+	bounds;
+function setButton(){
+	//
+	$('.map_article_title').find('a').click(function(e){
+		e.preventDefault();
+		HeaderButton($(this).attr('href'),$(this).attr('reload'));
+	})
+	//
+	$('#map_goback').click(function(){
+		$('.map_article_title').css('display','block');
+		$('.single_map_article').css('display','none');
+	})
+	//
+	$('.fa-chevron-left').click(function(){
+		if(pageCount!=-1){
+			pageCount--;
+			PageEvent(pageCount);
+		}			
+	})
+	//
+	$('.fa-chevron-right').click(function(){
+		if(pageCount!=marker.length-1){
+			pageCount++;
+			PageEvent(pageCount);
+		}			
+	})
+
+}
+function getTitle(callback){
+$('._loading').css('display','block');
+	AjaxPost(
+		'article/mapArticle',
+		'',
+		function(res){
+				for (var i = 0; i < res.length; i++) {
+					$('#mapArticleArea').prepend('<p>'+res[i].Title+'</p>');
+					$('#mapArticleArea').find('p').first()
+						.attr('title',res[i].Title)
+						.attr('date',res[i].Date)
+						.attr('author',res[i].Username);
+				}
+				$('._loading').css('display','none');
+				callback();
+			})
+}
+function mapArticleTitleClick(){
+		$('#mapArticleArea').find('p').click(function(){
+			var title=$(this).attr('title'),
+				date=$(this).attr('date'),
+				author=$(this).attr('author');
+			$('.map_article_title').css('display','none');
+			$('.single_map_article').css('display','block');
+			newMap();
+			startPage(title,author,date);
+			CleanMapMarker();
+			getPlaces(date,author);
+	})
+}
+function startPage(title,author,date){
+	$('#map_title').empty().text(title);
+	$('#map_author').empty().text(author);
+	$('#map_date').empty().text(date);
+	start=$('#start_page').html();
+}	
+function newMap(){
+	console.log('newMap');
+
+	 map= new google.maps.Map(document.getElementById('map'), {
+      center: {lat:24,lng:121.2},
+      zoom: 10,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true
+    //scrollwheel: false
+  	});
+	  service = new google.maps.places.PlacesService(map);
+}
+
+function CleanMapMarker(){
+	console.log('CleanMapMarker');
+	for(var i=0;i<marker.length;i++){
+		marker[i].setMap(null);
+	}
+	marker=[];
+	mapArticle=[];
+	pageCount=-1;
+	markCenter=[];
+}
+function getPlaces(date,name){
+	console.log('getPlaces');
+	AjaxPost('article//single_mapArticle',{name:name,date:date},function(res){
+		var place=res.Places,
+			article=res.Articles;
+		for(var i=0;i<place.length;i++){
+			CreateMarker(place[i]);
+		}				
+		CreateArticle(article);
+	})
+}
+
+function CreateMarker(place_id){	
+	bounds=new google.maps.LatLngBounds();
+		//center=new google.maps.LatLng();	
+		service.getDetails({placeId:place_id}, function(result,status){
+			if(status == google.maps.places.PlacesServiceStatus.OK){				
+				var infowindow=new google.maps.InfoWindow();
+				var mark = new google.maps.Marker({
+    				map: map,
+    				position: result.geometry.location,
+    				icon: {
+     					path: google.maps.SymbolPath.CIRCLE,
+     					fillColor: 'orange',
+     					fillOpacity: 1,
+      					strokeColor: 'red',
+      					strokeWeight: 2,
+      					scale: 7
+    				}
+  					})
+				infowindow.setContent(result.name);
+				infowindow.open(map,mark);
+				markCenter.push(result.geometry.location);
+				marker.push(mark);
+				if (result.geometry.viewport) {// Only geocodes have viewport.
+        			bounds.union(result.geometry.viewport);} 
+        		else {bounds.extend(result.geometry.location);}        		
+        		map.fitBounds(bounds);
+			}//if(status == google.maps.places.PlacesServiceStatus.OK)
+		});//service.getDetails	
+}
+function CreateArticle(article){
+	for(var i=0;i<article.length;i++){
+		mapArticle.push(article[i]);
+	}
+}
+function PageEvent(count){
+	if(count==-1){
+		$('#map_article').html(start);
+		map.fitBounds(bounds);
+	}
+	else{
+	$('#map_article').html(mapArticle[count]);
+		map.panTo(markCenter[count]);
+	}
+}
+</script>
+

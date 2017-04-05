@@ -1,0 +1,25 @@
+<div id='map'></div>
+<div id='schedule'></div>
+
+<style>
+	#map{
+		width: 50vw;
+		height: 95vh;
+		float: left;
+	}
+	#schedule{
+		width: 47vw;
+		height: 95vh;
+		float: left;
+	}
+</style>
+
+<script type="text/javascript">
+	var map=new google.maps.Map(document.getElementById('map'),{
+      center:{lat:23.6,lng:121.2},
+      zoom: 8,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true
+    //scrollwheel: false
+  })
+</script>

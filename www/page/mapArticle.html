@@ -1,0 +1,395 @@
+
+<div class='wrap'>
+	<div id="map"></div>
+	<div class="contain">	
+			<input type="submit" name="back" value="返回">
+			<input type="text"  id='searchTextField' placeholder="找地點">
+			<input type="submit" name="submit" value="送出">
+			<!-- <input type="submit" name="adjust" value="縮放"> -->
+			<h3 id='hint'>↗從您第一個地點開始搜尋吧!</h3>
+			<a id='commit' href="javascript:void(0)">是，開始編輯內容</a>
+			<a id='finishAll' href="javascript:void(0)">結束並儲存所有地點和文章</a>
+			<p id='book'>
+				<a href="javascript:void(0)" id='prev'>上一個</a>
+				<a href="javascript:void(0)" id='next'>下一個</a>
+			</p>
+			<p id='info'></p>
+			<div id='edit'>
+				<p></p>
+				<a id='editSub' href="javascript:void(0)">完成</a><br>
+				內容:<a id='addImg'>插入圖片<input type="file" id="insert"></a>
+				<div contenteditable="true" id='textArea'></div>
+			</div>
+	</div>
+</div>
+
+<style type="text/css">
+	#commit,#finishAll,#book,#edit{
+		display: none;
+	}
+	.wrap{
+		width: 100%;
+		height: 98vh;		
+	}
+	#map{		
+		width:50%;
+		height:98%;
+		float: left;
+	}
+	.contain{
+		float: left;
+		width: 40%;
+		height: 100%;
+	}
+	#textArea{
+		width: 100%;
+		min-height: 500px;
+		border: 1px solid lightgray;
+	}
+	#testArea img{
+		width: 80%;
+	}
+</style>
+<script>//article/newMapArticle
+  var map;
+  var nanto=new google.maps.LatLng(23.58,120.58);
+  var input = document.getElementById('searchTextField'),
+  submit=document.querySelector('[name="submit"]'),
+  adjust=document.querySelector('[name="adjust"]'),
+  hint=document.getElementById('hint'),
+  mapArea=document.getElementById('map'),
+  contain=document.querySelector('.contain'),
+  commit=document.getElementById('commit'),
+  info=document.getElementById('info'),
+  edit=document.getElementById('edit'),
+  textArea=document.getElementById('textArea'),
+  editSub=document.getElementById('editSub'),
+  finishAll=document.getElementById('finishAll'),
+  prev=document.getElementById('prev'),
+  next=document.getElementById('next');
+  var service;
+  var markers=[];
+  var my_markers=[];
+  var my_places=[];
+  var my_articles=[];
+  var articles={};
+  var bounds;
+  var result_Public;
+  var pageCount=0;   
+  var W=window.innerWidth,
+      H=window.innerHeight;
+    
+  	NewMap(); 
+ 	InsertImg();
+  // adjust.addEventListener('click',function(){
+  //   AdjustMap();
+  // })
+  input.addEventListener('focus',function(){
+    this.value='';
+    return;
+  })
+  submit.addEventListener('click',function(){
+   // mapArea.style.height='80vh';
+    My_hideMarker();
+    TextSearch(textSearchCallback)
+  });
+  commit.addEventListener('click',function(){
+    // mapArea.style.height='40vh';
+    confirmMarker(result_Public);
+  })
+  editSub.addEventListener('click',function(){
+    if(H>W)
+    containBack();
+    editFinish(result_Public);
+  })
+  finishAll.addEventListener('click',function(){
+    Complete();
+  })
+  prev.addEventListener('click',function(){
+    (pageCount==0)?pageCount=0:pageCount--;
+    pageEvent(pageCount);
+  })
+  next.addEventListener('click',function(){
+    (pageCount<(my_articles.length-1))?pageCount++:pageCount=(my_articles.length-1);
+    pageEvent(pageCount);
+  })
+  $('[name="back"]').on('click',function(){
+    containBack();
+  })
+  //textSearchCallback: clearMarker/createMarker:MarkerInfo
+  function NewMap(){
+  	console.log('NewMap');
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: nanto,
+      zoom: 8,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true
+    //scrollwheel: false
+  });
+  //Search Box
+  var defaultBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(26.037, 122.69),
+    new google.maps.LatLng(21.268, 119.333)
+    );
+
+  var searchBox = new google.maps.places.SearchBox(input,{
+    bounds: defaultBounds
+  });  
+}
+
+
+  //text Search
+  function TextSearch(textSearchCallback){    
+    console.log('TextSearch');
+    bounds=new google.maps.LatLngBounds();
+    var query=input.value;
+    if(query!=''){
+      hint.innerHTML='點選紅圈看詳細資訊';
+      request={
+        location:nanto,
+        radius:50000,
+        query:query
+      }
+      service = new google.maps.places.PlacesService(map);
+      service.textSearch(request, textSearchCallback);
+    }   
+  }
+  function textSearchCallback(results,status){
+    console.log('textSearchCallback');
+    if(status == google.maps.places.PlacesServiceStatus.OK){
+     clearMarker();
+     for (var i = 0; i < results.length; i++) {
+      infowindow= new google.maps.InfoWindow();
+      createMarker(results[i],bounds,infowindow);
+    } 
+    map.fitBounds(bounds);
+  }
+}
+function createMarker(result,bounds,infowindow){
+  console.log('createMarker');
+  var placeLoc = result.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: placeLoc,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: '#FFFFFF',
+      fillOpacity: 1,
+      strokeColor: 'red',
+      strokeWeight: 2,
+      scale: 7
+    }
+  })
+  marker.addListener('click',function(){
+    MarkerInfo(result)});
+  markers.push(marker);
+  infowindow.setContent(result.name);
+  infowindow.open(map, marker);
+  if (result.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(result.geometry.viewport);
+      } else {
+        bounds.extend(result.geometry.location);
+      }
+    }
+    function MarkerInfo(result){
+      console.log('MarkerInfo');
+      if(window.innerHeight>window.innerWidth)
+        setTimeout(containMove,500);
+      map.panTo(result.geometry.location);
+      map.setZoom(16);
+      hint.innerHTML='這是您要找的地點嗎?';
+      commit.style.display='block';
+      service.getDetails({placeId:result.place_id},function(place,status){
+        if(status == google.maps.places.PlacesServiceStatus.OK){
+          (place.rating)?Rating=place.rating:Rating='無評分';
+          (place.vicinity)?Vicinity=place.vicinity:Vicinity='';
+          var txt='<h4>'+place.name+' '+Rating+'/5</h4><small>'+
+          Vicinity+'</small><br>';
+          if(place.photos){       
+            for(var i=0;i<place.photos.length;i++){
+              var src=place.photos[i].getUrl({'maxWidth': 300, 'maxHeight': 300}); 
+              txt+='<img src="'+src+'" >';
+            }
+          }   
+          info.innerHTML=txt;
+        }
+      })  
+      result_Public=result;
+    }
+    function confirmMarker(result){
+      console.log('confirmMarker')
+      hint.innerHTML='上傳照片、寫些什麼吧!';
+      textArea.innerHTML='';
+      commit.style.display='none';
+      finishAll.style.display='none';
+      edit.style.display='block';
+      info.innerHTML='';  
+    }
+
+    function editFinish(result){
+      if(textArea.textContent!=''){
+        console.log('editFinish');
+        my_articles.push(textArea.innerHTML);
+        my_places.push(result);  
+        hint.innerHTML='完成'+my_places.length+
+        '個地點了!繼續下個地點吧!<br><small>點選綠標可查看已編輯地點</small>';
+        finishAll.style.display='block';
+        textArea.innerHTML='';
+        edit.style.display='none';
+        clearMarker();
+        var my_bounds=new google.maps.LatLngBounds();
+        My_clearMarker();
+        for(var i=0;i<my_articles.length;i++){
+          var my_infowindow= new google.maps.InfoWindow();
+          My_createMarker(i,my_places[i],my_articles[i],my_infowindow,my_bounds);
+          }
+        }
+        else{
+          hint.innerHTML='請再多充實文章內容喔';
+        }
+      }
+
+
+      function clearMarker(){
+        for(var i=0;i<markers.length;i++){
+          markers[i].setMap(null);
+        }
+        markers=[];
+      }
+      function My_hideMarker(){
+        for(var i=0;i<my_markers.length;i++){
+          my_markers[i].setMap(null);
+        }
+      }
+      function My_clearMarker(){
+        My_hideMarker();
+        my_markers=[];
+      }
+      function My_createMarker(i,place,article,my_infowindow,my_bounds){       
+          var placeLoc = place.geometry.location;
+          var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            icon: {
+              path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+              fillColor: 'green',
+              fillOpacity: 1,
+              strokeColor:'lightgreen',
+              strokeWeight: 1,
+              scale: 7
+            }
+          })
+          marker.addListener('click',function(){    
+            info.innerHTML='<h4>'+place.name+'</h4>'+article;
+            if(H>W){
+            $('.contain').animate({top:'45vw'});
+            $('[name="back"]').css('display','inline');}
+         })
+          
+          my_infowindow.setContent((i+1)+'.'+place.name);
+          my_infowindow.open(map, marker);
+          my_markers.push(marker);
+          if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        my_bounds.union(place.geometry.viewport);
+      } else {
+        my_bounds.extend(place.geometry.location);
+      }
+    map.fitBounds(my_bounds);
+  }
+  function Complete(){
+    var com=confirm('您已編輯'+my_articles.length+'個地點，確定完成嗎?');
+    if(com){
+      var title=window.prompt("輸入標題");
+      var my_bounds=new google.maps.LatLngBounds();
+      var places={};
+      My_clearMarker();
+      var date=new Date();
+      places[0]=title;
+      places[1]=date;
+      places[2]=localStorage.username;
+        for(var i=0;i<my_articles.length;i++){
+          var my_infowindow= new google.maps.InfoWindow();
+          My_createMarker(i,my_places[i],my_articles[i],my_infowindow,my_bounds);
+          var set=2+(i+1)*2;
+          places[set-1]=my_places[i].place_id;
+          places[set]=my_articles[i];
+          }
+
+          submit.style.display='none';
+          input.style.display='none';
+          finishAll.style.display='none';
+          book.style.display='block';
+          hint.innerHTML='';
+          pageEvent(pageCount);
+          SaveData(places,'article/newMapArticle',function(res){
+            alert(res);
+          });
+     }    
+  }
+  function SaveData(data,route,callback){
+    $.ajax({
+      type:'POST',
+      url:ip+route,
+      data:data,
+      async:true,
+      success:function(res){        
+          callback(res);
+      },
+      error:function(){
+      		alert('抱歉 儲存失敗，請稍後再試');
+      }
+    })
+  }
+  function pageEvent(count){
+    hint.innerHTML=my_places[count].name;
+    info.innerHTML=my_articles[count];
+    map.panTo(my_places[count].geometry.location);
+  }
+  function InsertImg(){
+  document.getElementById('insert').addEventListener('change',function(){
+        var file= document.getElementById('insert').files[0];
+        var reader  = new FileReader();       
+        //----------檔案讀取+預覽------
+        reader.addEventListener("load", function () {
+          var result=reader.result;
+          Insert(result);
+        })
+        if(file)reader.readAsDataURL(file);
+      })
+  }
+  //inert text
+  function Insert(result){
+    document.getElementById('textArea').focus();
+    var selection= window.getSelection ? window.getSelection() : document.selection;
+      var range=selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+      range.collapse(false);
+      var tag = range.createContextualFragment('<br><img class="uploadImg" src="'+result+'"><br>');     
+      var lastChild = tag.lastChild;
+      range.insertNode(tag);
+      if(lastChild){
+      range.setEndAfter(lastChild);
+      range.setStartAfter(lastChild);
+    }
+      selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function containMove(){
+    $('.contain').animate({top:'0'});
+    $('[name="search"]').css('display','none');
+    $('[name="submit"]').css('display','none');
+    $('[name="back"]').css('display','block');
+  }
+  function containBack(){
+    var w=window.innerWidth,
+        h=window.innerHeight;
+    var my_h=(h-80)+'px';
+    $('.contain').animate({top:my_h});
+    $('#info').empty();
+    $('[name="search"]').css('display','inline');
+    $('[name="submit"]').css('display','inline');
+    $('[name="back"]').css('display','none');
+  }
+</script>

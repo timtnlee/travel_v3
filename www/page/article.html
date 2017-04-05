@@ -1,0 +1,79 @@
+
+	<div class='article_title'>
+		<h3>article</h3>
+		<div id='articleArea'>
+			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+		</div>
+	</div>
+
+	<div class="single_article">
+		<a href='javascript:void(0)' id='goback'>
+			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
+		<p id='title'></p>
+		<p id='date'></p>
+		<p id='author'></p>
+		<div id='content'></div>
+	</div>
+
+<script>
+$('._loading').css('display','block');
+	$('#goback').click(function(){
+		$('.article_title').css('display','block');
+		$('.single_article').css('display','none');
+	})
+	AjaxPost(
+		'article/article',
+		'',
+		function(res){
+			for (var i=0; i<res.length ; i++) {
+				$('#articleArea').prepend('<p>'+res[i].Title+'</p>');
+				$('#articleArea').find('p').first()
+					.attr('title',res[i].Title)
+					.attr('date',res[i].Date)
+					.attr('author',res[i].Username)
+					.attr('content',res[i].Article);
+				}
+			$('#articleArea').find('p').click(function(){
+				var title=$(this).attr('title'),
+					date=$(this).attr('date');
+					author=$(this).attr('author'),
+					content=$(this).attr('content');
+
+				$('.article_title').css('display','none');
+				$('.single_article').css('display','block');
+
+				$('#title').text(title);
+				$('#date').text(date);
+				$('#author').text(author);
+				$('#content').html(content);	
+				})
+			$('._loading').css('display','none');
+			}
+		)
+</script>
+<style>
+	.article_title p{
+		padding: 20px 10px 20px 10px;
+		border-bottom: 1px solid lightgray;
+		margin: 0;
+		cursor: pointer;
+	}
+	.article_title p:hover{
+		background-color: lightgray;
+	}
+	.article_title h3{
+		padding: 15px;
+		border-bottom: 1px solid lightgray;
+		margin: 0;
+	}
+	.single_article{
+		display: none;
+	}
+	.single_article img{
+		max-width: 500px;
+	}
+	.single_article a{
+		font-size: 18px;
+		color:#3C3C3C;
+	}
+</style>

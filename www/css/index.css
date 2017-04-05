@@ -1,0 +1,41 @@
+body{
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+a{
+	text-decoration: none;
+}
+._header{
+	font-size: 20px;
+	margin: 0px;
+	background-color: #ECECFF;
+	padding:10px;
+}
+._header a{
+	text-decoration: none;
+	color: gray;
+	margin-left: 10px;
+}
+._header p{
+	display: inline;
+	margin:0;
+	padding: 0;
+}
+._pages{
+	
+}
+._loading{
+	background-color: white;
+	display: none;
+}
+._menu{
+
+}
+._content{
+	margin: 0;
+	padding: 10px;
+}
+._loginOption{
+	display: none;
+}
