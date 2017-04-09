@@ -1,35 +1,35 @@
-<div class="map_article_title">		
-	<h3>地圖文章<a href="mapArticle" reload='true'>新增地圖文章</a></h3>
-	<div id='mapArticleArea'>
-		<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+<div class="pageContainer">
+	<div class="map_article_title">		
+		<a href="mapArticle" reload='true'>新增地圖文章</a>
+		<div id='mapArticleArea'>
+			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+		</div>
 	</div>
-</div>
 
-<div class="single_map_article">
-	<div id='map'></div>
+	<div class="single_map_article">
+		<div id='map'></div>
 
-	<div id='single_article'>
-		<a href='javascript:void(0)' id='map_goback'>
-			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
-		</a>
-		<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
-		<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
-		<div id='map_article'>
-			<p id='map_title'><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></p>
-			<p id='map_date'></p>
-			<p id='map_author'></p>
-				
+		<div id='single_article'>
+			<a href='javascript:void(0)' id='map_goback'>
+				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
+			</a>
+			<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+			<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+			<div id='map_article'>
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+			</div>
 		</div>
 	</div>
 </div>
-
 	<div id='start_page'>
-		
+		<p id='map_title'></p>
+		<p id='map_date'></p>
+		<p id='map_author'></p>
 	</div>
 
 <style>
 	.map_article_title{
-		min-height:50vh; 
+		 
 	}
 	.map_article_title img{
 		width: 100px;
@@ -79,44 +79,43 @@
 		margin-left: 20px;
 	}
 	#start_page{
-		display: ;
+		display:none ;
 	}
 </style>
 
 
 <script>
-setButton();
 getTitle(mapArticleTitleClick);
+setButton();
 
 //var
 var map,
 	service,
 	marker=[],
 	mapArticle=[],
-	markCenter=[],
 	pageCount=-1,
 	start,
 	bounds;
 function setButton(){
 	//
-	$('.map_article_title').find('a').click(function(e){
+	$('.map_article_title').find('a').unbind().click(function(e){
 		e.preventDefault();
 		HeaderButton($(this).attr('href'),$(this).attr('reload'));
 	})
 	//
-	$('#map_goback').click(function(){
+	$('#map_goback').unbind().click(function(){
 		$('.map_article_title').css('display','block');
 		$('.single_map_article').css('display','none');
 	})
 	//
-	$('.fa-chevron-left').click(function(){
+	$('.fa-chevron-left').unbind().click(function(){
 		if(pageCount!=-1){
 			pageCount--;
 			PageEvent(pageCount);
 		}			
 	})
 	//
-	$('.fa-chevron-right').click(function(){
+	$('.fa-chevron-right').unbind().click(function(){
 		if(pageCount!=marker.length-1){
 			pageCount++;
 			PageEvent(pageCount);
@@ -176,30 +175,30 @@ function newMap(){
 function CleanMapMarker(){
 	console.log('CleanMapMarker');
 	for(var i=0;i<marker.length;i++){
-		marker[i].setMap(null);
+		marker[i].mark.setMap(null);
 	}
 	marker=[];
 	mapArticle=[];
 	pageCount=-1;
-	markCenter=[];
 }
 function getPlaces(date,name){
 	console.log('getPlaces');
 	AjaxPost('article//single_mapArticle',{name:name,date:date},function(res){
 		var place=res.Places,
 			article=res.Articles;
-		for(var i=0;i<place.length;i++){
-			CreateMarker(place[i]);
-		}				
+		
+		CreateMarker(place);			
 		CreateArticle(article);
 	})
 }
-
-function CreateMarker(place_id){	
-	bounds=new google.maps.LatLngBounds();
-		//center=new google.maps.LatLng();	
-		service.getDetails({placeId:place_id}, function(result,status){
-			if(status == google.maps.places.PlacesServiceStatus.OK){				
+function getDetail(place){
+	var max=place.length;
+	var i=0; //這樣才能讀到i 如果用迴圈包service.getDetails(..callback(){...這裡會讀不到i}) 
+	console.log(max);
+	Delay();
+	function Delay(){
+		service.getDetails({placeId:place[i]}, function(result,status){
+			if(status === google.maps.places.PlacesServiceStatus.OK){							
 				var infowindow=new google.maps.InfoWindow();
 				var mark = new google.maps.Marker({
     				map: map,
@@ -213,18 +212,31 @@ function CreateMarker(place_id){
       					scale: 7
     				}
   					})
-				infowindow.setContent(result.name);
+				infowindow.setContent(i+':'+result.name);
 				infowindow.open(map,mark);
-				markCenter.push(result.geometry.location);
-				marker.push(mark);
+				marker.push({
+					mark:mark,
+					center:result.geometry.location,
+					name:result.name
+				});
 				if (result.geometry.viewport) {// Only geocodes have viewport.
         			bounds.union(result.geometry.viewport);} 
         		else {bounds.extend(result.geometry.location);}        		
         		map.fitBounds(bounds);
+        		i++;
+        		if(i!=max)
+        		Delay();
 			}//if(status == google.maps.places.PlacesServiceStatus.OK)
 		});//service.getDetails	
+	}
+	
+}
+function CreateMarker(place){	
+	bounds=new google.maps.LatLngBounds();
+	getDetail(place);//精髓 
 }
 function CreateArticle(article){
+	PageEvent(pageCount);
 	for(var i=0;i<article.length;i++){
 		mapArticle.push(article[i]);
 	}
@@ -236,8 +248,8 @@ function PageEvent(count){
 	}
 	else{
 	$('#map_article').html(mapArticle[count]);
-		map.panTo(markCenter[count]);
-	}
+		map.panTo(marker[count].center);
+	}	
 }
 </script>
 

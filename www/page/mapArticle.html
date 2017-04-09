@@ -2,7 +2,6 @@
 <div class='wrap'>
 	<div id="map"></div>
 	<div class="contain">	
-			<input type="submit" name="back" value="返回">
 			<input type="text"  id='searchTextField' placeholder="找地點">
 			<input type="submit" name="submit" value="送出">
 			<!-- <input type="submit" name="adjust" value="縮放"> -->
@@ -78,16 +77,12 @@
   var pageCount=0;   
   var W=window.innerWidth,
       H=window.innerHeight;
-    
-  	NewMap(); 
+  ResetInput('#searchTextField');
+  NewMap(); 
  	InsertImg();
   // adjust.addEventListener('click',function(){
   //   AdjustMap();
   // })
-  input.addEventListener('focus',function(){
-    this.value='';
-    return;
-  })
   submit.addEventListener('click',function(){
    // mapArea.style.height='80vh';
     My_hideMarker();

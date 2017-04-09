@@ -36,6 +36,7 @@ function LoginOption(){
 }
 function HeaderButton(href,reload){
 	$('._content').find('._pages').css('display','none');
+	$('._content').find('._pages').find('input').attr('disabled',true).unbind();
 	$('._reloadPages').remove();
 	var id='#'+href;
 	console.log(href);	
@@ -62,13 +63,18 @@ function HeaderButton(href,reload){
 				}
 			});
 		}
-	}
-
-	
+		$(id).find('input').attr('disabled',false);
+	}	
 }
 
+function ResetInput(input){
+	$(input).on('focus',function(){
+		$(this).val('');
+		return;
+	})
+}
 function EnterSubmit(ele){
-	$(window).keydown(function(e){
+	$(window).keyup(function(e){
 		if(event.which==13){
 			$(ele).click();
 		}

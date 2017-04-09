@@ -1,8 +1,8 @@
-
+<div class="pageContainer">
+	<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 	<div class='article_title'>
-		<h3>article</h3>
 		<div id='articleArea'>
-			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+			
 		</div>
 	</div>
 
@@ -14,7 +14,7 @@
 		<p id='author'></p>
 		<div id='content'></div>
 	</div>
-
+</div>
 <script>
 $('._loading').css('display','block');
 	$('#goback').click(function(){
@@ -52,6 +52,10 @@ $('._loading').css('display','block');
 		)
 </script>
 <style>
+	.article_title{
+		margin: 0px 10vw 0px 10vw;
+		background-color:white;
+	}
 	.article_title p{
 		padding: 20px 10px 20px 10px;
 		border-bottom: 1px solid lightgray;
@@ -68,6 +72,9 @@ $('._loading').css('display','block');
 	}
 	.single_article{
 		display: none;
+		margin: 0px 20vw 0px 20vw;
+		background-color:white;
+		padding: 20px 20px 40px 20px;
 	}
 	.single_article img{
 		max-width: 500px;

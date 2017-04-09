@@ -21,7 +21,7 @@
     <body>
         <script type="text/javascript" src="cordova.js"></script>
         <div class='_container'>
-        	<div class="_header">我是Header
+        	<div class="_header">
         		<a href='home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
 				<a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
 				<a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
@@ -45,8 +45,10 @@
 					<a href="signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
 				</p>
         	</div>
-        	<div class="_content">
-        	
+            <div class="welcome">
+                <p name='title'>首頁</p>
+            </div>
+        	<div class="_content">        	
         		<!-- content Pages go here -->
         	</div>
         </div>
@@ -61,9 +63,9 @@
     	$(function(){
     		LoadHomePage();
     		$('._header').find('a').on('click',function(e){
-    			$('._header').find('a').css('color','gray');
-    			$(this).css('color','black');
     			e.preventDefault();
+                $("[name='title']").text($(this).text());
+                $('.welcome').css({height:'0px'}).animate({height:'40px'});
     			HeaderButton($(this).attr('href'),$(this).attr('reload'));
     		})
     	})

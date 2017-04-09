@@ -1,25 +1,227 @@
-<div id='map'></div>
-<div id='schedule'></div>
+<script src='js/planning_search.js'></script>
+<script src='js/planning_distance.js'></script>
+<div id='block_you'><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+
+<div id='allContainer'>	
+	<!-- map -->
+	<div id='map'></div>
+	<!-- search info -->
+	<div id='mapInfo'>
+	<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
+	<div id='searchArea'>
+		
+		<h4>查詢</h4>
+			<input type="text" id='textSearch' placeholder="輸入地點">
+			<input type="submit" id="searchSubmit" value="查詢"><br>
+	</div>
+	<div id='allPlaces'></div>		
+	<div id='option'>			
+		<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
+		<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
+		<a key='景點'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
+		<a key='停車場'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
+		<p id='goback' class="back">
+			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
+		</p>	
+		<div id='info'>
+		</div>
+		<a>網路熱門</a>
+	</div>		
+	</div>
+	<!-- distance -->
+	<div id='planDistance'>
+		<p id='distanceGoback' class="back">
+			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
+		</p>
+		<h4>路線規劃</h4>
+		
+		<div id='output'></div>	
+	</div>
+
+</div>
+<div id='schedule'>
+	<div class="list_con" id='list_head'>
+		<h4 style="display: inline-block;">清單(拖曳來排序)</h4>
+		<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>規劃路線</a>
+	</div>	
+</div>
 
 <style>
+	#allContainer{
+		margin: 0px;
+	}
+	#block_you{
+		z-index: 10;
+		background-color: lightgray;
+		opacity: 0.5;
+		text-align: center;
+		position: fixed;
+		width: 100%;
+		height: 50vh;
+		padding-top: 50vh;
+		top: 0;
+	}
 	#map{
+		z-index: 9;
 		width: 50vw;
 		height: 95vh;
-		float: left;
+		position: absolute;
+		left: 0;
+	}
+	#mapInfo{
+		margin: 0;
+		padding: 0px;
+		width: 27vw;
+		height: 95vh;
+		position: absolute;
+		left: 50vw;
+		overflow-y: hidden;
+	}
+	#planDistance{
+		margin: 0;
+		padding: 0px;
+		width: 27vw;
+		height: 95vh;
+		position: absolute;
+		left: 77vw;
+		overflow-y: hidden;
 	}
 	#schedule{
-		width: 47vw;
+		overflow-y: scroll;
+		width: 23vw;
 		height: 95vh;
-		float: left;
+		position: absolute;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		background-color: lightgoldenrodyellow ;
+	}
+	#list_head{
+		background-color: lightgoldenrodyellow ;
+		border: none;
+		margin: 5px 5px 10px 5px;
+	}
+	#hint{
+		border-radius: 50px 0px 0px 50px;
+		overflow: hidden;
+		margin: 0px;
+		padding: 0px 5px 0px 10px;
+		background-color: lightcoral;
+	}
+	#option{
+		display: none;
+	}
+	#option a{
+		display: inline-block;
+		font-size: 20px;
+		margin: 10px 5px 10px 5px;
+		cursor: pointer;
+		color: gray;
+	}
+	.back{
+		cursor: pointer;
+		color:black;
+		padding: 2px;
+		border-radius: 5px;
+		background-color: lightgray;
+		font-size: 20px;
+	}
+	#goback{
+		display: none;		
+	}
+	#allPlaces{
+		height: 350px;
+		overflow-y:scroll; 
+	}
+	#allPlaces p{
+		cursor: pointer;
+		margin: 0;
+		padding:10px;
+		border-top: 1px solid gray;
+	}
+	#allPlaces p:hover{
+		background-color: lightgray;
+	}
+	#plan,#option #add{
+		cursor: pointer;
+		color:black;
+		padding: 2px;
+		border-radius: 5px;
+		background-color: lightgray;
+	}
+	#plan{
+		font-weight: bold;
+		font-size: 18px;
+		display: inline-block;
+		margin-left: 20px;
+	}
+	#infoImg{
+		height: 350px;
+		overflow-y: scroll;
+	}
+	#infoImg img{
+		width: 300px;
+	}
+	.list_con{
+		border-bottom: 1px solid orange;
+		margin: 0;
+		padding:0px;
+		background-color:#FFE153;
+	}
+	.dragP{
+		font-size: 18px;
+		cursor: pointer;
+		padding: 10px 5px 5px 5px;
+		margin: 0px;
+		height:30px;
+	}
+	.tempor{
+		display: inline-block;
+		width: 100%;
+		height: 30px;
+		background-color: #FFFF6F;
+		text-align: center;
+	}
+	.fa-bars{
+		cursor: pointer;
+		margin-right: 10px;
+	}
+	.fa-trash-o{
+		cursor: pointer;
+		float: right;
+		z-index: 10;
 	}
 </style>
 
 <script type="text/javascript">
-	var map=new google.maps.Map(document.getElementById('map'),{
-      center:{lat:23.6,lng:121.2},
-      zoom: 8,
-      disableDefaultUI: true,
-      disableDoubleClickZoom: true
-    //scrollwheel: false
-  })
+//var
+	//map
+var map,
+	service,
+	distance_service,
+	query,
+	bounds,
+	mark_bounds,
+	radius=700000,
+	marker=[],
+	list_marker=[],
+	center={lat:24.5,lng:121.2},
+	infowindows,//has 's'
+	my_list=[],
+	listCount=0;
+	//dom
+var hint=document.getElementById('hint'),
+	input=document.getElementById('textSearch'),
+	dragCount='',
+	dragId='';
+
+//process
+	//planning_search
+block();
+ResetInput('#textSearch');
+EnterSubmit('#searchSubmit');
+setButton();
+newMap();
+	//planning_distance
+
 </script>
