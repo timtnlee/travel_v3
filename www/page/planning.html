@@ -199,8 +199,43 @@
 		float: right;
 		z-index: 10;
 	}
-	@media screen and (orientation:portrait) {
+	@media (orientation:portrait){
 		#map{
+			width: 100vw;
+			height: 45vh;
+		}
+		#welcomeOption{
+			display: block;
+		}
+		#mapInfo{
+			overflow-y: scroll;
+			position: absolute;
+			bottom: 0px;
+			width: 100vw;
+			height: 55vh;
+			z-index: 2;
+			left: 0px;
+			background-color: white;
+		}
+		#schedule_block{
+			position:absolute;
+			top:55vh;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 10;
+		}
+		#schedule{
+			z-index: 10;
+			position: absolute;
+			left: 0;
+			top:45%;
+			width: 100%;
+			height: 55%;
+		}
+	}
+	@media (max-width:500px){
+			#map{
 			width: 100vw;
 			height: 45vh;
 		}
