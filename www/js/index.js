@@ -1,5 +1,5 @@
-
-var ip='http://127.0.0.1:3000/';
+//var ip='http://127.0.0.1:3000/';
+var ip='http://192.168.1.45:3000/';
 if(!localStorage.logined)
     	localStorage.logined='no';
 if(!localStorage.username)
