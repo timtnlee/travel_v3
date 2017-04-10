@@ -1,5 +1,10 @@
 //var ip='http://127.0.0.1:3000/';
 var ip='http://192.168.1.45:3000/';
+function setIp(){
+	var prompt=window.prompt('local host?');
+	if(prompt)ip='http://127.0.0.1:3000/';
+}
+
 if(!localStorage.logined)
     	localStorage.logined='no';
 if(!localStorage.username)
@@ -20,14 +25,16 @@ function LoginOption(){
 	var option=$('._loginOption');
 	option.each(function(){
 		var first=$(this).find('a').first(),
-		last=$(this).find('a').last();
+			last=$(this).find('a').last();
 		if(localStorage.logined=='no'){
 			console.log('未登入');
+			first.css('display','block');
 			last.css('display','none');
 		}
 		else{
 			console.log('已登入');
 			first.css('display','none');
+			last.css('display','block');
 		}
 	})	
 }
