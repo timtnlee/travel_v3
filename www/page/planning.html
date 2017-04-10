@@ -18,10 +18,11 @@
 	<div id='option'>			
 		<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
 		<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
-		<a key='景點'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
+		<a key='attrications'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
 		<a key='停車場'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
+		<a key='夜市'><i class="fa fa-cutlery" aria-hidden="true"></i>夜市</a>
 		<p id='goback' class="back">
-			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
+			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
 		</p>	
 		<div id='info'>
 		</div>
@@ -33,17 +34,19 @@
 		<p id='distanceGoback' class="back">
 			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
 		</p>
-		<h4>路線規劃</h4>
-		
-		<div id='output'></div>	
+		<h4>路線規劃</h4>	
+		<div id='output'></div>			
 	</div>
 
 </div>
+<div id='schedule_block'>
 <div id='schedule'>
 	<div class="list_con" id='list_head'>
-		<h4 style="display: inline-block;">清單(拖曳來排序)</h4>
+		<h4 style="display: inline-block;">清單</h4>
+		<small>點擊看詳細資料，拖曳來排序</small>
 		<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>規劃路線</a>
 	</div>	
+</div>
 </div>
 
 <style>
@@ -62,16 +65,17 @@
 		top: 0;
 	}
 	#map{
-		z-index: 9;
+		z-index: 2;
 		width: 50vw;
 		height: 95vh;
 		position: absolute;
 		left: 0;
 	}
 	#mapInfo{
+		background: white;		
 		margin: 0;
 		padding: 0px;
-		width: 27vw;
+		width: 25vw;
 		height: 95vh;
 		position: absolute;
 		left: 50vw;
@@ -80,15 +84,19 @@
 	#planDistance{
 		margin: 0;
 		padding: 0px;
-		width: 27vw;
+		width: 25vw;
 		height: 95vh;
 		position: absolute;
 		left: 77vw;
 		overflow-y: hidden;
 	}
+	#output{
+		height: 350px;
+		overflow-y: scroll;
+	}
 	#schedule{
 		overflow-y: scroll;
-		width: 23vw;
+		width: 25vw;
 		height: 95vh;
 		position: absolute;
 		right: 0;
@@ -113,7 +121,7 @@
 	}
 	#option a{
 		display: inline-block;
-		font-size: 20px;
+		font-size: 15px;
 		margin: 10px 5px 10px 5px;
 		cursor: pointer;
 		color: gray;
@@ -191,6 +199,41 @@
 		float: right;
 		z-index: 10;
 	}
+	@media screen and (orientation:portrait) {
+		#map{
+			width: 100vw;
+			height: 45vh;
+		}
+		#welcomeOption{
+			display: block;
+		}
+		#mapInfo{
+			overflow-y: scroll;
+			position: absolute;
+			bottom: 0px;
+			width: 100vw;
+			height: 55vh;
+			z-index: 2;
+			left: 0px;
+			background-color: white;
+		}
+		#schedule_block{
+			position:absolute;
+			top:55vh;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 10;
+		}
+		#schedule{
+			z-index: 10;
+			position: absolute;
+			left: 0;
+			top:45%;
+			width: 100%;
+			height: 55%;
+		}
+	}
 </style>
 
 <script type="text/javascript">
@@ -198,11 +241,12 @@
 	//map
 var map,
 	service,
-	distance_service,
+	DirectionsService,
 	query,
 	bounds,
 	mark_bounds,
-	radius=700000,
+	radius=500000,
+	focusMark,
 	marker=[],
 	list_marker=[],
 	center={lat:24.5,lng:121.2},
@@ -217,11 +261,17 @@ var hint=document.getElementById('hint'),
 
 //process
 	//planning_search
+welcomeOption('清單',showShedule);
 block();
 ResetInput('#textSearch');
-EnterSubmit('#searchSubmit');
 setButton();
 newMap();
 	//planning_distance
 
+function showShedule(){
+	$('#schedule_block').css('zIndex','3').animate({top:'0'});
+}
+$('#schedule_block').click(function(){
+	$(this).css('zIndex','0').animate({top:'55vh'})
+})
 </script>

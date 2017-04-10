@@ -1,6 +1,6 @@
 <div class="pageContainer">
 	<div class="map_article_title">		
-		<a href="mapArticle" reload='true'>新增地圖文章</a>
+		<a href="mapArticle" reload='true' id='addMapArticle'>新增地圖文章</a>
 		<div id='mapArticleArea'>
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
@@ -29,11 +29,18 @@
 
 <style>
 	.map_article_title{
-		 
+		 margin: 0px 10vw 0px 10vw;
+		background-color:white;
 	}
 	.map_article_title img{
 		width: 100px;
 		display: inline;
+	}
+	#addMapArticle{
+		margin-top: 10px;
+		color: black;
+		background-color: lightgrey;
+		border-radius: 5px;
 	}
 	.map_article_title p{
 		padding: 20px 10px 20px 10px;
@@ -81,6 +88,17 @@
 	#start_page{
 		display:none ;
 	}
+@media screen and (orientation:portrait) {
+	#map{
+		width: 100vw;
+		height: 40vh;
+	}
+	#single_article{
+		overflow-y: scroll;
+		width: 100vw;
+		height: 60vh;
+	}
+}
 </style>
 
 

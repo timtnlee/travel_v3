@@ -6,7 +6,7 @@ function close_block(){
 }
 function initVar(){
 	console.log('init radius,center in initVar()');
-	radius=700000,
+	radius=500000,
 	center={lat:24.5,lng:121.2};
 }
 function newMap(){
@@ -34,6 +34,7 @@ function setButton(){
 		query=$('#textSearch').val();
 		if($(this).val()=='查詢'){//大範圍搜特定地點
 			initVar();
+			newMap();
 			Steps('start_search');			
 			TextSearch(query,radius,center);
 			Steps('done_search');
@@ -57,15 +58,14 @@ function setButton(){
 }
 function TextSearch(my_query,my_radius,my_center){	
 	console.log('TextSearch');
-	console.log('radius:'+radius);
-	newMap();
-	block();
+	console.log('radius:'+radius);	
 	CleanMarker();
 	CreateListMarker();
     bounds=new google.maps.LatLngBounds();
     place_bounds=new google.maps.LatLngBounds();
     if(my_query!=''){
-      request={
+    	block();
+      	request={
         location:my_center,
         radius:my_radius,
         query:my_query
@@ -118,7 +118,24 @@ function Steps(step){
 function textSearchCallback(result,status){
 	console.log('textSearchCallback');
 	if(status == google.maps.places.PlacesServiceStatus.OK){
-		$('#allPlaces').empty().prepend('<h4>搜尋結果</h4>');
+		if(radius==500000)
+			$('#allPlaces').empty().prepend('<h4>全域搜尋"'+query+'"</h4>');
+		else{
+			var key=query,
+				translate=['餐廳','景點','住宿'];
+			switch(key){
+				case 'restaurant':
+					key='餐廳';
+					break;
+				case 'attrications':
+					key='景點';
+					break;
+				case 'hotel':
+					key='住宿';
+					break;
+			}
+			$('#allPlaces').empty().prepend('<h4>"'+focusMark+'"附近搜尋"'+key+'"</h4>');
+		}
 		for(var i=0;i<result.length;i++){			
 			CreateMarker(result[i]);
 			if(result[i].geometry.viewport)
@@ -182,6 +199,7 @@ function CreateMarker(place){
 function MarkInfo(place,list){
 	var new_bounds=new google.maps.LatLngBounds();
 	console.log('MarkInfo');
+	focusMark=place.name;
 	var Rating,Vicinity;
 	 if (place.geometry.viewport) {
         // Only geocodes have viewport.
@@ -329,14 +347,22 @@ function drop(e){
 	dragover('#'+divId);
 	Trash();
 }
-function CleanMarker(){
-	console.log('CleanMarker');		
-	//CleanSingleMark();
+function ShowMarker(){
+	for (var i = 0; i < marker.length; i++) {
+		marker[i].setMap(map);
+	}
+}
+function HideMarker(){
 	for (var i = 0; i < marker.length; i++) {
 		marker[i].setMap(null);
 	}
+}
+function CleanMarker(){
+	console.log('CleanMarker');		
+	HideMarker();
 	marker=[];	
 }
+
 function CleanListMark(){
 	HideListMarker();
 	list_marker=[];

@@ -23,16 +23,19 @@ function LoginOption(){
 		last=$(this).find('a').last();
 		if(localStorage.logined=='no'){
 			console.log('未登入');
-			first.css('display','inline');
 			last.css('display','none');
 		}
 		else{
 			console.log('已登入');
 			first.css('display','none');
-			last.css({display:'inline'});
 		}
 	})	
-	option.css('display','inline');
+}
+function welcomeOption(text,func){//can only be used in reload pages
+	$('#welcomeOption').text(text);
+	$('#welcomeOption').unbind().click(function(){
+		func();
+	})	
 }
 function HeaderButton(href,reload){
 	$('._content').find('._pages').css('display','none');
@@ -66,7 +69,14 @@ function HeaderButton(href,reload){
 		$(id).find('input').attr('disabled',false);
 	}	
 }
-
+function PhoneButton(){
+	 $('#menuBar').click(function(){
+            $('._menu').animate({left:'0'});
+            })
+	 $('._menu').click(function(){
+	 		$('._menu').animate({left:'-100%'});
+	 })
+}
 function ResetInput(input){
 	$(input).on('focus',function(){
 		$(this).val('');
