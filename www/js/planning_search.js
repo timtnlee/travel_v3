@@ -156,6 +156,11 @@ function PtagClick(place,mark,infowindow){
 	$('#allPlaces').append('<p>'+place.name+'</p>');
 	$('#allPlaces').find('p').last().click(function(){
 		MarkInfo(place);
+		if(infowindows)
+		infowindows.close();
+		infowindow.setContent(place.name);
+		infowindow.open(map,mark);
+		infowindows=infowindow;
 	}).mouseover(function(){
 		if(infowindows)
 		infowindows.close();
