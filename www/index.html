@@ -14,6 +14,14 @@
                                                     media-src *; 
                                                     connect-src *">
         <script src='js/jquery-3.1.1.js'></script>
+        
+    <!-- 最新編譯和最佳化的 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<!-- 選擇性佈景主題 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<!-- 最新編譯和最佳化的 JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
         <script src="https://use.fontawesome.com/e702146991.js"></script>
         <script src='js/index.js'></script>
         <script async defer
@@ -70,7 +78,7 @@
     			e.preventDefault();
                 $("[name='title']").text($(this).text());
                 $('.welcome').css({height:'0px'}).animate({height:'40px'});
-    			HeaderButton($(this).attr('href'),$(this).attr('reload'),$(this).attr('optional'));
+    			HeaderButton($(this));
     		})
             PhoneButton();
     	})

@@ -1,0 +1,34 @@
+<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+<div class="pageContainer">
+	<div class="pageMiddle loginpage">
+		<p>register</p>
+	<p>帳號
+	<input type="text" name="register_name"><br><small>未輸入</small>
+	</p>
+	<p>密碼
+	<input type="password" name="register_passwd"><br><small>未輸入</small>
+	</p>
+	<input type="submit" name="register" value="註冊">
+	</div>
+</div>
+<style type="text/css">
+	.loginpage{
+		text-align: center;
+	}
+</style>
+<script type="text/javascript">
+CheckInput('[name="register_name"]');
+CheckInput('[name="register_passwd"]')
+	EnterSubmit('[name="register"]');
+	$('[name="register"]').click(function(){
+		var name=$('[name="register_name"]').val(),
+			passwd=$('[name="register_passwd"]').val();
+		AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
+			alert(res);
+			if(res=='註冊成功'){
+				localStorage.username=name;
+				location.href='';
+			}
+		})
+	})
+</script>

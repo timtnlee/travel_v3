@@ -1,6 +1,19 @@
-<div class="pageContainer">
+<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+<div class="pageMiddle">
 	<div id='usersArea'>
-	<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+		<div class="row">		
+		<div class="col-xs-6">			
+			<div class="col-md-6 "></div>
+			<div class="col-md-6 "></div>
+			
+		</div>
+		<div class="col-xs-6">
+			
+			<div class="col-md-6 "></div>
+			<div class="col-md-6 "></div>
+			
+		</div>
+		</div>
 	</div>
 </div>
 
@@ -10,19 +23,31 @@ $('._loading').css('display','block');
 		'user/users',
 		'',
 		function(res){
-			for(var i=0;i<res.length;i++){					
-					if(res[i].UsericonSet)
-					$('#usersArea')
-					.prepend('<p>'+res[i].Username+'</p><p><img src="'+res[i].Usericon+'"></p>');
-					else
-					$('#usersArea').prepend('<p>'+res[i].Username+'</p>');
+			for(var i=0;i<res.length;i++){
+					var count=i%4;
+					var img='img/icon.png';					
+					if(res[i].UsericonSet){
+					$('#usersArea').find('.col-md-6').eq(count)
+					.prepend('<div class="users"><p>'+res[i].Username
+						+'</p><p><img src="'+res[i].Usericon+'"></p></div>');
+					}
+					else{
+					$('#usersArea').find('.col-md-6').eq(count)
+					.prepend('<div class="users"><p>'+res[i].Username
+						+'</p><p><img src="'+img+'"></p></div>');
+					}
 				}
 				$('._loading').css('display','none');
 			}
 		)
 </script>
 <style type="text/css">
-	#usersArea img{
-		width: 100px;
+	#usersArea{
+		padding-top: 30px;
 	}
+	#usersArea img{
+		width: 100%;
+		display: inline-block;
+	}
+	.users{border: 1px solid lightgray;}
 </style>

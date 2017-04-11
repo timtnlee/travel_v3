@@ -38,7 +38,10 @@ function welcomeOption(text,func){//can only be used in reload pages
 		func();
 	})	
 }
-function HeaderButton(href,reload,option){
+function HeaderButton(target){
+	var href=target.attr('href'),
+		reload=target.attr('reload'),
+		option=target.attr('optional');
 	$('._content').find('._pages').css('display','none');
 	$('._content').find('._pages').find('input').attr('disabled',true).unbind();
 	$('._reloadPages').remove();
@@ -89,12 +92,28 @@ function EnterSubmit(ele){
 	$(window).unbind('keydown').keydown(function(e){
 		if(e.which==13){
 			e.preventDefault();
-			console.log('enter');
 			$(ele).click();
 		}
 	})
 }
-
+function checkData(str){
+		var regExp=/[^0-9a-zA-Z]/;
+		return regExp.test(str);
+	}
+function CheckInput(ele){
+	$(ele).on('keyup',function(){
+		console.log('323');
+		var str=$(this).val();
+		var display=$(this).next().next();
+		if(str=='')
+			display.text('未輸入');
+		else if(checkData(str))
+			display.text('請輸入英文或數字');
+		else{
+			display.text('✔');
+		}
+	})
+}
 function AjaxPost(route,data,success,error){
 	console.log('AjaxPost');
 	$.ajax({

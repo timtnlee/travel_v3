@@ -144,9 +144,9 @@ function textSearchCallback(result,status){
 				bounds.extend(result[i].geometry.location)
 			}			
 		}	
-		map.fitBounds(bounds);
-		close_block();
+		map.fitBounds(bounds);		
 	}
+	close_block();
 }
 function NearbySearch(){
 	console.log('NearbySearch');

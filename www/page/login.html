@@ -1,11 +1,33 @@
 <div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 <div class="pageContainer">
-<p>login</p>
-帳號<input type="text" name="name"><br>
-密碼<input type="password" name="passwd">
-<input type="submit" name="submit" value="登入">
+	<div class="pageMiddle loginpage">
+		<p>login</p>
+	<p>帳號
+	<input type="text" name="name"><br>
+	<small>未輸入</small>
+	</p>
+	
+	<p>密碼
+	<input type="password" name="passwd"><br>
+	<small>未輸入</small>
+	</p>
+	
+	<input type="submit" name="submit" value="登入">
+	<input href='register' type="submit" name="goregister" value="註冊">
+	</div>
 </div>
+<style type="text/css">
+	.loginpage{
+		text-align: center;
+	}
+</style>
 <script>
+CheckInput('[name="name"]');
+CheckInput('[name="passwd"]')
+	$('[name="goregister"]').click(function(e){
+		e.preventDefault();
+		HeaderButton($(this));
+	})
 	EnterSubmit('[name="submit"]');
 	$('[name="submit"]').click(function(){
 		$('._loading').css('display','block');

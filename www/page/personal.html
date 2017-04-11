@@ -1,8 +1,20 @@
+<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 <div class="pageContainer">
-	<p>Psersonal page</p>
-	<p id='name'></p>
-	<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
-	<img id='usericon' src=''>
+<div class="pageMiddle">
+	<div class="row">
+		<div class="col-sm-6">	
+			<img id='usericon' src=''>
+		</div>
+		<div class="col-sm-6">
+			<p>User Name:</p>
+			<p id='name'></p>
+			<p>文章:</p>
+			<p >123</p>
+			<p>行程:</p>
+			<p >222</p>
+		</div>
+	</div>
+	</div>
 </div>
 <script>
 if(localStorage.logined=='yes')
@@ -20,6 +32,6 @@ AjaxPost(
 
 <style>
 	#usericon{
-		width: 300px;
+		width: 90%;
 	}
 </style>
