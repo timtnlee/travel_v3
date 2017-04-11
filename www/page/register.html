@@ -21,8 +21,10 @@ CheckInput('[name="register_name"]');
 CheckInput('[name="register_passwd"]')
 	EnterSubmit('[name="register"]');
 	$('[name="register"]').click(function(){
+		console.log('click');
 		var name=$('[name="register_name"]').val(),
 			passwd=$('[name="register_passwd"]').val();
+		if(name!=''&&passwd!=''){
 		AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
 			alert(res);
 			if(res=='註冊成功'){
@@ -30,5 +32,6 @@ CheckInput('[name="register_passwd"]')
 				location.href='';
 			}
 		})
+		}
 	})
 </script>

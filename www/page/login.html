@@ -30,9 +30,12 @@ CheckInput('[name="passwd"]')
 	})
 	EnterSubmit('[name="submit"]');
 	$('[name="submit"]').click(function(){
-		$('._loading').css('display','block');
+		console.log('click');
+		
 		var username=$('[name="name"]').val(),
 			userpasswd=$('[name="passwd"]').val();
+		if(username!=''&&userpasswd!=''){
+		$('._loading').css('display','block');
 		AjaxPost(
 			'user/login',
 			{name:username,passwd:userpasswd},
@@ -48,5 +51,6 @@ CheckInput('[name="passwd"]')
 				$('._loading').css('display','none');
 				}				
 			)
+		}
 	})
 </script>

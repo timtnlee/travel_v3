@@ -43,7 +43,6 @@ function HeaderButton(target){
 		reload=target.attr('reload'),
 		option=target.attr('optional');
 	$('._content').find('._pages').css('display','none');
-	$('._content').find('._pages').find('input').attr('disabled',true).unbind();
 	$('._reloadPages').remove();
 	if(option&&localStorage.logined=='no')
 		href=option;
