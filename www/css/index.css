@@ -125,8 +125,16 @@ a{
 		width: 200px;
 		background-color: lightgray;
 	}
+	.pageMiddle{
+		width: 98vw;
+		margin: 0px 1vw 0px 1vw;
+	}
 }
 @media (max-width:500px){
+	.pageMiddle{
+		width: 98vw;
+		margin: 0px 1vw 0px 1vw;
+	}
 	.pageContainer{
 		padding: 1vw;
 	}
