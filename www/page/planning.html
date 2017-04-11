@@ -217,6 +217,16 @@
 			left: 0px;
 			background-color: white;
 		}
+		#planDistance{
+			overflow-y: scroll;
+			position: absolute;
+			bottom: 0px;
+			width: 100vw;
+			height: 55vh;
+			z-index: 2;
+			left: 100vw;
+			background-color: white;
+		}
 		#schedule_block{
 			position:absolute;
 			top:55vh;
@@ -250,6 +260,16 @@
 			height: 55vh;
 			z-index: 2;
 			left: 0px;
+			background-color: white;
+		}
+		#planDistance{
+			overflow-y: scroll;
+			position: absolute;
+			bottom: 0px;
+			width: 100vw;
+			height: 55vh;
+			z-index: 2;
+			left: 100vw;
 			background-color: white;
 		}
 		#schedule_block{
@@ -296,6 +316,7 @@ var hint=document.getElementById('hint'),
 
 //process
 	//planning_search
+EnterSubmit('#searchSubmit');
 welcomeOption('清單',showShedule);
 block();
 ResetInput('#textSearch');

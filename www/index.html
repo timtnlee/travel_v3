@@ -25,68 +25,33 @@
         <script type="text/javascript" src="cordova.js"></script>
         <div class='_container'>
         	<div class="_header">
-                <div class="_PC-header">
-        		<a href='home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
-				<a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
-				<a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
-				<a href='trip' reload='true'><i class="fa fa-car" aria-hidden="true"></i>行程</a>
-				
+                     <!--  phone -->
+               <div class="_response-header">                  
+                   <div class="_menu">
+                    <div class="_menuArea">
+                       <a href='home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
+                        <a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
+                        <a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
+                        <a href='trip' reload='true'><i class="fa fa-car" aria-hidden="true"></i>行程</a>              
+                        <a href='planning' reload='true' optional='planning'>
+                            <i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
+                        <a href='personal' optional='login'>
+                            <i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
+                        <p class="_loginOption">    
+                        <a href='login'><i class="fa fa-sign-in" aria-hidden="true"></i>登入</a>
+                        <a href="signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
+                        </p>
+                     </div>
+                   </div>
+               </div>
 
-				<p class='_loginOption'>				
-					<a href='planning' reload='true'>
-						<i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
-					<a href='planning' reload='true'>
-						<i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
-				</p>
-				
-				<p class='_loginOption'>				
-					<a href='login'><i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
-					<a href='personal'><i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
-				</p>
-				
-				<p class='_loginOption'>				
-					<a href='login'><i class="fa fa-sign-in" aria-hidden="true"></i>登入</a>
-					<a href="signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
-				</p>
-        	   </div> 
-                
-                <div class="welcome"> 
+               <div class="welcome"> 
                     <strong id='menuBar' href="javascript:void(0)">
                         <i class="fa fa-bars" aria-hidden="true"></i>
                     </strong>
                     <p name='title'>首頁</p>
                     <strong href="javascript:viod(0)" id='welcomeOption'>123</strong>
                 </div>
-                     <!--  phone -->
-               <div class="_PH-header">
-                  
-                   <div class="_menu">
-                    <div class="_menuArea">
-                       <a href='home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
-                         <a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
-                        <a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
-                        <a href='trip' reload='true'><i class="fa fa-car" aria-hidden="true"></i>行程</a>
-                
-
-                        <p class='_loginOption _menuP'>                
-                         <a href='planning' reload='true'>
-                        <i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
-                            <a href='planning' reload='true'>
-                        <i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
-                     </p>
-                
-                        <p class='_loginOption _menuP'>                
-                        <a href='login'><i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
-                        <a href='personal'><i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
-                        </p>
-                
-                        <p class='_loginOption _menuP'>                
-                        <a href='login'><i class="fa fa-sign-in" aria-hidden="true"></i>登入</a>
-                        <a href="signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
-                     </p>
-                     </div>
-                   </div>
-               </div>
             </div>
            
         	<div class="_content">        	
@@ -99,13 +64,13 @@
     	
     	//Dom events go here
     	$(function(){
-            setIp();
-    		LoadHomePage();
+            setIp(); 
+            LoadHomePage();    		
     		$('._header').find('a').on('click',function(e){
     			e.preventDefault();
                 $("[name='title']").text($(this).text());
                 $('.welcome').css({height:'0px'}).animate({height:'40px'});
-    			HeaderButton($(this).attr('href'),$(this).attr('reload'));
+    			HeaderButton($(this).attr('href'),$(this).attr('reload'),$(this).attr('optional'));
     		})
             PhoneButton();
     	})

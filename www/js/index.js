@@ -1,8 +1,8 @@
 //var ip='http://127.0.0.1:3000/';
 var ip='http://192.168.1.45:3000/';
 function setIp(){
-	var prompt=window.prompt('local host?');
-	if(prompt)ip='http://127.0.0.1:3000/';
+	var confirm=window.confirm('local host?');
+	if(confirm)ip='http://127.0.0.1:3000/';
 }
 
 if(!localStorage.logined)
@@ -22,21 +22,15 @@ function LoadHomePage(){
 	LoginOption();
 }
 function LoginOption(){
-	var option=$('._loginOption');
-	option.each(function(){
-		var first=$(this).find('a').first(),
-			last=$(this).find('a').last();
-		if(localStorage.logined=='no'){
-			console.log('未登入');
-			first.css('display','block');
-			last.css('display','none');
-		}
-		else{
-			console.log('已登入');
-			first.css('display','none');
-			last.css('display','block');
-		}
-	})	
+	var first=$('._loginOption').find('a').first(),
+		last=$('._loginOption').find('a').last();
+	if(localStorage.logined=='yes'){
+		first.css('display','none')
+	}
+	else{
+		last.css('display','none')
+	}
+
 }
 function welcomeOption(text,func){//can only be used in reload pages
 	$('#welcomeOption').text(text);
@@ -44,12 +38,15 @@ function welcomeOption(text,func){//can only be used in reload pages
 		func();
 	})	
 }
-function HeaderButton(href,reload){
+function HeaderButton(href,reload,option){
 	$('._content').find('._pages').css('display','none');
 	$('._content').find('._pages').find('input').attr('disabled',true).unbind();
 	$('._reloadPages').remove();
+	
+	console.log('option:'+option);
+	if(option&&localStorage.logined=='no')
+		href=option;
 	var id='#'+href;
-	console.log(href);	
 	if(reload=='true'){		
 		$("._content").prepend('<div id="'+href+'" class="_reloadPages"></div>');
 		$.ajax({
@@ -91,8 +88,10 @@ function ResetInput(input){
 	})
 }
 function EnterSubmit(ele){
-	$(window).keyup(function(e){
-		if(event.which==13){
+	$(window).unbind('keydown').keydown(function(e){
+		if(e.which==13){
+			e.preventDefault();
+			console.log('enter');
 			$(ele).click();
 		}
 	})

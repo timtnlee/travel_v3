@@ -1,6 +1,7 @@
 body{
 	margin: 0;
 	padding: 0;
+	-webkit-tap-highlight-color:rgba(255,0,0,0);
 }
 a{
 	text-decoration: none;
@@ -19,8 +20,8 @@ a{
 	margin: 0px;
 }
 ._header a{
-	margin: 10px;
 	display: inline-block;
+	margin: 10px;
 	text-decoration: none;
 	color: #0000C6;
 	margin-left: 20px;
@@ -29,7 +30,7 @@ a{
 	color:#5B5B5B;
 }
 ._loginOption{
-	/* display: inline; */
+	display: inline;
 	margin:0;
 	padding: 0;
 }
@@ -59,7 +60,7 @@ a{
 }
 #welcomeOption{
 	cursor: pointer;
-	padding: 10px 0px 10px 0px;
+	padding: 10px 5px 10px 0px;
 	margin: 0px;
 	float: right;
 	color: white;
@@ -74,26 +75,12 @@ a{
 	margin: 0px;
 	padding:0px;
 }
-._loginOption{
-	margin: 0;
-	padding: 0;
-	display: inline;
-}
-._loginOption a{
-	color: #808040;
-}
-._PH-header{
-	display: none;
-}
 @media screen and (orientation:portrait) {
 	.pageContainer{
 		padding: 1vw;
 	}
-   ._PC-header{
-   	display: none;
-   }
-   ._PH-header{
-		display: block;
+
+   ._response-header{
 		text-align: left;
 	}
 	._menu{
@@ -119,7 +106,7 @@ a{
 	}
 	._header a{
 		display: block;
-		margin: 20px 5px 10px 0px;
+		margin: 20px 5px 10px 20px;
 	}
 	._menuArea{
 		height: 100%;
@@ -129,14 +116,11 @@ a{
 	}
 }
 @media (max-width:500px){
-		.pageContainer{
+	.pageContainer{
 		padding: 1vw;
 	}
-   ._PC-header{
-   	display: none;
-   }
-   ._PH-header{
-		display: block;
+
+   ._response-header{
 		text-align: left;
 	}
 	._menu{
@@ -162,7 +146,7 @@ a{
 	}
 	._header a{
 		display: block;
-		margin: 20px 5px 10px 0px;
+		margin: 20px 5px 10px 20px;
 	}
 	._menuArea{
 		height: 100%;

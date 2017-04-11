@@ -5,7 +5,42 @@ var waypoints=[],
 	directions;
 GoToPlan();
 
+function moving(step){
+	var h=window.innerHeight,
+		w=window.innerWidth;
+	var response=function(){
+		if(h>w||w<=500)
+			return 'h';
+		return 'w';
+	}
+	var gotoplan=function(){
+		$('#plan').css('opacity','0.7');
+		if(response=='w'){		
+			$('#mapInfo').animate({left:'23vw'});
+			$('#planDistance').animate({left:'50vw'});
+		}
+		else{
+			$('#mapInfo').animate({left:'-100vw'});
+			$('#planDistance').animate({left:'0vw'});
+		}
+	}
+	var gobacksearch=function(){
+		$('#plan').css('opacity','1');
+		if(response=='w'){
+			$('#mapInfo').animate({left:'50vw'});
+			$('#planDistance').animate({left:'77vw'});
+		}
+		else{
+			$('#mapInfo').animate({left:'0vw'});
+			$('#planDistance').animate({left:'100vw'});
+		}
+	}
 
+	if(step=='gotoplan')
+		gotoplan();
+	else
+		gobacksearch();	
+}
 
 function GoToPlan(){
 	$('#plan').on('click',function(){
@@ -13,21 +48,17 @@ function GoToPlan(){
 			HideMarker();
 			//HideListMarker();
 			CleanDisplay();
-			FindList();
-			$(this).css('opacity','0.7');
-			$('#mapInfo').animate({left:'23vw'});
-			$('#planDistance').animate({left:'50vw'});		
+			FindList();	
+			moving('gotoplan');
 			block();
 			Directions();
 		}		
 	});
 	$('#distanceGoback').on('click',function(){
 		ShowMarker();
+		moving('gobacksearch');
 		//ShowListMarker();
 		HideDisplay();
-		$('#plan').css('opacity','1');
-		$('#mapInfo').animate({left:'50vw'});
-		$('#planDistance').animate({left:'77vw'});
 	})
 }
 function initWaypoints(){
