@@ -14,8 +14,10 @@ function moving(step){
 		return 'w';
 	}
 	var gotoplan=function(){
+		console.log(response);
 		$('#plan').css('opacity','0.7');
-		if(response=='w'){		
+		if(response()=='w'){		
+			console.log('w');
 			$('#mapInfo').animate({left:'23vw'});
 			$('#planDistance').animate({left:'50vw'});
 		}
@@ -26,7 +28,7 @@ function moving(step){
 	}
 	var gobacksearch=function(){
 		$('#plan').css('opacity','1');
-		if(response=='w'){
+		if(response()=='w'){
 			$('#mapInfo').animate({left:'50vw'});
 			$('#planDistance').animate({left:'77vw'});
 		}
@@ -95,7 +97,8 @@ function ShowListMarker(){
 function Directions(){
 	directions=new google.maps.DirectionsService();
 	directionsDisplay= new google.maps.DirectionsRenderer({
-		map:map});
+		map:map
+	});
 	directionsDisplay.setPanel(document.getElementById('output'));
 	var request={
 		origin:start,
