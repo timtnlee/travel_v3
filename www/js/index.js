@@ -42,8 +42,6 @@ function HeaderButton(href,reload,option){
 	$('._content').find('._pages').css('display','none');
 	$('._content').find('._pages').find('input').attr('disabled',true).unbind();
 	$('._reloadPages').remove();
-	
-	console.log('option:'+option);
 	if(option&&localStorage.logined=='no')
 		href=option;
 	var id='#'+href;
