@@ -20,7 +20,7 @@
 					<small>未輸入</small>
 				</div>				
 			</div>
-			<div class="form-group">
+			<div class="form-group" align="left">
 				<div class='col-sm-offset-2 col-sm-10'>
 					<div class="col-sm-2">
 						<input class="btn btn-default" type="submit" name="submit" value="登入">
@@ -48,22 +48,12 @@ CheckInput('[name="passwd"]')
 		HeaderButton($(this));
 	})
 	EnterSubmit('[name="submit"]');
-<<<<<<< HEAD
 	$('[name="submit"]').click(function(e){
 		e.preventDefault();
-=======
-	$('[name="submit"]').click(function(){
-		console.log('click');
-		
->>>>>>> origin/master
 		var username=$('[name="name"]').val(),
 			userpasswd=$('[name="passwd"]').val();
 		if(username!=''&&userpasswd!=''){
 		$('._loading').css('display','block');
-<<<<<<< HEAD
-		
-=======
->>>>>>> origin/master
 		AjaxPost(
 			'user/login',
 			{name:username,passwd:userpasswd},

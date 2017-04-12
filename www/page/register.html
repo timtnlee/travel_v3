@@ -1,16 +1,38 @@
 <div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 <div class="pageContainer">
-	<div class="pageMiddle loginpage">
-		<p>register</p>
-	<p>帳號
-	<input type="text" name="register_name"><br><small>未輸入</small>
-	</p>
-	<p>密碼
-	<input type="password" name="register_passwd"><br><small>未輸入</small>
-	</p>
-	<input type="submit" name="register" value="註冊">
+	<div class="singleMiddle loginpage">
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">帳號</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" name="register_name">
+				</div>	
+				<div class="col-sm-2" align="left">
+					<small>未輸入</small>
+				</div>			
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">密碼</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="password" name="register_passwd">
+				</div>			
+				<div class="col-sm-2" align="left">
+					<small>未輸入</small>
+				</div>				
+			</div>
+			<div class="form-group">
+				<div class='col-sm-offset-2 col-sm-10'>
+					<div class="col-sm-2">
+						<input class="btn btn-default" type="submit" name="register" value="註冊">
+					</div>
+				</div>
+			</div>
+		</form>
+	
+	
 	</div>
 </div>
+
 <style type="text/css">
 	.loginpage{
 		text-align: center;
@@ -20,7 +42,7 @@
 CheckInput('[name="register_name"]',nameCheck);
 CheckInput('[name="register_passwd"]');
 function nameCheck(){
-	var display=$('[name="register_name"]').next().next(),
+	var display=$('[name="register_name"]').parent().next().children(),
 		name=$('[name="register_name"]').val();
 	AjaxPost('user/nameCheck',{name:name},function(res){			
 			if(res=='yes'){
@@ -37,32 +59,18 @@ function nameCheck(){
 	$('[name="register"]').click(function(){
 		console.log('click');
 		var name=$('[name="register_name"]').val(),
-<<<<<<< HEAD
 			passwd=$('[name="register_passwd"]').val(),
 			nameErr=$('[name="register_name"]').next().next().text(),
 			passwdErr=$('[name="register_name"]').next().next().text();
 			console.log(nameErr+passwdErr);
 		if(nameErr=='✔'&&passwdErr=='✔'){
-			AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
-=======
-			passwd=$('[name="register_passwd"]').val();
-		if(name!=''&&passwd!=''){
-		AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
->>>>>>> origin/master
+			AjaxPost('user/register',{name:name,passwd:passwd},function(res){
 			alert(res);
 			if(res=='註冊成功'){
 				localStorage.logined='yes';
 				localStorage.username=name;
 				location.href='';
-<<<<<<< HEAD
 				}
 			})
 		}
-	
-=======
-			}
-		})
-		}
->>>>>>> origin/master
 	})
-</script>
