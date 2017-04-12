@@ -17,21 +17,52 @@
 	}
 </style>
 <script type="text/javascript">
-CheckInput('[name="register_name"]');
-CheckInput('[name="register_passwd"]')
+CheckInput('[name="register_name"]',nameCheck);
+CheckInput('[name="register_passwd"]');
+function nameCheck(){
+	var display=$('[name="register_name"]').next().next(),
+		name=$('[name="register_name"]').val();
+	AjaxPost('user/nameCheck',{name:name},function(res){			
+			if(res=='yes'){
+				display.text('✔');
+			}
+			else{
+				display.text('此帳號已使用');
+			}
+		})
+}
+	
+
 	EnterSubmit('[name="register"]');
 	$('[name="register"]').click(function(){
 		console.log('click');
 		var name=$('[name="register_name"]').val(),
+<<<<<<< HEAD
+			passwd=$('[name="register_passwd"]').val(),
+			nameErr=$('[name="register_name"]').next().next().text(),
+			passwdErr=$('[name="register_name"]').next().next().text();
+			console.log(nameErr+passwdErr);
+		if(nameErr=='✔'&&passwdErr=='✔'){
+			AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
+=======
 			passwd=$('[name="register_passwd"]').val();
 		if(name!=''&&passwd!=''){
 		AjaxPost('user/register',{name:name,passwd:passwd},function(res){			
+>>>>>>> origin/master
 			alert(res);
 			if(res=='註冊成功'){
+				localStorage.logined='yes';
 				localStorage.username=name;
 				location.href='';
+<<<<<<< HEAD
+				}
+			})
+		}
+	
+=======
 			}
 		})
 		}
+>>>>>>> origin/master
 	})
 </script>

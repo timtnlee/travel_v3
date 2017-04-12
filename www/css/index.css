@@ -15,7 +15,20 @@ a{
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+#block_you{
+		z-index: 10;
+		background-color: lightgray;
+		opacity: 0.5;
+		text-align: center;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		padding-top: 50vh;
+		top: 0;
+		display: none;
+	}
 ._header{
+	background-color:rgba(60,60,60,0.9);
 	text-align: center;
 	font-size: 20px;
 	margin: 0px;
@@ -24,11 +37,15 @@ a{
 	display: inline-block;
 	margin: 10px;
 	text-decoration: none;
-	color: #0000C6;
+	color: white;
 	margin-left: 20px;
 }
+._header a:hover{
+	color: lightgray;
+}
 ._header a i{
-	color:#5B5B5B;
+	color:gray;
+	margin-right: 10px
 }
 ._loginOption{
 	display: inline;
@@ -36,11 +53,13 @@ a{
 	padding: 0;
 }
 .welcome{
-		font-size: 20px;
+		height:40px;
+		padding: 5px; 
+		font-weight:bold;
 		margin: 0px;
 		text-align: center;
 		font-size:20px;
-		background: linear-gradient(to top,#84C1FF,#97CBFF); 
+		background: linear-gradient(to top,#C2C287,#B9B973); 
 		color: white;
 	}
 .articleBar{
@@ -49,19 +68,24 @@ a{
 	}
 [name='title']{
 	display: inline-block;
-	padding: 10px 0px 10px 0px;
+	padding: 0px;
 	margin: 0px;
 }
 .pageContainer{
-	padding: 10px;
+	padding:10px 0px 10px 0px;
 	margin: 0px;
 }
 .pageMiddle{
-	padding: 0.5px;
-	width: 80vw;
+	padding: 1vw;
+	width: 78vw;
 	margin: 0px 10vw 0px 10vw;
 	background-color:white;
 }
+.singleMiddle{
+		margin: 0px 20vw 0px 20vw;
+		background-color:white;
+		padding: 20px 20px 40px 20px;
+	}
 ._loading{
 	text-align: center;
 	display: none;
@@ -82,13 +106,13 @@ a{
 }
 ._content{
 	/* height: 100vh; */
-	background-color:#A6FFFF;
+	background:linear-gradient(to top,#FFFFAA,#FFFFDF);
 	margin: 0px;
 	padding:0px;
 }
 @media screen and (orientation:portrait) {
 	.pageContainer{
-		padding: 1vw;
+		padding:2px 0px 2px 0px;
 	}
 
    ._response-header{
@@ -103,19 +127,18 @@ a{
 		height: 100%;
 	}
 	._loginOption{
-
+	
 	}
 	#menuBar{
+		margin-top: -5px;
 		cursor: pointer;
 		font-size: 25px;
-		position: absolute;
-		left: 10px;
-		top: 8px;
-		display: inline;
+		display: inline-block;
 		text-decoration: none;
 		color: white;
 	}
 	._header a{
+		color: white;
 		display: block;
 		margin: 20px 5px 10px 20px;
 	}
@@ -123,11 +146,16 @@ a{
 		height: 100%;
 		padding: 2px;
 		width: 200px;
-		background-color: lightgray;
+		background-color:rgba(60,60,60,0.9);
 	}
 	.pageMiddle{
 		width: 98vw;
 		margin: 0px 1vw 0px 1vw;
+	}
+	.singleMiddle{
+		margin: 0px 1vw 0px 1vw;
+		background-color:white;
+		padding: 20px 20px 40px 20px;
 	}
 }
 @media (max-width:500px){
@@ -135,8 +163,13 @@ a{
 		width: 98vw;
 		margin: 0px 1vw 0px 1vw;
 	}
+	.singleMiddle{
+		margin: 0px 1vw 0px 1vw;
+		background-color:white;
+		padding: 20px 20px 40px 20px;
+	}
 	.pageContainer{
-		padding: 1vw;
+		padding:2px 0px 2px 0px;
 	}
 
    ._response-header{
@@ -164,6 +197,7 @@ a{
 		color: white;
 	}
 	._header a{
+		color: white;
 		display: block;
 		margin: 20px 5px 10px 20px;
 	}
@@ -171,6 +205,6 @@ a{
 		height: 100%;
 		padding: 2px;
 		width: 200px;
-		background-color: lightgray;
+		background-color:rgba(60,60,60,0.9);
 	}
 }

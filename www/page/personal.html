@@ -3,7 +3,10 @@
 <div class="pageMiddle">
 	<div class="row">
 		<div class="col-sm-6">	
-			<img id='usericon' src=''>
+			<button class="btn btn-success btn-xs" id='iconUploadBtn'>上傳</button>
+			<br>
+			<input type="file" name="" id='iconUploadInput' accept="image/*"> 			
+			<img id='usericon' src='img/icon.png'>
 		</div>
 		<div class="col-sm-6">
 			<p>User Name:</p>
@@ -17,7 +20,8 @@
 	</div>
 </div>
 <script>
-if(localStorage.logined=='yes')
+uploadIcon();
+if(localStorage.logined=='yes'){
 $('._loading').css('display','block');
 AjaxPost(
 	'user/personal',
@@ -27,10 +31,26 @@ AjaxPost(
 		$('._loading').css('display','none');
 	}
 	)
-	$('#name').text(localStorage.username);
+	$('#name').text(localStorage.username);}
+function uploadIcon(){
+	$('#iconUploadBtn').click(function(){
+		$('#iconUploadInput').click();
+	})
+	InsertImg('#iconUploadInput',SaveIcon);
+}
+function SaveIcon(result){
+		block();
+		AjaxPost('user/picture',{username:localStorage.username,result:result},function(res){
+			alert(res);
+			reNewPage('personal');
+		})
+}
 </script>
 
 <style>
+	#iconUploadInput{
+		display: none;
+	}
 	#usericon{
 		width: 90%;
 	}

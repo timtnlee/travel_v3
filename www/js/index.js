@@ -38,10 +38,38 @@ function welcomeOption(text,func){//can only be used in reload pages
 		func();
 	})	
 }
+function reNewPage(href){
+	console.log(123);
+		id='#'+href;
+		$('._content').find('._pages').css('display','none');
+		$('._reloadPages').remove();
+		$(id).remove();
+		$("._content").prepend('<div id="'+href+'" class="_pages"></div>');
+		$.ajax({
+			url: "page/"+href+".html", 
+			success: function(result){        	
+        		$(id).html(result);
+				}
+			});
+} 
+function InsertImg(ele,insert){
+	$(ele).on('change',function(){
+				var file= document.querySelector(ele).files[0];
+				var reader  = new FileReader();				
+				//----------檔案讀取+預覽------
+				reader.addEventListener("load", function () {
+					console.log('load');
+					var result=reader.result;
+					insert(result);
+				})
+				if(file)reader.readAsDataURL(file);
+			})}
 function HeaderButton(target){
 	var href=target.attr('href'),
 		reload=target.attr('reload'),
 		option=target.attr('optional');
+		text=target.text();
+	$("[name='title']").text(text);
 	$('._content').find('._pages').css('display','none');
 	$('._reloadPages').remove();
 	if(option&&localStorage.logined=='no')
@@ -70,7 +98,6 @@ function HeaderButton(target){
 				}
 			});
 		}
-		$(id).find('input').attr('disabled',false);
 	}	
 }
 function PhoneButton(){
@@ -99,17 +126,18 @@ function checkData(str){
 		var regExp=/[^0-9a-zA-Z]/;
 		return regExp.test(str);
 	}
-function CheckInput(ele){
+function CheckInput(ele,addition){
 	$(ele).on('keyup',function(){
 		console.log('323');
 		var str=$(this).val();
-		var display=$(this).next().next();
+		var display=$(this).parent().next().children();
 		if(str=='')
 			display.text('未輸入');
 		else if(checkData(str))
 			display.text('請輸入英文或數字');
 		else{
-			display.text('✔');
+			if(addition)addition();			
+			else display.text('✔');
 		}
 	})
 }
@@ -129,3 +157,9 @@ function AjaxPost(route,data,success,error){
 			console.log('POST done');
 		})
 	}
+function block(){
+	$('#block_you').css('display','block');
+}
+function close_block(){
+	$('#block_you').css('display','none');
+}

@@ -7,7 +7,7 @@
 	<div id='map'></div>
 	<!-- search info -->
 	<div id='mapInfo'>
-	<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
+	<p id='hint' class="bg-info">選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
 	<div id='searchArea'>
 		
 		<h4>查詢</h4>
@@ -52,17 +52,6 @@
 <style>
 	#allContainer{
 		margin: 0px;
-	}
-	#block_you{
-		z-index: 10;
-		background-color: lightgray;
-		opacity: 0.5;
-		text-align: center;
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		padding-top: 50vh;
-		top: 0;
 	}
 	#map{
 		z-index: 2;
@@ -110,11 +99,11 @@
 		margin: 5px 5px 10px 5px;
 	}
 	#hint{
-		overflow: hidden;
+		/* overflow: hidden;
 		margin: 0px;
 		opacity: 0.9;
 		padding: 2px 5px 2px 10px;
-		background-color: lightcoral;
+		background-color: lightcoral; */
 	}
 	#option{
 		display: none;

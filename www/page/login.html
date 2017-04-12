@@ -1,19 +1,38 @@
 <div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 <div class="pageContainer">
-	<div class="pageMiddle loginpage">
-		<p>login</p>
-	<p>帳號
-	<input type="text" name="name"><br>
-	<small>未輸入</small>
-	</p>
+	<div class="singleMiddle loginpage">
+		<form class="form-horizontal" role="form">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">帳號</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="name">
+				</div>	
+				<div class="col-sm-2" align="left">
+					<small >未輸入</small>
+				</div>			
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">密碼</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="password" name="passwd">
+				</div>			
+				<div class="col-sm-2" align="left">
+					<small>未輸入</small>
+				</div>				
+			</div>
+			<div class="form-group">
+				<div class='col-sm-offset-2 col-sm-10'>
+					<div class="col-sm-2">
+						<input class="btn btn-default" type="submit" name="submit" value="登入">
+					</div>
+					<div class="col-sm-2">
+						<input class="btn btn-default" href='register' type="submit" name="goregister" value="註冊">
+					</div>		
+				</div>
+			</div>
+		</form>
 	
-	<p>密碼
-	<input type="password" name="passwd"><br>
-	<small>未輸入</small>
-	</p>
 	
-	<input type="submit" name="submit" value="登入">
-	<input href='register' type="submit" name="goregister" value="註冊">
 	</div>
 </div>
 <style type="text/css">
@@ -29,26 +48,34 @@ CheckInput('[name="passwd"]')
 		HeaderButton($(this));
 	})
 	EnterSubmit('[name="submit"]');
+<<<<<<< HEAD
+	$('[name="submit"]').click(function(e){
+		e.preventDefault();
+=======
 	$('[name="submit"]').click(function(){
 		console.log('click');
 		
+>>>>>>> origin/master
 		var username=$('[name="name"]').val(),
 			userpasswd=$('[name="passwd"]').val();
 		if(username!=''&&userpasswd!=''){
 		$('._loading').css('display','block');
+<<<<<<< HEAD
+		
+=======
+>>>>>>> origin/master
 		AjaxPost(
 			'user/login',
 			{name:username,passwd:userpasswd},
 			function(res){
-				if(res.verification){
-				localStorage.logined='yes';
-				localStorage.username=username;
-				location.href='';
-					}
-				else{
-					alert(res.welcome);
-					}
+				alert(res.welcome);
 				$('._loading').css('display','none');
+				console.log(res.verification);
+				if(res.verification=='yes'){
+					localStorage.logined='yes';
+					localStorage.username=username;
+					location.href='';
+					}				
 				}				
 			)
 		}

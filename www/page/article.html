@@ -2,14 +2,14 @@
 	
 	<div class='article_title pageMiddle'>
 		<div class="articleBar">
-			<a>新增文章</a>
+			<a href="addArticle" optiona='login' reload='true' class="btn btn-link">新增文章</a>
 		</div>
 		<div id='articleArea'>
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
 	</div>
 
-	<div class="single_article">
+	<div class="single_article singleMiddle">
 		<a href='javascript:void(0)' id='goback'>
 			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
 		<p id='title'></p>
@@ -19,6 +19,10 @@
 	</div>
 </div>
 <script>
+$('.articleBar').find('.btn-link').click(function(e){
+	e.preventDefault();
+	HeaderButton($(this));
+})
 $('._loading').css('display','block');
 	$('#goback').click(function(){
 		$('.article_title').css('display','block');
@@ -73,9 +77,6 @@ $('._loading').css('display','block');
 	}
 	.single_article{
 		display: none;
-		margin: 0px 20vw 0px 20vw;
-		background-color:white;
-		padding: 20px 20px 40px 20px;
 	}
 	.single_article img{
 		max-width: 500px;

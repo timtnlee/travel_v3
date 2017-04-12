@@ -1,13 +1,21 @@
 <div class="pageContainer">
-	<p>介紹</p>
+	<div class="pageMiddle">
+		<div class="introduce">
+			<button class="btn btn-default" onclick='test()'>GET STARTED</button>
+		</div>
+	</div>
 </div>
 
 <style type="text/css">
-	
+	.introduce{
+		text-align: center;
+	}
 </style>
 
 <script>
-
+function test(){
+	
+}
 function welcomeTitle(){
 	$('[name="title"]').text('Welcome to Utravel !'+localStorage.username);
 }

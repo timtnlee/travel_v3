@@ -1,0 +1,62 @@
+<div id='block_you'><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+<div class="pageContainer">
+	<div class="singleMiddle">
+		<input type="text" name="art_title" class="form-control" placeholder="標題">
+		<div><input type="file" id='Insert' accept = "image/*"></div>
+		<div class="" id='contentArea' contenteditable="true"></div>
+		<button class="btn btn-default" id='submit'>發表</button>
+	</div>
+</div>
+<style type="text/css">
+	#contentArea{
+		border: 1px solid gray;
+		min-height: 300px;
+	}
+	#contentArea img{
+		width: 90%;
+	}
+</style>
+<script type="text/javascript">
+	InsertImg('#Insert',Insert);
+	AddNewArticle();
+	function AddNewArticle(){
+		$('#submit').click(function(){
+			block();
+			var title=$('[name="art_title"]').val(),
+				content=$('#contentArea').html();
+			if(title!=''&&content!=''){
+				SaveArticle(title,content);
+			}
+			else{
+				alert('標題或內容空白');
+				close_block();
+			}
+		})
+	}
+	function SaveArticle(title,content){
+		AjaxPost('article/addArticle',
+			{username:localStorage.username,title:title,article:content,date:new Date()},
+			function(res){
+				alert(res);
+				close_block();
+				reNewPage('article');
+			})
+	}
+	
+	//inert text
+	function Insert(result){
+		$('#contentArea').focus();
+		var selection= window.getSelection ? window.getSelection() : document.selection;
+    	var range=selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+    	range.collapse(false);
+    	var tag = range.createContextualFragment('<br><img class="uploadImg" src="'+result+'"><br>');   	
+    	var	lastChild = tag.lastChild;
+    	range.insertNode(tag);
+    	if(lastChild){
+			range.setEndAfter(lastChild);
+			range.setStartAfter(lastChild);
+		}
+    	selection.removeAllRanges();
+		selection.addRange(range);
+	}
+</script>

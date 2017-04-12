@@ -1,9 +1,4 @@
-function block(){
-	$('#block_you').css('display','block');
-}
-function close_block(){
-	$('#block_you').css('display','none');
-}
+
 function initVar(){
 	console.log('init radius,center in initVar()');
 	radius=500000,
