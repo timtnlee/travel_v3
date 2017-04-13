@@ -56,12 +56,13 @@ function nameCheck(){
 	
 
 	EnterSubmit('[name="register"]');
-	$('[name="register"]').click(function(){
+	$('[name="register"]').click(function(e){
+		e.preventDefault();
 		console.log('click');
 		var name=$('[name="register_name"]').val(),
 			passwd=$('[name="register_passwd"]').val(),
 			nameErr=$('[name="register_name"]').parent().next().children().text(),
-			passwdErr=$('[name="register_name"]').parent().next().children().text();
+			passwdErr=$('[name="register_passwd"]').parent().next().children().text();
 			console.log(nameErr+passwdErr);
 		if(nameErr=='✔'&&passwdErr=='✔'){
 			AjaxPost('user/register',{name:name,passwd:passwd},function(res){
