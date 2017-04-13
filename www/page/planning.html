@@ -2,60 +2,58 @@
 <script src='js/planning_distance.js'></script>
 <div id='block_you'><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 
-<div id='allContainer'>	
+<div class='pageContainer'>	
 	<!-- map -->
 	<div id='map'></div>
-	<!-- search info -->
+		<!-- search info -->
 	<div id='mapInfo'>
-	<p id='hint' class="bg-info">選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
-	<div id='searchArea'>
+		<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
+		<div id='searchArea'>
 		
-		<h4>查詢</h4>
-			<input type="text" id='textSearch' placeholder="輸入地點">
-			<input type="submit" id="searchSubmit" value="查詢"><br>
-	</div>
-	<div id='allPlaces'></div>		
-	<div id='option'>			
-		<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
-		<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
-		<a key='attrications'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
-		<a key='停車場'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
-		<a key='夜市'><i class="fa fa-cutlery" aria-hidden="true"></i>夜市</a>
-		<p id='goback' class="back">
-			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
-		</p>	
-		<div id='info'>
+			<h4>查詢</h4>
+				<input type="text" id='textSearch' placeholder="輸入地點">
+				<input type="submit" id="searchSubmit" value="查詢"><br>
 		</div>
-		<a>網路熱門</a>
-	</div>		
+		<div id='allPlaces'></div>		
+		<div id='option'>			
+			<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
+			<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
+			<a key='attrications'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
+			<a key='停車場'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
+			<a key='夜市'><i class="fa fa-cutlery" aria-hidden="true"></i>夜市</a>
+			<p id='goback' class="back">
+				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
+			</p>	
+			<div id='info'>
+			</div>
+			<a>網路熱門</a>
+		</div>		
 	</div>
-	<!-- distance -->
-	<div id='planDistance'>
-		<p id='distanceGoback' class="back">
-			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
-		</p>
-		<h4>路線規劃</h4>	
-		<div id='output'></div>			
+		<!-- distance -->
+		<div id='planDistance'>
+			<p id='distanceGoback' class="back">
+				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
+			</p>
+			<h4>路線規劃</h4>	
+			<div id='output'></div>			
+		</div>
+		<!-- shedule -->
+	<div id='schedule_block'>
+		<div id='schedule'>
+			<div class="list_con" id='list_head'>
+			<h4 style="display: inline-block;">清單</h4>
+			<small>點擊看詳細資料，拖曳來排序</small>
+			<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>規劃路線</a>
+		</div>	
+		</div>
 	</div>
+</div>
 
-</div>
-<div id='schedule_block'>
-<div id='schedule'>
-	<div class="list_con" id='list_head'>
-		<h4 style="display: inline-block;">清單</h4>
-		<small>點擊看詳細資料，拖曳來排序</small>
-		<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>規劃路線</a>
-	</div>	
-</div>
-</div>
 
 <style>
-	#allContainer{
-		margin: 0px;
-	}
 	#map{
 		z-index: 2;
-		width: 50vw;
+		width:75vw;
 		height: 95vh;
 		position: absolute;
 		left: 0;
@@ -67,17 +65,22 @@
 		width: 25vw;
 		height: 95vh;
 		position: absolute;
-		left: 50vw;
+		right: 25vw;
 		overflow-y: hidden;
+		z-index: 10;
+		opacity: 0.95;
 	}
 	#planDistance{
+		background: white;		
 		margin: 0;
 		padding: 0px;
 		width: 25vw;
 		height: 95vh;
 		position: absolute;
-		left: 77vw;
+		right: 25vw;
 		overflow-y: hidden;
+		z-index: 0;
+		opacity: 0;
 	}
 	#output{
 		height: 350px;
@@ -92,6 +95,7 @@
 		margin: 0;
 		padding: 0;
 		background-color: lightgoldenrodyellow ;
+		opacity: 1;
 	}
 	#list_head{
 		background-color: lightgoldenrodyellow ;
@@ -99,11 +103,11 @@
 		margin: 5px 5px 10px 5px;
 	}
 	#hint{
-		/* overflow: hidden;
+		overflow: hidden;
 		margin: 0px;
 		opacity: 0.9;
 		padding: 2px 5px 2px 10px;
-		background-color: lightcoral; */
+		background-color:lightblue;
 	}
 	#option{
 		display: none;
@@ -202,7 +206,7 @@
 			bottom: 0px;
 			width: 100vw;
 			height: 55vh;
-			z-index: 2;
+			z-index: 10;
 			left: 0px;
 			background-color: white;
 		}
@@ -212,9 +216,10 @@
 			bottom: 0px;
 			width: 100vw;
 			height: 55vh;
-			z-index: 2;
-			left: 100vw;
+			z-index: 0;
+			left: 0px;
 			background-color: white;
+			opacity: 0;
 		}
 		#schedule_block{
 			position:absolute;
@@ -222,10 +227,9 @@
 			left: 0;
 			width: 100vw;
 			height: 100vh;
-			z-index: 10;
+			z-index: 11;
 		}
 		#schedule{
-			z-index: 10;
 			position: absolute;
 			left: 0;
 			top:45%;
@@ -247,7 +251,7 @@
 			bottom: 0px;
 			width: 100vw;
 			height: 55vh;
-			z-index: 2;
+			z-index: 10;
 			left: 0px;
 			background-color: white;
 		}
@@ -257,9 +261,10 @@
 			bottom: 0px;
 			width: 100vw;
 			height: 55vh;
-			z-index: 2;
-			left: 100vw;
+			z-index: 0;
+			left: 0px;
 			background-color: white;
+			opacity: 0;
 		}
 		#schedule_block{
 			position:absolute;
@@ -267,10 +272,9 @@
 			left: 0;
 			width: 100vw;
 			height: 100vh;
-			z-index: 10;
+			z-index: 11;
 		}
 		#schedule{
-			z-index: 10;
 			position: absolute;
 			left: 0;
 			top:45%;
@@ -314,7 +318,7 @@ newMap();
 	//planning_distance
 
 function showShedule(){
-	$('#schedule_block').css('zIndex','3').animate({top:'0'});
+	$('#schedule_block').css('zIndex','11').animate({top:'0'});
 }
 $('#schedule_block').click(function(){
 	$(this).css('zIndex','0').animate({top:'55vh'})

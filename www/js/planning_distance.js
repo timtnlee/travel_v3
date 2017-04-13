@@ -15,27 +15,14 @@ function moving(step){
 	}
 	var gotoplan=function(){
 		console.log(response);
-		$('#plan').css('opacity','0.7');
-		if(response()=='w'){		
-			console.log('w');
-			$('#mapInfo').animate({left:'23vw'});
-			$('#planDistance').animate({left:'50vw'});
-		}
-		else{
-			$('#mapInfo').animate({left:'-100vw'});
-			$('#planDistance').animate({left:'0vw'});
-		}
+		$('#plan').css('opacity','0.7');		
+			$('#mapInfo').css('zIndex','0').animate({opacity:'0'});
+			$('#planDistance').css('zIndex','10').animate({opacity:'0.95'});
 	}
 	var gobacksearch=function(){
 		$('#plan').css('opacity','1');
-		if(response()=='w'){
-			$('#mapInfo').animate({left:'50vw'});
-			$('#planDistance').animate({left:'77vw'});
-		}
-		else{
-			$('#mapInfo').animate({left:'0vw'});
-			$('#planDistance').animate({left:'100vw'});
-		}
+			$('#mapInfo').css('zIndex','10').animate({opacity:'0.95'});
+			$('#planDistance').css('zIndex','0').animate({opacity:'0'});
 	}
 
 	if(step=='gotoplan')

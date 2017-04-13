@@ -1,7 +1,10 @@
 <div class="pageContainer">
 	<div class="pageMiddle">
 		<div class="introduce">
-			<button class="btn btn-default" onclick='test()'>GET STARTED</button>
+		123<br>
+			<button class="btn btn-primary" onclick="" id=getstart>
+			GET STARTED
+			</button>
 		</div>
 	</div>
 </div>
@@ -10,12 +13,15 @@
 	.introduce{
 		text-align: center;
 	}
+	#getstart{
+		color: white;
+	}
 </style>
 
 <script>
-function test(){
+
 	
-}
+
 function welcomeTitle(){
 	$('[name="title"]').text('Welcome to Utravel !'+localStorage.username);
 }

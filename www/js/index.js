@@ -1,5 +1,5 @@
 //var ip='http://127.0.0.1:3000/';
-var ip='http://192.168.1.45:3000/';
+var ip='http://140.119.19.15:3000/';
 function setIp(){
 	var confirm=window.confirm('local host?');
 	if(confirm)ip='http://127.0.0.1:3000/';
