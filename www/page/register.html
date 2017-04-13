@@ -60,8 +60,8 @@ function nameCheck(){
 		console.log('click');
 		var name=$('[name="register_name"]').val(),
 			passwd=$('[name="register_passwd"]').val(),
-			nameErr=$('[name="register_name"]').next().next().text(),
-			passwdErr=$('[name="register_name"]').next().next().text();
+			nameErr=$('[name="register_name"]').parent().next().children().text(),
+			passwdErr=$('[name="register_name"]').parent().next().children().text();
 			console.log(nameErr+passwdErr);
 		if(nameErr=='✔'&&passwdErr=='✔'){
 			AjaxPost('user/register',{name:name,passwd:passwd},function(res){
@@ -70,6 +70,9 @@ function nameCheck(){
 				localStorage.logined='yes';
 				localStorage.username=name;
 				location.href='';
+				}
+				else{
+					alert('error');
 				}
 			})
 		}
