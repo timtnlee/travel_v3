@@ -1,6 +1,5 @@
 <script src='js/planning_search.js'></script>
 <script src='js/planning_distance.js'></script>
-<div id='block_you'><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 
 <div class='pageContainer'>	
 	<!-- map -->
@@ -52,7 +51,7 @@
 
 <style>
 	#map{
-		z-index: 2;
+		z-index: 0;
 		width:75vw;
 		height: 95vh;
 		position: absolute;
@@ -191,6 +190,9 @@
 		cursor: pointer;
 		float: right;
 		z-index: 10;
+	}
+	#output p{
+		background-color: lightskyblue;
 	}
 	@media (orientation:portrait){
 		#map{

@@ -296,7 +296,8 @@ function ListClick(target){
 	MarkInfo(my_list[count],'list');
 }
 function dragstart(element){
-	$(element).attr('draggable',true).unbind()
+	$('#schedule')
+	.find(element).attr('draggable',true).unbind()
 			.on('dragstart',function(e){
 				e.originalEvent.dataTransfer.setData('text',e.target.id);
 			})	
@@ -308,7 +309,8 @@ function dragstart(element){
 			})
 }
 function dragover(element){
-	$(element)
+	$('#schedule')
+	.find(element)
 		.on('dragover',function(e){	
 
 			//這個e.target是指被drag的.dragP不是.list_con		
@@ -335,7 +337,8 @@ function drop(e){
 	var id='#'+ele,
 		content=$(id).text(),
 		divId=$(id).parent().attr('id');
-	$(id).parent().remove();
+	$('#schedule')
+	.find(id).parent().remove();
 	
 	$('<div class="list_con" id="'
 			+divId+'"><p class="dragP" id="'

@@ -15,9 +15,10 @@
 			<p >123</p>
 			<p>行程:</p>
 			<p >222</p>
+			<p>我的清單</p>
 		</div>
 	</div>
-	</div>
+</div>
 </div>
 <script>
 uploadIcon();
@@ -42,6 +43,7 @@ function SaveIcon(result){
 		block();
 		AjaxPost('user/picture',{username:localStorage.username,result:result},function(res){
 			alert(res);
+			close_block();
 			reNewPage('personal');
 		})
 }

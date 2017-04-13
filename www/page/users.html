@@ -16,6 +16,24 @@
 		</div>
 		</div>
 	</div>
+	<!-- single user -->
+	<div class="singleUser">
+		<div class="row">
+		<div class="col-sm-6">
+			<button  class="btn btn-default">返回</button><br>
+			<img src=''>
+		</div>
+		<div class="col-sm-6">
+			<p>User Name:</p>
+			<p id='name'></p>
+			<p>文章:</p>
+			<p >123</p>
+			<p>行程:</p>
+			<p >222</p>
+		</div>
+	</div>
+	</div>
+
 </div>
 </div>
 <script>
@@ -38,9 +56,27 @@ $('._loading').css('display','block');
 						+'</p><p><img src="'+img+'"></p></div>');
 					}
 				}
+				UserClick();
 				$('._loading').css('display','none');
 			}
 		)
+function UserClick(){
+	$('.users').click(function(){
+		block();
+		var single=$('.singleUser'),
+			text=$(this).children().text(),
+			img=$(this).find('img').attr('src');
+		$('#usersArea').css('display','none');
+		single.css('display','block');
+		single.find('img').attr('src',img);
+		single.find('p').eq(0).text('User Name:'+text);
+		close_block();
+	})
+	$('.singleUser').find('button').click(function(){
+		$('.singleUser').css('display','none');
+		$('#usersArea').css('display','block');
+	})
+}
 </script>
 <style type="text/css">
 	#usersArea{
@@ -50,5 +86,14 @@ $('._loading').css('display','block');
 		width: 100%;
 		display: inline-block;
 	}
-	.users{border: 1px solid lightgray;}
+	.users{
+		border: 1px solid lightgray;
+		cursor: pointer;
+	}
+	.singleUser{
+		display: none;
+	}
+	.singleUser img{
+		width: 100%;
+	}
 </style>
