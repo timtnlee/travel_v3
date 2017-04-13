@@ -172,14 +172,7 @@ function CreateMarker(place){
 	var mark=new  google.maps.Marker({
     	map: map,
     	position: place.geometry.location,
-    	icon: {
-     		path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      		fillColor: 'red',
-      		fillOpacity: 1,
-      		strokeColor: 'black',
-      		strokeWeight: 0.5,
-      		scale: 5
-    		}
+    	icon:'img/red-dot.png'    		
   		})
 	mark.addListener('click',function(){
 		block();
@@ -261,14 +254,9 @@ function NewListMarker(place){
 	var mark=new google.maps.Marker({
 		map: map,
    		position: placeLoc,
-    	icon: {
-    		path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW,
-     		fillColor: 'lightgreen',
-     		fillOpacity: 1,
-     		strokeColor: 'green',
-     		strokeWeight: 0.5,
-     		scale: 6
-    		}
+   		optimized: false,
+      	zIndex:9,
+    	icon:'img/green-dot.png'  
 	})
 	infowindow.setContent(place.name);
 	infowindow.open(map,mark);

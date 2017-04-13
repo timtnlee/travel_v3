@@ -7,14 +7,14 @@
 		<!-- search info -->
 	<div id='mapInfo'>
 		<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
-		<div id='searchArea'>
+		<div id='searchArea' class="top">
 		
 			<h4>查詢</h4>
 				<input type="text" id='textSearch' placeholder="輸入地點">
 				<input type="submit" id="searchSubmit" value="查詢"><br>
 		</div>
-		<div id='allPlaces'></div>		
-		<div id='option'>			
+		<div id='allPlaces' class="down"></div>		
+		<div id='option' class="middle">			
 			<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
 			<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
 			<a key='attrications'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
@@ -23,7 +23,7 @@
 			<p id='goback' class="back">
 				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
 			</p>	
-			<div id='info'>
+			<div id='info' class="down">
 			</div>
 			<a>網路熱門</a>
 		</div>		
@@ -34,7 +34,7 @@
 				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
 			</p>
 			<h4>路線規劃</h4>	
-			<div id='output'></div>			
+			<div id='output' class="down"></div>			
 		</div>
 		<!-- shedule -->
 	<div id='schedule_block'>
@@ -81,9 +81,13 @@
 		z-index: 0;
 		opacity: 0;
 	}
-	#output{
-		height: 350px;
-		overflow-y: scroll;
+	.top{
+		
+	}
+	.middle{
+		
+	}
+	.down{
 	}
 	#schedule{
 		overflow-y: scroll;
@@ -130,7 +134,7 @@
 		display: none;		
 	}
 	#allPlaces{
-		height: 350px;
+		height: 50vh;
 		overflow-y:scroll; 
 	}
 	#allPlaces p{
@@ -191,8 +195,19 @@
 		float: right;
 		z-index: 10;
 	}
-	#output p{
+	#output{
+		/* height: 350px; */
+		overflow-y: scroll;
+	}
+	#output h4{
+		padding: 5px;
 		background-color: lightskyblue;
+	}
+	.travelMode{
+		margin: 3px;
+	}
+	.instruc{
+		display: none;
 	}
 	@media (orientation:portrait){
 		#map{

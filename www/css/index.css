@@ -84,8 +84,11 @@ a{
 .singleMiddle{
 		margin: 0px 20vw 0px 20vw;
 		background-color:white;
-		padding: 20px 20px 40px 20px;
+		padding: 20px 1vw 40px 1vw;
 	}
+.singleMiddle img{
+	max-width: 56vw
+}
 ._loading{
 	text-align: center;
 	display: none;
