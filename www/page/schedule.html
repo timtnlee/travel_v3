@@ -1,0 +1,83 @@
+<div class="row">
+	<div class="col-sm-6">
+		<div id='map'></div>
+	</div>
+</div>
+<style type="text/css">
+	#map{
+		width: 100%;
+		height: 100vh;
+	}
+</style>
+<script type="text/javascript">
+var map,
+	directions,
+	places=[];
+newMap();
+DisplaySchedule();
+function newMap(){
+	console.log('newMap,searchBox');
+	map=new google.maps.Map(document.getElementById('map'),{
+      center:{lat:23.6,lng:121.2},
+      zoom: 8,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true
+    //scrollwheel: false
+  })
+}
+function DisplaySchedule(){
+	var promises=[];
+	console.log('DisplaySchedule')
+	console.log(_display_mode)
+	for (var i = 0; i < _display_place.length; i++) {
+		promises.push(onePlace(_display_place[i],i))
+	}
+	Promise.all(promises).then(()=>{
+		for (var i = 0; i < places.length-1; i++) {
+			let requestObj={
+				start:places[i].geometry.location,
+				end:places[i+1].geometry.location,
+				mode:_display_mode[i]
+			}
+			DirctionsRender(requestObj)
+		}
+	})
+}
+
+function onePlace(placeId,i){
+	return new Promise(function(resolve,reject){
+		console.log(i)
+		let service = new google.maps.places.PlacesService(map);
+		service.getDetails({placeId:placeId},function(place,status){
+       	if(status=='OK'){      
+       		places[i]=place
+       		resolve()
+       		}
+   		})
+	})
+}
+	
+function DirctionsRender(requestObj){
+	var start=requestObj.start,
+		end=requestObj.end,
+		mode=requestObj.mode;
+	console.log('DirctionsRender')
+	directions=new google.maps.DirectionsService();
+	console.log(start+end+mode)
+			var request={
+				origin:start,
+  				destination:end,
+  				//waypoints:waypoints,
+  				optimizeWaypoints: true,
+  				travelMode:mode,
+  				transitOptions: {
+   					//modes: ['BUS'],
+    				routingPreference: 'FEWER_TRANSFERS'
+ 					}
+				}
+	directions.route(request,function(result,status){
+		var display=new google.maps.DirectionsRenderer({map:map})
+		display.setDirections(result);
+	})
+}
+</script>

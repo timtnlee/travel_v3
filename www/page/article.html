@@ -1,5 +1,4 @@
-<div class="pageContainer">
-	
+<div class="pageContainer">	
 	<div class='article_title pageMiddle'>
 		<div class="articleBar">
 			<a href="addArticle" optiona='login' reload='true' class="btn btn-link">新增文章</a>
@@ -8,53 +7,32 @@
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
 	</div>
-
-	<div class="single_article singleMiddle">
-		<a href='javascript:void(0)' id='goback'>
-			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
-		<p id='title'></p>
-		<p id='date'></p>
-		<p id='author'></p>
-		<div id='content'></div>
-	</div>
 </div>
 <script>
 $('.articleBar').find('.btn-link').click(function(e){
 	e.preventDefault();
 	HeaderButton($(this));
 })
-$('._loading').css('display','block');
-	$('#goback').click(function(){
-		$('.article_title').css('display','block');
-		$('.single_article').css('display','none');
-	})
 	AjaxPost(
 		'article/article',
 		'',
 		function(res){
 			for (var i=0; i<res.length ; i++) {
-				$('#articleArea').prepend('<p>'+res[i].Title+'</p>');
+				$('#articleArea').prepend('<p href="singleArticle" reload="true">'+res[i].Title+'</p>');
 				$('#articleArea').find('p').first()
 					.attr('title',res[i].Title)
 					.attr('date',res[i].Date)
 					.attr('author',res[i].Username)
-					.attr('content',res[i].Article);
+					.attr('id',res[i]._id);
 				}
 			$('#articleArea').find('p').click(function(){
-				var title=$(this).attr('title'),
-					date=$(this).attr('date');
-					author=$(this).attr('author'),
-					content=$(this).attr('content');
-
-				$('.article_title').css('display','none');
-				$('.single_article').css('display','block');
-
-				$('#title').text(title);
-				$('#date').text(date);
-				$('#author').text(author);
-				$('#content').html(content);	
+				_goback='article';
+				_articleObj.title=$(this).attr('title'),
+				_articleObj.author=$(this).attr('author'),
+				_articleObj.date=$(this).attr('date'),
+				_articleObj.id=$(this).attr('id');
+				HeaderButton($(this));
 				})
-			$('._loading').css('display','none');
 			}
 		)
 </script>
@@ -75,17 +53,4 @@ $('._loading').css('display','block');
 		border-bottom: 1px solid lightgray;
 		margin: 0;
 	}
-	.single_article{
-		display: none;
-	}
-	.single_article a{
-		font-size: 18px;
-		color:#3C3C3C;
-	}
-@media screen and (orientation:portrait) {
-
-	.single_article img{
-		width: 96vw;
-	}
-}
 </style>

@@ -9,13 +9,9 @@
 			<img id='usericon' src='img/icon.png'>
 		</div>
 		<div class="col-sm-6">
-			<p>User Name:</p>
-			<p id='name'></p>
-			<p>文章:</p>
-			<p >123</p>
-			<p>行程:</p>
-			<p >222</p>
-			<p>我的清單</p>
+			<h4 id='personal_name'></h4>
+			<h4 id='personal_article'>文章:</h4>
+			<h4 id='personal_schedule'>行程:</h4>
 		</div>
 	</div>
 </div>
@@ -28,11 +24,54 @@ AjaxPost(
 	'user/personal',
 	{name:localStorage.username},
 	function(res){
+
+		var article=0;
+		for(let i in res.articles){
+			console.log(res.articles[i].Title)
+			$('#personal_article')
+			.append('<p href="singleArticle" reload="true">'+res.articles[i].Title+'</p>')
+			.find('p').last()
+			.click(function(){
+			_goback='personal';
+			console.log(res.articles[i].Title)
+			_articleObj.title=res.articles[i].Title,
+			_articleObj.author=res.articles[i].Username,
+			_articleObj.date=res.articles[i].Date,
+			_articleObj.id=res.articles[i]._id;
+			HeaderButton($(this));
+			})
+		}
+		if(res.schedules){
+		for (var i = 0; i <res.schedules.length; i++) {
+				var title=res.schedules[i].Title,
+					place=res.schedules[i].Places,
+					mode=res.schedules[i].Modes;
+				$('#personal_schedule').append(
+					'<p href="schedule" reload="true">'
+					+title+'</p>')
+					.find('p').last().on('click',function(){
+						var schObj={
+							title:title,
+							place:place,
+							mode:mode
+						}
+						personal_schedule_click(schObj,$(this));
+					})
+			}
+		}
 		$('#usericon').attr('src',res.icon);
 		$('._loading').css('display','none');
 	}
 	)
-	$('#name').text(localStorage.username);}
+	$('#personal_name').text('名稱: '+localStorage.username);}
+function personal_schedule_click(schObj,target){
+		_display_title=schObj.title,
+		_display_place=schObj.place,
+		_display_mode=schObj.mode;
+		console.log(schObj.mode)
+		console.log(_display_mode)
+	HeaderButton(target);
+}
 function uploadIcon(){
 	$('#iconUploadBtn').click(function(){
 		$('#iconUploadInput').click();
@@ -55,5 +94,17 @@ function SaveIcon(result){
 	}
 	#usericon{
 		width: 90%;
+	}
+	#personal_article p{
+		cursor:  pointer;
+		background-color: lightgray;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
+	}
+	#personal_schedule p{
+		cursor:  pointer;
+		background-color: lightskyblue;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
 	}
 </style>

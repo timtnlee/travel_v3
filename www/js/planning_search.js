@@ -17,7 +17,7 @@ function newMap(){
    	 	new google.maps.LatLng(26.037, 122.69),
     	new google.maps.LatLng(21.268, 119.333)
     );
-	service = new google.maps.places.PlacesService(map);
+	//service = new google.maps.places.PlacesService(map);
 	var searchBox = new google.maps.places.SearchBox(input,{
 		bounds:defaultBounds
 	})

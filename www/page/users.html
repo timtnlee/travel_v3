@@ -24,12 +24,9 @@
 			<img src=''>
 		</div>
 		<div class="col-sm-6">
-			<p>User Name:</p>
-			<p id='name'></p>
-			<p>文章:</p>
-			<p >123</p>
-			<p>行程:</p>
-			<p >222</p>
+			<div id='singleuser_username'></div>
+			<div id='singleuser_article'></div>
+			<div id='singleuser_schedule'></div>
 		</div>
 	</div>
 	</div>
@@ -64,19 +61,57 @@ function UserClick(){
 	$('.users').click(function(){
 		block();
 		var single=$('.singleUser'),
-			text=$(this).children().text(),
+			name=$(this).children().text(),
 			img=$(this).find('img').attr('src');
-		$('#usersArea').css('display','none');
-		single.css('display','block');
-		single.find('img').attr('src',img);
-		single.find('p').eq(0).text('User Name:'+text);
+		AjaxPost('user/personal',{name:name},function(res){
+			$('#usersArea').css('display','none')
+			single.css('display','block')
+			single.find('img').attr('src',img)
+			$('#singleuser_username').text('User Name:'+name)
+		$('#singleuser_article').text('文章: ')
+		
+		for(let i in res.articles){
+			console.log(res.articles[i].Title)
+			$('#singleuser_article')
+			.append('<p href="singleArticle" reload="true">'+res.articles[i].Title+'</p>')
+			.find('p').last()
+			.click(function(){
+			_goback='users';
+			console.log(res.articles[i].Title)
+			_articleObj.title=res.articles[i].Title,
+			_articleObj.author=res.articles[i].Username,
+			_articleObj.date=res.articles[i].Date,
+			_articleObj.id=res.articles[i]._id;
+			HeaderButton($(this));
+			})
+		}
+		$('#singleuser_schedule').text('行程: ')
+		if(res.schedules){
+		for (var i = 0; i <res.schedules.length; i++) {
+				var title=res.schedules[i].Title,
+					place=res.schedules[i].Places,
+					mode=res.schedules[i].Modes;
+				$('#singleuser_schedule').append(
+					'<p href="schedule" reload="true">'
+					+title+'</p>')
+					.find('p').last().on('click',function(){
+						_display_title=title,
+						_display_place=place,
+						_display_mode=mode;		
+						HeaderButton($(this));
+					})
+				
+				}
+			}
 		close_block();
+		})
 	})
+}
 	$('.singleUser').find('button').click(function(){
 		$('.singleUser').css('display','none');
 		$('#usersArea').css('display','block');
 	})
-}
+
 </script>
 <style type="text/css">
 	#usersArea{
@@ -96,4 +131,20 @@ function UserClick(){
 	.singleUser img{
 		width: 100%;
 	}
+	#singleuser_username{
+
+	}
+	#singleuser_article p{
+		cursor:  pointer;
+		background-color: lightgray;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
+	}
+	#singleuser_schedule p{
+		cursor:  pointer;
+		background-color: lightskyblue;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
+	}
+			
 </style>

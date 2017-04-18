@@ -1,0 +1,48 @@
+<div class="pageContainer">
+	<div class="single_article singleMiddle">
+		<a id='goback'>
+			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
+		<p id='title'></p>
+		<p id='date'></p>
+		<p id='author'></p>
+		<div id='content'>
+			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	.single_article{
+	}
+	.single_article a{
+		font-size: 18px;
+		color:#3C3C3C;
+	}
+	.single_article p{
+		font-size: 20px;
+		font-weight: bold;
+	}
+@media screen and (orientation:portrait) {
+
+	.single_article img{
+		width: 96vw;
+	}
+}
+</style>
+<script type="text/javascript">
+console.log(_articleObj)
+$('#goback').click(function(e){
+	$(this).attr('href',_goback)
+	e.preventDefault();
+	HeaderButton($(this))
+})
+	block();
+	AjaxPost('article/single_article',{id:_articleObj.id},function(res){
+					//console.log(res);
+					var content=res[0].Article;
+					$('#title').text(_articleObj.title);
+					$('#date').text(_articleObj.date);
+					$('#author').text('author: '+_articleObj.author);
+					$('#content').html(content);
+					close_block()
+				})		
+</script>

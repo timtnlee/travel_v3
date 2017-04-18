@@ -108,7 +108,7 @@ a{
 }
 ._content{
 	/* height: 100vh; */
-	background:linear-gradient(to top,#FFFFAA,#FFFFDF);
+	background:linear-gradient(to top,#FFFFDF,#FFFFDF);/* #FFFFAA */
 	margin: 0px;
 	padding:0px;
 }

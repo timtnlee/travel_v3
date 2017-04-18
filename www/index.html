@@ -43,7 +43,7 @@
                         <a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
                         <a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
                         <a href='trip' reload='true'><i class="fa fa-car" aria-hidden="true"></i>行程</a>              
-                        <a href='planning' reload='true' optional='planning'>
+                        <a href='planning' reload='true' optional='login'>
                             <i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
                         <a href='personal' optional='login'>
                             <i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
@@ -71,7 +71,16 @@
     </body>
     <script>
     	//Global variable for other pages' scripts
-    	
+    	var _articleObj={
+                title:'',
+                date:'',
+                author:'',
+                id:''
+            },
+            _goback='',
+            _display_title,
+            _display_place=[],
+            _display_mode=[];
     	//Dom events go here
     	$(function(){
             setIp(); 
