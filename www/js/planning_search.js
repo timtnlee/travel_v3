@@ -21,6 +21,7 @@ function newMap(){
 	var searchBox = new google.maps.places.SearchBox(input,{
 		bounds:defaultBounds
 	})
+	service = new google.maps.places.PlacesService(map);
 	close_block();
 }
 function setButton(){
@@ -34,10 +35,16 @@ function setButton(){
 			TextSearch(query,radius,center);
 			Steps('done_search');
 		}
-		else{//在特定地點進行Nearby Search		
-			NearbySearch();
+		else{//在特定地點進行Nearby Search
+			radius=500;		
+			TextSearch(query,radius,center);
 			Steps('done_search');
 		}
+	})
+	//
+	$('#getLocationBtn').click(function(e){
+		e.preventDefault();
+		getUserLocation();
 	})
 	//
 	$('#goback').click(function(){
@@ -50,6 +57,33 @@ function setButton(){
 		NearbySearch();
 		Steps('done_search');
 	})
+}
+function getUserLocation(){
+	 if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(ShowUserLocation);
+    }
+  	else{alert("不支援定位或權限未開啟")}
+}
+function ShowUserLocation(position){
+	var userCenter={lat: position.coords.latitude,lng:position.coords.longitude};
+	CreateUserMarker(userCenter);
+	map.setZoom(15);
+ 	map.panTo(userCenter); 	
+}
+function CreateUserMarker(Ucenter){
+	var mark=new google.maps.Marker({
+		map:map,
+		position:Ucenter,
+		icon:'img/red-dot.png'
+	})
+	var Userinfowindow=new google.maps.InfoWindow()
+	Userinfowindow.setContent('目前位置')
+	Userinfowindow.open(map,mark)
+	marker.push(mark)
+	center=Ucenter
+	focusMark='我的位置'
+	Steps('marker_click')
 }
 function TextSearch(my_query,my_radius,my_center){	
 	console.log('TextSearch');
@@ -65,7 +99,6 @@ function TextSearch(my_query,my_radius,my_center){
         radius:my_radius,
         query:my_query
       }
-      service = new google.maps.places.PlacesService(map);
       service.textSearch(request, textSearchCallback);
     }   
 }
@@ -96,6 +129,16 @@ function Steps(step){
 			$('#searchArea').find('h4').text('附近找:');
 			$('#allPlaces').css('display','none');
 			break;
+		case 'user_location':
+			console.log('render user_location');	
+			//$('#hint').animate({height:'0px'});
+			$('#searchSubmit').val('附近找');
+			$('#info').css('display','block');
+			$('#option').css('display','block');
+			$('#goback').css('display','block');
+			$('#searchArea').find('h4').text('附近找:');
+			$('#allPlaces').css('display','none');
+			break;
 		case 'list_info':
 			console.log('render list_info');	
 			$('#hint').animate({height:'0px'});
@@ -117,16 +160,19 @@ function textSearchCallback(result,status){
 			$('#allPlaces').empty().prepend('<h4>全域搜尋"'+query+'"</h4>');
 		else{
 			var key=query,
-				translate=['餐廳','景點','住宿'];
+				translate=['餐廳','景點','住宿','停車場'];
 			switch(key){
+				case 'parking':
+					key=translate[3];
+					break;
 				case 'restaurant':
 					key='餐廳';
 					break;
 				case 'attrications':
 					key='景點';
 					break;
-				case 'hotel':
-					key='住宿';
+				case "Cafe'":
+					key='咖啡廳';
 					break;
 			}
 			$('#allPlaces').empty().prepend('<h4>"'+focusMark+'"附近搜尋"'+key+'"</h4>');
@@ -144,8 +190,17 @@ function textSearchCallback(result,status){
 	close_block();
 }
 function NearbySearch(){
+	radius=1000;
 	console.log('NearbySearch');
-	TextSearch(query,radius,center);
+	 var request = {
+    	location:center,
+    	radius: '500',
+    	type:query
+ 		}
+ 	bounds=new google.maps.LatLngBounds();
+ 	CleanMarker()
+  	service.nearbySearch(request, textSearchCallback)
+	//TextSearch(query,radius,center);//center在點擊mark時定義 或是我的位置
 }
 function PtagClick(place,mark,infowindow){
 	$('#allPlaces').append('<p>'+place.name+'</p>');
@@ -166,12 +221,13 @@ function PtagClick(place,mark,infowindow){
 	})
 }
 
-function CreateMarker(place){
+function CreateMarker(place,location){
 	console.log('CreateMarker');
+	if(!location)location=place.geometry.location;
 	var infowindow=new google.maps.InfoWindow();
 	var mark=new  google.maps.Marker({
     	map: map,
-    	position: place.geometry.location,
+    	position:location,
     	icon:'img/red-dot.png'    		
   		})
 	mark.addListener('click',function(){
@@ -223,7 +279,6 @@ function MarkInfo(place,list){
 			
 			console.log('change center,radius');
 			center=result.geometry.location;
-			radius=500;
 			close_block();
 			(list)?Steps('list_info'):Steps('marker_click');
 		}
@@ -287,10 +342,12 @@ function dragstart(element){
 	$('#schedule')
 	.find(element).attr('draggable',true).unbind()
 			.on('dragstart',function(e){
+				//$('#'+e.target.id).parent().css('visibility','hidden');
 				e.originalEvent.dataTransfer.setData('text',e.target.id);
 			})	
 			.on('dragend',function(e){
 				$('.tempor').remove();
+				//$('#'+e.target.id).parent().css('display','block');
 			})
 			.on('click',function(){
 				ListClick(this);

@@ -1,8 +1,6 @@
 //var ip='http://127.0.0.1:3000/';
-var ip='http://140.119.19.15:3000/';
 function setIp(){
-	var confirm=window.confirm('local host?');
-	if(confirm)ip='http://127.0.0.1:3000/';
+	ip=window.prompt('local host?','http://127.0.0.1:3000/');
 }
 
 if(!localStorage.logined)
@@ -127,7 +125,7 @@ function checkData(str){
 		return regExp.test(str);
 	}
 function CheckInput(ele,addition){
-	$(ele).on('keyup',function(){
+	$(ele).on('change keyup',function(){
 		console.log('323');
 		var str=$(this).val();
 		var display=$(this).parent().next().children();

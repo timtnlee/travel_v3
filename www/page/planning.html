@@ -1,5 +1,7 @@
+<link rel="stylesheet" type="text/css" href="css/planning.css">
 <script src='js/planning_search.js'></script>
 <script src='js/planning_distance.js'></script>
+
 
 <div class='pageContainer'>	
 	<!-- map -->
@@ -12,13 +14,13 @@
 			<h4>查詢</h4>
 				<input type="text" id='textSearch' placeholder="輸入地點">
 				<input type="submit" id="searchSubmit" value="查詢"><br>
+				<input type="submit" id='getLocationBtn' value="我的位置">
 		</div>
 		<div id='allPlaces' class="down"></div>		
 		<div id='option' class="middle">			
 			<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
-			<a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>住宿</a>
-			<a key='attrications'><i class="fa fa-bank" aria-hidden="true"></i>景點</a>
-			<a key='停車場'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
+			<a key='cafe'><i class="fa fa-hospital-o" aria-hidden="true"></i>Cafe'</a>
+			<a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
 			<a key='夜市'><i class="fa fa-cutlery" aria-hidden="true"></i>夜市</a>
 			<p id='goback' class="back">
 				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
@@ -48,8 +50,54 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+//var
+	//map
+var map,
+	service,
+	DirectionsService,
+	query,
+	bounds,
+	mark_bounds,
+	radius=500000,
+	focusMark,
+	marker=[],
+	list_marker=[],
+	center={lat:24.5,lng:121.2},
+	infowindows,//has 's'
+	my_list=[],
+	listCount=0;
+	//dom
+var hint=document.getElementById('hint'),
+	input=document.getElementById('textSearch'),
+	dragCount='',
+	dragId='';
 
-<style>
+//process
+	//planning_search
+EnterSubmit('#searchSubmit');
+welcomeOption('清單',showShedule);
+block();
+ResetInput('#textSearch');
+setButton();
+newMap();
+	//planning_distance
+
+function showShedule(){
+	$('#schedule').css('zIndex','19');
+	$('#schedule_block').css('zIndex','19').animate({top:'0'});
+}
+$('#schedule_block').click(function(){
+	$(this).css('zIndex','0').animate({top:'55vh'})
+})
+</script>
+<style type="text/css">
+	#welcomeOption{
+		display: block;
+	}
+	.pageContainer{
+		padding: 0;
+	}
 	#map{
 		z-index: 0;
 		width:75vw;
@@ -64,7 +112,7 @@
 		width: 25vw;
 		height: 95vh;
 		position: absolute;
-		right: 25vw;
+		right: 0vw;
 		overflow-y: hidden;
 		z-index: 10;
 		opacity: 0.95;
@@ -76,7 +124,7 @@
 		width: 25vw;
 		height: 95vh;
 		position: absolute;
-		right: 25vw;
+		right: 0vw;
 		overflow-y: hidden;
 		z-index: 0;
 		opacity: 0;
@@ -300,44 +348,3 @@
 		}
 	}
 </style>
-
-<script type="text/javascript">
-//var
-	//map
-var map,
-	service,
-	DirectionsService,
-	query,
-	bounds,
-	mark_bounds,
-	radius=500000,
-	focusMark,
-	marker=[],
-	list_marker=[],
-	center={lat:24.5,lng:121.2},
-	infowindows,//has 's'
-	my_list=[],
-	listCount=0;
-	//dom
-var hint=document.getElementById('hint'),
-	input=document.getElementById('textSearch'),
-	dragCount='',
-	dragId='';
-
-//process
-	//planning_search
-EnterSubmit('#searchSubmit');
-welcomeOption('清單',showShedule);
-block();
-ResetInput('#textSearch');
-setButton();
-newMap();
-	//planning_distance
-
-function showShedule(){
-	$('#schedule_block').css('zIndex','11').animate({top:'0'});
-}
-$('#schedule_block').click(function(){
-	$(this).css('zIndex','0').animate({top:'55vh'})
-})
-</script>

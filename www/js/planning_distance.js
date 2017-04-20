@@ -66,7 +66,7 @@ function BuildPage(){
 		if(index!=0){
 			directionsId[index-1]=my_list[id].place_id;
 			$('#output')
-				.append('<div id="displayCount'+displayCount+'"><h4 id="list'+id+'">'
+				.append('<div id="displayCount'+displayCount+'"><h4 id="list'+id+'">'//Display Place Tag
 					+my_list[id].name
 				+'</h4></div><div></div>');
 			if(index!=1){
@@ -100,39 +100,6 @@ function BuildPage(){
 	})
 }
 
-// function initWaypoints(){
-// 	start=end='';
-// 	waypoints=[];
-// 	document.getElementById('output').innerHTML='';
-// }
-// function FindList(){
-// 	initWaypoints();
-// 	var max=$('#schedule').find('.list_con').length-1;
-// 	console.log('length:'+max);
-// 	$('#schedule').find('.list_con').each(function(index){
-// 		console.log('index:'+index);
-// 		if(index!=0){
-// 			var id=$(this).find('p').attr('id'),
-// 				location=my_list[id].geometry.location;
-// 			if(index==1)
-// 				start=location;
-// 			else if(index==max)
-// 				end=location;
-// 			else
-// 				waypoints.push({location:location,stopover:true});
-// 		}
-// 	})
-// }
-// function ShowListMarker(){
-	
-// 	$('#schedule').find('.list_con').each(function(index){
-// 		if(index!=0){
-// 			var id=$(this).find('p').attr('id');
-// 			if(list_marker[id])
-// 				list_marker[id].setMap(map);
-// 		}
-// 	});
-// }
 function Directions(request,id,display,count,mode){
 	display.setOptions( { suppressMarkers: true });
 	directions.route(request,function(result, status){
@@ -158,7 +125,7 @@ function callback(result, status,id,display,request,count,mode) {
  		+result.routes[0].legs[0].distance.text+'<br>'+result.routes[0].legs[0].duration.text
  		+'<br><a class="openInstruc">詳細資訊</a>'
  		+'<div class="instruc" >'+instruct+'<div>';
- 	area.html(info);
+ 	area.html(info);										//display route
  	display.setDirections(result);
 
  	area.find('.openInstruc').click(function(){//openInstruc

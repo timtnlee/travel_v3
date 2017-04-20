@@ -98,8 +98,8 @@ a{
 }
 #welcomeOption{
 	cursor: pointer;
-	padding: 10px 5px 10px 0px;
-	margin: 0px;
+	padding:0px;
+	margin: 0px 5px 0px 5px;
 	float: right;
 	color: white;
 	display: none;
@@ -108,7 +108,8 @@ a{
 }
 ._content{
 	/* height: 100vh; */
-	background:linear-gradient(to top,#FFFFDF,#FFFFDF);/* #FFFFAA */
+	background-color: #F0F0F0;
+	/* background:linear-gradient(to top,#FFFFDF,#FFFFDF); *//* #FFFFAA */
 	margin: 0px;
 	padding:0px;
 }
