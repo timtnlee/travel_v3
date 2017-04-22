@@ -5,10 +5,11 @@ body{
 }
 a{
 	text-decoration: none;
+	color:skyblue;
 }
 ._container{
 	position: fixed;
-	left: 0;
+	left: 1000;
 	top: 0;
 	width: 100%;
 	height: 100%;
@@ -17,7 +18,7 @@ a{
 }
 #block_you{
 		z-index: 10;
-		background-color: lightgray;
+		background-color: black;
 		opacity: 0.5;
 		text-align: center;
 		position: fixed;
@@ -28,9 +29,9 @@ a{
 		display: none;
 	}
 ._header{
-	background-color:rgba(60,60,60,0.9);
+	background-color:rgba(0,0,0,0.9);
 	text-align: center;
-	font-size: 20px;
+	font-size: 15px;
 	margin: 0px;
 }
 ._header a{
@@ -41,7 +42,7 @@ a{
 	margin-left: 20px;
 }
 ._header a:hover{
-	color: lightgray;
+	color: #87CEEB;
 }
 ._header a i{
 	color:gray;
@@ -51,15 +52,17 @@ a{
 	display: inline;
 	margin:0;
 	padding: 0;
+	color:black;
+
 }
 .welcome{
 		height:40px;
-		padding: 5px; 
+		padding: 5px;
 		font-weight:bold;
 		margin: 0px;
 		text-align: center;
 		font-size:20px;
-		background: linear-gradient(to top,#C2C287,#B9B973); 
+		background: linear-gradient(to top,#808080 ,DimGrey );
 		color: white;
 	}
 .articleBar{
@@ -79,7 +82,7 @@ a{
 	padding: 1vw;
 	width:;
 	margin: 0px 10vw 0px 10vw;
-	background-color:white;
+	background-color: white ;
 }
 .singleMiddle{
 		margin: 0px 20vw 0px 20vw;
@@ -99,16 +102,16 @@ a{
 #welcomeOption{
 	cursor: pointer;
 	padding:0px;
-	margin: 0px 5px 0px 5px;
+	margin: 1px 5px 0px 5px;
 	float: right;
-	color: white;
+	color: black;
 	display: none;
 }
 ._menu{
 }
 ._content{
 	/* height: 100vh; */
-	background-color: #F0F0F0;
+	background-color: white;
 	/* background:linear-gradient(to top,#FFFFDF,#FFFFDF); *//* #FFFFAA */
 	margin: 0px;
 	padding:0px;
@@ -130,9 +133,10 @@ a{
 		height: 100%;
 	}
 	._loginOption{
-	
+
 	}
 	#menuBar{
+		float: left;
 		margin-top: -5px;
 		cursor: pointer;
 		font-size: 25px;
@@ -157,7 +161,7 @@ a{
 	}
 	.singleMiddle{
 		margin: 0px 1vw 0px 1vw;
-		background-color:white;
+		background-color:black;
 		padding: 20px 20px 40px 20px;
 	}
 }
@@ -190,17 +194,16 @@ a{
 
 	}
 	#menuBar{
+		float: left;
+		margin-top: -5px;
 		cursor: pointer;
 		font-size: 25px;
-		position: absolute;
-		left: 10px;
-		top: 8px;
-		display: inline;
+		display: inline-block;
 		text-decoration: none;
 		color: white;
 	}
 	._header a{
-		color: white;
+		color:white;
 		display: block;
 		margin: 20px 5px 10px 20px;
 	}
@@ -208,6 +211,6 @@ a{
 		height: 100%;
 		padding: 2px;
 		width: 200px;
-		background-color:rgba(60,60,60,0.9);
+		background-color:rgba(0,0,0,0.9);
 	}
 }

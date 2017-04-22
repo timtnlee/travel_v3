@@ -18,14 +18,16 @@ function moving(step){
 	// 	return 'w';
 	// }
 	var gotoplan=function(){
-		$('#plan').css('opacity','0.7');		
-			$('#mapInfo').css('zIndex','0').animate({opacity:'0'});
-			$('#planDistance').css('zIndex','10').animate({opacity:'0.95'});
+		$('#plan').css('opacity','0.7');
+		$('#schedule').css('zIndex','0');		
+			$('#mapInfo').animate({opacity:'0'});
+			$('#planDistance').animate({opacity:'0.95'}).css('zIndex','19');
 	}
 	var gobacksearch=function(){
 		$('#plan').css('opacity','1');
-			$('#mapInfo').css('zIndex','10').animate({opacity:'0.95'});
-			$('#planDistance').css('zIndex','0').animate({opacity:'0'});
+			$('#schedule').css('zIndex','19');
+			$('#mapInfo').animate({opacity:'0.95'});
+			$('#planDistance').animate({opacity:'0'}).css('zIndex','0');
 	}
 
 	if(step=='gotoplan')

@@ -1,7 +1,17 @@
 <link rel="stylesheet" type="text/css" href="css/planning.css">
 <script src='js/planning_search.js'></script>
 <script src='js/planning_distance.js'></script>
-
+<div id='searchArea'>
+			<div class="row">
+				<div class="col-xs-9">
+					<input type="text" id='textSearch' class="form-control" placeholder="輸入地點">
+				</div>
+				<div class="col-xs-3">
+					<input type="submit" id="searchSubmit" value="查詢" class="btn btn-primary">
+				</div>
+				
+			</div>	<!-- <input type="submit" id='getLocationBtn' value="我的位置"> -->
+		</div>
 
 <div class='pageContainer'>	
 	<!-- map -->
@@ -9,23 +19,22 @@
 		<!-- search info -->
 	<div id='mapInfo'>
 		<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
-		<div id='searchArea' class="top">
 		
-			<h4>查詢</h4>
-				<input type="text" id='textSearch' placeholder="輸入地點">
-				<input type="submit" id="searchSubmit" value="查詢"><br>
-				<input type="submit" id='getLocationBtn' value="我的位置">
-		</div>
-		<div id='allPlaces' class="down"></div>		
-		<div id='option' class="middle">			
+		<div id='allPlaces'></div>		
+		<div id='option'>
+			<p id='goback' class="back">
+				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
+			</p>
+			<h4 class="btn btn-link option_bar_btn">附近找</h4>	
+			<div id='option_bar'>	
 			<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
 			<a key='cafe'><i class="fa fa-hospital-o" aria-hidden="true"></i>Cafe'</a>
 			<a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
-			<a key='夜市'><i class="fa fa-cutlery" aria-hidden="true"></i>夜市</a>
-			<p id='goback' class="back">
-				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
-			</p>	
-			<div id='info' class="down">
+			.......
+			</div>	
+			
+			
+			<div id='info'>
 			</div>
 			<a>網路熱門</a>
 		</div>		
@@ -41,6 +50,9 @@
 		<!-- shedule -->
 	<div id='schedule_block'>
 		<div id='schedule'>
+			<p id='scheduleGoback' class="back">
+				<i class="fa fa-arrow-up" aria-hidden="true"></i>收起
+			</p>
 			<div class="list_con" id='list_head'>
 			<h4 style="display: inline-block;">清單</h4>
 			<small>點擊看詳細資料，拖曳來排序</small>
@@ -95,13 +107,26 @@ $('#schedule_block').click(function(){
 	#welcomeOption{
 		display: block;
 	}
+	#option_bar{
+		display: none;
+		height: 200px;
+	}
+	#option_bar a{
+		display: inline-block;
+		font-size: 15px;
+		margin:0px;
+		width: 5vw;
+		height: 50px;
+		cursor: pointer;
+		color: gray;
+	}
 	.pageContainer{
 		padding: 0;
 	}
 	#map{
 		z-index: 0;
 		width:75vw;
-		height: 95vh;
+		height: 100vh;
 		position: absolute;
 		left: 0;
 	}
@@ -110,10 +135,10 @@ $('#schedule_block').click(function(){
 		margin: 0;
 		padding: 0px;
 		width: 25vw;
-		height: 95vh;
+		height: 100vh;
 		position: absolute;
 		right: 0vw;
-		overflow-y: hidden;
+		overflow-y: scroll;
 		z-index: 10;
 		opacity: 0.95;
 	}
@@ -122,25 +147,17 @@ $('#schedule_block').click(function(){
 		margin: 0;
 		padding: 0px;
 		width: 25vw;
-		height: 95vh;
+		height:100vh;
 		position: absolute;
 		right: 0vw;
 		overflow-y: hidden;
 		z-index: 0;
 		opacity: 0;
 	}
-	.top{
-		
-	}
-	.middle{
-		
-	}
-	.down{
-	}
 	#schedule{
 		overflow-y: scroll;
 		width: 25vw;
-		height: 95vh;
+		height: 100vh;
 		position: absolute;
 		right: 0;
 		margin: 0;
@@ -157,18 +174,11 @@ $('#schedule_block').click(function(){
 		overflow: hidden;
 		margin: 0px;
 		opacity: 0.9;
-		padding: 2px 5px 2px 10px;
+		padding: 0px;
 		background-color:lightblue;
 	}
 	#option{
 		display: none;
-	}
-	#option a{
-		display: inline-block;
-		font-size: 15px;
-		margin: 10px 5px 10px 5px;
-		cursor: pointer;
-		color: gray;
 	}
 	.back{
 		cursor: pointer;
@@ -182,7 +192,7 @@ $('#schedule_block').click(function(){
 		display: none;		
 	}
 	#allPlaces{
-		height: 50vh;
+		height:90vh;
 		overflow-y:scroll; 
 	}
 	#allPlaces p{
@@ -190,6 +200,7 @@ $('#schedule_block').click(function(){
 		margin: 0;
 		padding:10px;
 		border-top: 1px solid gray;
+		border-bottom: 1px solid gray;
 	}
 	#allPlaces p:hover{
 		background-color: lightgray;
@@ -201,6 +212,9 @@ $('#schedule_block').click(function(){
 		border-radius: 5px;
 		background-color: lightgray;
 	}
+	#info{
+		height: 90vh;
+	}
 	#plan{
 		font-weight: bold;
 		font-size: 18px;
@@ -208,11 +222,11 @@ $('#schedule_block').click(function(){
 		margin-left: 20px;
 	}
 	#infoImg{
-		height: 350px;
-		overflow-y: scroll;
+	/* 	height: 350px; */
+		/* overflow-y: scroll; */
 	}
 	#infoImg img{
-		width: 300px;
+		width: 24vw;
 	}
 	.list_con{
 		border-bottom: 1px solid orange;
@@ -253,6 +267,9 @@ $('#schedule_block').click(function(){
 	}
 	.travelMode{
 		margin: 3px;
+	}
+	#hint{
+		height: 10vh;
 	}
 	.instruc{
 		display: none;

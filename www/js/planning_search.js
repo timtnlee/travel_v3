@@ -22,6 +22,7 @@ function newMap(){
 		bounds:defaultBounds
 	})
 	service = new google.maps.places.PlacesService(map);
+	map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('searchArea'));
 	close_block();
 }
 function setButton(){
@@ -30,7 +31,7 @@ function setButton(){
 		query=$('#textSearch').val();
 		if($(this).val()=='查詢'){//大範圍搜特定地點
 			initVar();
-			newMap();
+			//newMap();
 			Steps('start_search');			
 			TextSearch(query,radius,center);
 			Steps('done_search');
@@ -44,6 +45,7 @@ function setButton(){
 	//
 	$('#getLocationBtn').click(function(e){
 		e.preventDefault();
+		console.log('getLocationBtn')
 		getUserLocation();
 	})
 	//
@@ -57,15 +59,26 @@ function setButton(){
 		NearbySearch();
 		Steps('done_search');
 	})
+	//
+	$('.option_bar_btn').click(function(){
+		$('#option_bar').css('display','block');
+	})
+	//
+	$('#scheduleGoback').click(function(){
+		$('#schedule').css('zIndex','0');
+	})
 }
 function getUserLocation(){
+	console.log('getUserLocation')
 	 if (navigator.geolocation)
     {
+    	console.log('s')
     navigator.geolocation.getCurrentPosition(ShowUserLocation);
     }
   	else{alert("不支援定位或權限未開啟")}
 }
 function ShowUserLocation(position){
+	console.log('ShowUserLocation')
 	var userCenter={lat: position.coords.latitude,lng:position.coords.longitude};
 	CreateUserMarker(userCenter);
 	map.setZoom(15);
@@ -118,6 +131,7 @@ function Steps(step){
 			$('#option').css('display','none');
 			$('#goback').css('display','none');
 			$('#allPlaces').css('display','block');
+			$('#option_bar').css('display','none');
 			break;
 		case 'marker_click'://MarkInfo
 			console.log('render marker_click');	
@@ -128,6 +142,7 @@ function Steps(step){
 			$('#goback').css('display','block');
 			$('#searchArea').find('h4').text('附近找:');
 			$('#allPlaces').css('display','none');
+			$('#option_bar').css('display','none');
 			break;
 		case 'user_location':
 			console.log('render user_location');	
@@ -135,7 +150,7 @@ function Steps(step){
 			$('#searchSubmit').val('附近找');
 			$('#info').css('display','block');
 			$('#option').css('display','block');
-			$('#goback').css('display','block');
+			$('#goback').css('display','none');
 			$('#searchArea').find('h4').text('附近找:');
 			$('#allPlaces').css('display','none');
 			break;
@@ -150,6 +165,7 @@ function Steps(step){
 			$('#goback').css('display','block');
 			$('#searchArea').find('h4').text('附近找:');
 			$('#allPlaces').css('display','none');
+			$('#option_bar').css('display','none');
 			break;
 	}
 }
@@ -157,7 +173,7 @@ function textSearchCallback(result,status){
 	console.log('textSearchCallback');
 	if(status == google.maps.places.PlacesServiceStatus.OK){
 		if(radius==500000)
-			$('#allPlaces').empty().prepend('<h4>全域搜尋"'+query+'"</h4>');
+			$('#allPlaces').empty().prepend('<h4>全域搜尋"'+query+'"結果 :</h4>');
 		else{
 			var key=query,
 				translate=['餐廳','景點','住宿','停車場'];
@@ -175,7 +191,7 @@ function textSearchCallback(result,status){
 					key='咖啡廳';
 					break;
 			}
-			$('#allPlaces').empty().prepend('<h4>"'+focusMark+'"附近搜尋"'+key+'"</h4>');
+			$('#allPlaces').empty().prepend('<h4>"'+focusMark+'"附近搜尋"'+key+'"結果 :</h4>');
 		}
 		for(var i=0;i<result.length;i++){			
 			CreateMarker(result[i]);
@@ -211,7 +227,7 @@ function PtagClick(place,mark,infowindow){
 		infowindow.setContent(place.name);
 		infowindow.open(map,mark);
 		infowindows=infowindow;
-	}).mouseover(function(){
+	}).on('click mouseover',function(){
 		if(infowindows)
 		infowindows.close();
 		infowindow.setContent(place.name);
@@ -265,12 +281,12 @@ function MarkInfo(place,list){
     		(result.vicinity)?Vicinity=result.vicinity:Vicinity='';
     		$('#info').empty()
 				.prepend('<h2>'+result.name+'/'+Rating
-				+'<a id="add"><i class="fa fa-plus-circle" aria-hidden="true"></i>加入清單</a>'
+				+'<br><a id="add"><i class="fa fa-plus-circle" aria-hidden="true"></i>加入清單</a>'
 				+'</h2><p>'
 				+Vicinity+'</p><div id="infoImg"></div>');
 			if(result.photos){
 				for(var i=0;i<result.photos.length;i++){
-              		var src=result.photos[i].getUrl({'maxWidth': 300, 'maxHeight': 300}); 
+              		var src=result.photos[i].getUrl({'maxWidth':600, 'maxHeight': 600}); 
               		img+='<img src="'+src+'" >';
             	}
             	$('#infoImg').append(img);
