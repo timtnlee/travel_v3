@@ -67,6 +67,10 @@ function setButton(){
 	$('#scheduleGoback').click(function(){
 		$('#schedule').css('zIndex','0');
 	})
+	//
+	$('#infoGotop').click(function(){
+		$('#mapInfo').animate({scrollTop:'0'});
+	})
 }
 function getUserLocation(){
 	console.log('getUserLocation')
@@ -158,8 +162,8 @@ function Steps(step){
 			console.log('render list_info');	
 			$('#hint').animate({height:'0px'});
 			$('#searchSubmit').val('附近找');
-			$('#add')
-				.html('<i class="fa fa-plus-circle" aria-hidden="true"></i>再次加入(已加入)');
+			// $('#add')
+			// 	.html('<i class="fa fa-plus-circle" aria-hidden="true"></i>再次加入(已加入)');
 			$('#info').css('display','block');
 			$('#option').css('display','block');
 			$('#goback').css('display','block');
@@ -179,7 +183,7 @@ function textSearchCallback(result,status){
 				translate=['餐廳','景點','住宿','停車場'];
 			switch(key){
 				case 'parking':
-					key=translate[3];
+					key='停車場';
 					break;
 				case 'restaurant':
 					key='餐廳';
@@ -193,17 +197,19 @@ function textSearchCallback(result,status){
 			}
 			$('#allPlaces').empty().prepend('<h4>"'+focusMark+'"附近搜尋"'+key+'"結果 :</h4>');
 		}
-		for(var i=0;i<result.length;i++){			
-			CreateMarker(result[i]);
+		var markCount=0;
+		for(var i=0;i<result.length;i++){				
+			CreateMarker(result[i],markCount);
 			if(result[i].geometry.viewport)
 				bounds.union(result[i].geometry.viewport)
 			else{
 				bounds.extend(result[i].geometry.location)
-			}			
+			}	
+			markCount++;		
 		}	
-		map.fitBounds(bounds);		
+		map.fitBounds(bounds);	
+		close_block();	
 	}
-	close_block();
 }
 function NearbySearch(){
 	radius=1000;
@@ -218,8 +224,9 @@ function NearbySearch(){
   	service.nearbySearch(request, textSearchCallback)
 	//TextSearch(query,radius,center);//center在點擊mark時定義 或是我的位置
 }
-function PtagClick(place,mark,infowindow){
-	$('#allPlaces').append('<p>'+place.name+'</p>');
+function PtagClick(place,mark,infowindow,count){
+	$('#allPlaces').append('<p id="'+count+'"><span></span>'+place.name+'</p>');
+	console.log('set');
 	$('#allPlaces').find('p').last().click(function(){
 		MarkInfo(place);
 		if(infowindows)
@@ -236,10 +243,31 @@ function PtagClick(place,mark,infowindow){
 		return;
 	})
 }
+	
+function getPlaceIcon(place,count){
+	console.log(count)
+	var thisplace=place,
+		thiscount=count;
+	service.getDetails({placeId:place.place_id},function(result,status){
+		if(status=='OK'){
+			var src='img/red-dot.png';
+			if(result.photos){
+			src=result.photos[0].getUrl({'maxWidth':100, 'maxHeight': 100});
+			}
+			$('#allPlaces').find('#'+count).find('span').prepend('<img src="'+src+'">');
+		}
+		else if(status=='OVER_QUERY_LIMIT'){
+			setTimeout(function(){
+				getPlaceIcon(thisplace,thiscount)
+			},0010);
+			}
+		})
+	}
 
-function CreateMarker(place,location){
+
+function CreateMarker(place,count){
 	console.log('CreateMarker');
-	if(!location)location=place.geometry.location;
+	var location=place.geometry.location;
 	var infowindow=new google.maps.InfoWindow();
 	var mark=new  google.maps.Marker({
     	map: map,
@@ -258,7 +286,8 @@ function CreateMarker(place,location){
 		infowindows=infowindow;
 		return;
 	})
-	PtagClick(place,mark,infowindow);
+	PtagClick(place,mark,infowindow,count);
+	getPlaceIcon(place,count);
 	marker.push(mark);
 }
 function MarkInfo(place,list){
@@ -281,7 +310,7 @@ function MarkInfo(place,list){
     		(result.vicinity)?Vicinity=result.vicinity:Vicinity='';
     		$('#info').empty()
 				.prepend('<h2>'+result.name+'/'+Rating
-				+'<br><a id="add"><i class="fa fa-plus-circle" aria-hidden="true"></i>加入清單</a>'
+				+'<br>'
 				+'</h2><p>'
 				+Vicinity+'</p><div id="infoImg"></div>');
 			if(result.photos){
@@ -306,6 +335,7 @@ function AddToList(result){
 		my_list.push(result);
 		NewListMarker(result);
 		var name;
+		CountList();
 		(result.name.length>15)?name=result.name.substr(0,15)+'...':name=result.name;
 		//var sec=new Date().getMilliseconds();
 		$('#schedule').append(
@@ -392,6 +422,10 @@ function dragover(element){
 			}
 			dragCount=this.id;
 	})	
+}
+function CountList(){
+	var count=$('#schedule').find('.list_con').length;
+	$('#welcomeOption').text("清單("+count+")")
 }
 function drop(e){
 	var ele=e.originalEvent.dataTransfer.getData('text');

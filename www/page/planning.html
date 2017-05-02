@@ -1,6 +1,5 @@
-<link rel="stylesheet" type="text/css" href="css/planning.css">
-<script src='js/planning_search.js'></script>
-<script src='js/planning_distance.js'></script>
+<script src='js/planning_searches.js'></script>
+<script src='js/planning_distances.js'></script>
 <div id='searchArea'>
 			<div class="row">
 				<div class="col-xs-9">
@@ -21,19 +20,23 @@
 		<p id='hint'>選擇一個想去的地點吧(ex:台北101)<br>或是一個地區(ex:台北市)</p>
 		
 		<div id='allPlaces'></div>		
-		<div id='option'>
+
+		<div id='option'>			
 			<p id='goback' class="back">
 				<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
 			</p>
+			<p id='optionTag'></p>
 			<h4 class="btn btn-link option_bar_btn">附近找</h4>	
 			<div id='option_bar'>	
 			<a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
-			<a key='cafe'><i class="fa fa-hospital-o" aria-hidden="true"></i>Cafe'</a>
+			<a key='cafe'><i class="fa fa-coffee" aria-hidden="true"></i>Cafe'</a>
 			<a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
 			.......
 			</div>	
-			
-			
+			<div id='infoGotop'>
+				<i class="fa fa-arrow-up fa-3x" aria-hidden="true"></i>
+			</div>
+			<div id='infoText'></div>
 			<div id='info'>
 			</div>
 			<a>網路熱門</a>
@@ -42,30 +45,64 @@
 		<!-- distance -->
 		<div id='planDistance'>
 			<p id='distanceGoback' class="back">
-				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>返回
+				<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>收起
 			</p>
-			<h4>路線規劃<span class="btn btn-link" id="saveRouting">儲存行程</span></h4>	
-			<div id='output' class="down"></div>			
+			<h4>路線規劃(拖曳到這裡)<span class="btn btn-link" id="saveRouting">儲存行程</span></h4>
+			<div id='timeBar'><a>加一天</a></div>	
+			<div id='output' class="down">				
+			</div>			
 		</div>
 		<!-- shedule -->
 	<div id='schedule_block'>
 		<div id='schedule'>
 			<p id='scheduleGoback' class="back">
-				<i class="fa fa-arrow-up" aria-hidden="true"></i>收起
+				收起
 			</p>
 			<div class="list_con" id='list_head'>
-			<h4 style="display: inline-block;">清單</h4>
-			<small>點擊看詳細資料，拖曳來排序</small>
-			<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>規劃路線</a>
-		</div>	
+			<h4 style="display: inline-block;">我的清單</h4>
+			<small>點擊看詳細資料</small>
+			<a id='plan'><i class="fa fa-road" aria-hidden="true"></i>開始規劃</a>
+			</div>	
 		</div>
-	</div>
+	</div>	
 </div>
-
+<div class="first_drop_ex">
+		<div class="first_drop">拖曳加入地點</div>
+	</div>
+	<div class="timeline_ex">
+		
+			<div>
+				<p class="time_title morning" draggable="true">早上</p>
+				<div class="time_con">
+					
+				</div>
+			</div>
+			<div>
+				<p class="time_title noon">中午</p>
+				<div class="time_con">
+					
+				</div>
+			</div>
+			<div>
+				<p class="time_title afternoon">下午</p>
+				<div class="time_con">
+					
+				</div>
+			</div>
+			<div>
+				<p class="time_title night">晚上</p>
+				<div class="time_con">
+					
+				</div>
+			</div>
+		
+	</div>
 <script type="text/javascript">
 //var
 	//map
 var map,
+	searchBox,
+
 	service,
 	DirectionsService,
 	query,
@@ -75,7 +112,7 @@ var map,
 	focusMark,
 	marker=[],
 	list_marker=[],
-	center={lat:24.5,lng:121.2},
+	center={lat:23.5,lng:121.2},
 	infowindows,//has 's'
 	my_list=[],
 	listCount=0;
@@ -83,42 +120,104 @@ var map,
 var hint=document.getElementById('hint'),
 	input=document.getElementById('textSearch'),
 	dragCount='',
-	dragId='';
+	temporCount='',
+	dragId=0;
 
 //process
 	//planning_search
-EnterSubmit('#searchSubmit');
+//EnterSubmit('#searchSubmit');
+ResetInput('#textSearch');
 welcomeOption('清單',showShedule);
 block();
-ResetInput('#textSearch');
-setButton();
+
 newMap();
+Plan();
 	//planning_distance
 
-function showShedule(){
-	$('#schedule').css('zIndex','19');
-	$('#schedule_block').css('zIndex','19').animate({top:'0'});
+function showShedule(e){
+	// var target=$('#welcomeOption')
+	
+	// if(target.hasClass('showNow'))
+	// 	SetPage('close_schedule')
+	// else
+		SetPage('schedule')
+	// target.toggleClass('showNow')
 }
 $('#schedule_block').click(function(){
 	$(this).css('zIndex','0').animate({top:'55vh'})
 })
 </script>
 <style type="text/css">
+	#delList{
+	float: right;
+	}
+	.first_drop{
+		padding: 1px;
+		min-height: 50px;
+	}
+	.time_title{
+		margin: 0;
+		padding: 3px;
+		background-color: #F0F0F0;
+	}
+	.time_con{
+	}
+	.time_place{
+		cursor: pointer;
+		margin: 0;
+		padding:0.5vw;
+		/* border-top: 1px solid gray; */
+		border-bottom: 1px solid lightgray;
+	}
+	.tempor{
+		min-height: 50px;
+		margin: 0px;
+		padding: 0.5vw;
+	}
+	.first_drop_ex{
+		display: none;
+	}
+	.timeline_ex{
+		display: none;
+	}
+	.morning{
+		background-color: #00FFFF;
+	}
+	.noon{
+		background-color:#FFFFAA;
+	}
+	.afternoon{
+		background-color: #FFC78E;
+	}
+	.night{
+		color: white;
+		background-color: #28004D;
+	}
+	._container{
+		overflow-y: hidden;
+	}
+	#infoText{
+	}
+	#infoGotop{		
+		cursor: pointer;
+		background-color: rgba(80, 80, 80, 0.7);
+		position: fixed;
+		font-size:20px;
+		right: 35px;
+		bottom: 20px;
+		z-index: 19;
+	}
 	#welcomeOption{
 		display: block;
 	}
 	#option_bar{
-		display: none;
-		height: 200px;
+		/* display: none; */
 	}
 	#option_bar a{
-		display: inline-block;
 		font-size: 15px;
-		margin:0px;
-		width: 5vw;
-		height: 50px;
+		margin:5px;
 		cursor: pointer;
-		color: gray;
+		color:gray;
 	}
 	.pageContainer{
 		padding: 0;
@@ -138,21 +237,20 @@ $('#schedule_block').click(function(){
 		height: 100vh;
 		position: absolute;
 		right: 0vw;
-		overflow-y: scroll;
-		z-index: 10;
-		opacity: 0.95;
+		/* overflow-y: scroll; */
+		z-index: 1;
 	}
 	#planDistance{
 		background: white;		
 		margin: 0;
-		padding: 0px;
+		padding: 0px 0px 200px 0px;
 		width: 25vw;
 		height:100vh;
 		position: absolute;
-		right: 0vw;
-		overflow-y: hidden;
-		z-index: 0;
-		opacity: 0;
+		right: 25vw;
+		overflow-y: scroll;
+		opacity:0;
+		z-index: -1;
 	}
 	#schedule{
 		overflow-y: scroll;
@@ -171,6 +269,7 @@ $('#schedule_block').click(function(){
 		margin: 5px 5px 10px 5px;
 	}
 	#hint{
+		height: 50px;
 		overflow: hidden;
 		margin: 0px;
 		opacity: 0.9;
@@ -178,48 +277,87 @@ $('#schedule_block').click(function(){
 		background-color:lightblue;
 	}
 	#option{
+		overflow-y: scroll;
+		height: 90vh;
 		display: none;
 	}
+	#option p{
+		margin: 0px;
+		padding: 10px;
+	}
 	.back{
+		margin: 0px;
 		cursor: pointer;
 		color:black;
 		padding: 2px;
 		border-radius: 5px;
-		background-color: lightgray;
-		font-size: 20px;
+		background-color:lightblue;
+		font-size: 16px;
 	}
 	#goback{
-		display: none;		
+		
+		/* display: none;	 */	
 	}
 	#allPlaces{
+		padding: 0px 0px 100px 0px;
 		height:90vh;
 		overflow-y:scroll; 
 	}
 	#allPlaces p{
 		cursor: pointer;
 		margin: 0;
-		padding:10px;
-		border-top: 1px solid gray;
-		border-bottom: 1px solid gray;
+		padding:0.5vw;
+		/* border-top: 1px solid gray; */
+		border-bottom: 1px solid lightgray;
+	}
+	#optionTag{
+		margin: 0;
+		padding:0.5vw;
+		/* border-top: 1px solid gray; */
+		border-bottom: 1px solid lightgray;
+	}
+	.placeIcon{
+		width: 5vw;
+		height: 5vw;
+		overflow: hidden;
+		display: inline-block;	
+	}
+	.placeName{
+		padding-left:1vw;
+		/* padding-top:1.7vw;  */
+		height: 5vw;
+		width: 16vw;
+		margin-left:0.1vw; 
+		display: inline-block;
+		overflow: hidden;	
+	}
+	.placeIcon img{
+		height: 100%;
 	}
 	#allPlaces p:hover{
 		background-color: lightgray;
 	}
-	#plan,#option #add{
+	#add{
+		font-size: 12px;
+		cursor: pointer;
+		color:blue;
+		float: right;
+	}
+	#plan{
 		cursor: pointer;
 		color:black;
 		padding: 2px;
 		border-radius: 5px;
 		background-color: lightgray;
-	}
-	#info{
-		height: 90vh;
-	}
-	#plan{
 		font-weight: bold;
 		font-size: 18px;
 		display: inline-block;
-		margin-left: 20px;
+	}
+	#info{
+		padding-bottom: 100px;
+	}
+	#info img{
+		width: 24vw;
 	}
 	#infoImg{
 	/* 	height: 350px; */
@@ -229,24 +367,19 @@ $('#schedule_block').click(function(){
 		width: 24vw;
 	}
 	.list_con{
-		border-bottom: 1px solid orange;
+		cursor: pointer;
 		margin: 0;
-		padding:1px;
-		background-color:#FFE153;
+		padding:0.5vw;
+		/* border-top: 1px solid gray; */
+		border-bottom: 1px solid orange;
+		background-color:#FFE66F;
 	}
 	.dragP{
-		font-size: 18px;
+		/* font-size: 18px;
 		cursor: pointer;
 		padding: 5px;
 		margin: 0px;
-		height:30px;
-	}
-	.tempor{
-		display: inline-block;
-		width: 100%;
-		height: 30px;
-		background-color: #FFFF6F;
-		text-align: center;
+		height:30px; */
 	}
 	.fa-bars{
 		cursor: pointer;
@@ -257,111 +390,16 @@ $('#schedule_block').click(function(){
 		float: right;
 		z-index: 10;
 	}
-	#output{
-		/* height: 350px; */
-		overflow-y: scroll;
-	}
-	#output h4{
-		padding: 5px;
-		background-color: lightskyblue;
-	}
 	.travelMode{
 		margin: 3px;
-	}
-	#hint{
-		height: 10vh;
 	}
 	.instruc{
 		display: none;
 	}
 	@media (orientation:portrait){
-		#map{
-			width: 100vw;
-			height: 45vh;
-		}
-		#welcomeOption{
-			display: block;
-		}
-		#mapInfo{
-			overflow-y: scroll;
-			position: absolute;
-			bottom: 0px;
-			width: 100vw;
-			height: 55vh;
-			z-index: 10;
-			left: 0px;
-			background-color: white;
-		}
-		#planDistance{
-			overflow-y: scroll;
-			position: absolute;
-			bottom: 0px;
-			width: 100vw;
-			height: 55vh;
-			z-index: 0;
-			left: 0px;
-			background-color: white;
-			opacity: 0;
-		}
-		#schedule_block{
-			position:absolute;
-			top:55vh;
-			left: 0;
-			width: 100vw;
-			height: 100vh;
-			z-index: 11;
-		}
-		#schedule{
-			position: absolute;
-			left: 0;
-			top:45%;
-			width: 100%;
-			height: 55%;
-		}
+		
 	}
 	@media (max-width:500px){
-			#map{
-			width: 100vw;
-			height: 45vh;
-		}
-		#welcomeOption{
-			display: block;
-		}
-		#mapInfo{
-			overflow-y: scroll;
-			position: absolute;
-			bottom: 0px;
-			width: 100vw;
-			height: 55vh;
-			z-index: 10;
-			left: 0px;
-			background-color: white;
-		}
-		#planDistance{
-			overflow-y: scroll;
-			position: absolute;
-			bottom: 0px;
-			width: 100vw;
-			height: 55vh;
-			z-index: 0;
-			left: 0px;
-			background-color: white;
-			opacity: 0;
-		}
-		#schedule_block{
-			position:absolute;
-			top:55vh;
-			left: 0;
-			width: 100vw;
-			height: 100vh;
-			z-index: 11;
-		}
-		#schedule{
-			position: absolute;
-			left: 0;
-			top:45%;
-			width: 100%;
-			height: 55%;
-		}
+		
 	}
 </style>

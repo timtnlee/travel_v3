@@ -1,4 +1,28 @@
 //var ip='http://127.0.0.1:3000/';
+var _articleObj={
+            title:'',
+            date:'',
+            author:'',
+            id:''
+        },
+        _goback='',
+        _display_title,
+        _display_place=[],
+        _display_mode=[];
+    	//Dom events go here
+$(function(){
+            setIp(); 
+            LoadHomePage();    		
+            $('._header').find('a').on('click',function(e){
+             e.preventDefault();
+             $('.welcome').css({height:'0px'}).animate({height:'40px'});
+             HeaderButton($(this));
+         })
+            PhoneButton();
+})
+
+
+
 function setIp(){
 	ip=window.prompt('local host?','http://140.119.19.15:3000/');
 }
@@ -32,8 +56,8 @@ function LoginOption(){
 }
 function welcomeOption(text,func){//can only be used in reload pages
 	$('#welcomeOption').text(text);
-	$('#welcomeOption').unbind().click(function(){
-		func();
+	$('#welcomeOption').unbind().click(function(e){
+		func(e,$(this))
 	})	
 }
 function reNewPage(href){
@@ -62,11 +86,12 @@ function InsertImg(ele,insert){
 				})
 				if(file)reader.readAsDataURL(file);
 			})}
-function HeaderButton(target){
+function HeaderButton(target,text){
 	var href=target.attr('href'),
 		reload=target.attr('reload'),
-		option=target.attr('optional');
-		text=target.text();
+		option=target.attr('optional')
+	if(!text)
+		var text=target.text();
 	$("[name='title']").text(text);
 	$('._content').find('._pages').css('display','none');
 	$('._reloadPages').remove();
