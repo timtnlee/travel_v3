@@ -1,20 +1,131 @@
 var disInfoCount = 0,
-    displays = {}
+    dayCount = 0,
+    pageCount = 0,
+    maxPage = 0,
+    displays = {},
+    displayMarkers = [],
+    displayBounds = new google.maps.LatLngBounds()
 
-function Plan() {
+function Plan() { //will execute in planning.html
     TimeLine()
+    DayPageEvent()
+    AddTimLine() //activate
+    DelTimeLine() //activate
+    DayBtn() //activate
+}
+
+function AddTimLine() {
+    $('#addADay').on('click', function(e) {
+        e.preventDefault()
+        TimeLine()
+        DayPageEvent()
+    })
+}
+
+function DelTimeLine() {
+    $('#delADay').on('click', function(e) {
+        e.preventDefault()
+        if (dayCount >= 2) {
+            let confirm = window.confirm('將刪除第' + (dayCount) + '天，是否確定')
+            if (confirm) {
+                _delTimeLine()
+            }
+        } else {
+            alert('只有一天')
+        }
+    })
+}
+
+function _delTimeLine() {
+    let id = 'timeLine' + (dayCount - 1),
+    	places=$('#'+id).find('.time_place')
+    places.each(function(i){
+    	if(i!=0){
+    		console.log(places.eq(i).attr('id'))
+    		_renderDel(places.eq(i).attr('id'))
+    	}
+    })
+    $('#' + id).remove()
+    if (pageCount == dayCount - 1)
+        pageCount--
+        dayCount--
+        DayPageEvent()
+}
+
+function DayPageEvent() {
+    $('#output').find('.time_line').css({ display: 'none', opacity: '0' })
+    $('#timeLine' + pageCount).css('display', 'block').animate({ opacity: '1' })
+    $('#dayTitle').text('第' + (pageCount + 1) + '天')
+    $('#maxDay').text(dayCount + '日遊')
+    if (pageCount == 0)
+        $('#prevDay').text(' ')
+    else
+        $('#prevDay').text('<')
+    if (pageCount == dayCount - 1)
+        $('#nextDay').text(' ')
+    else
+        $('#nextDay').text('>')
+}
+
+function DayBtn() {
+    $('#prevDay').on('click', function(e) {
+        e.preventDefault()
+        if (pageCount != 0)
+            pageCount--
+            DayPageEvent()
+    })
+    $('#nextDay').on('click', function(e) {
+        e.preventDefault()
+        if (pageCount != dayCount - 1)
+            pageCount++
+            DayPageEvent()
+    })
 }
 
 function TimeLine() {
-    var html = $('.timeline_ex').html(),
-        firstDrop = $('.first_drop_ex').html()
-    $('#output').html(html)
+    let html = $('.timeline_ex').html(),
+        firstDrop = $('.first_drop_ex').html(),
+        timeLineId = 'timeLine' + dayCount
+    $('#output').append(html)
+        .find('.time_line').last()
+        .attr('id', timeLineId).css('display', 'block')
+    pageCount = dayCount
+    dayCount++
     $('#output').find('.time_con')
         .on('dragover', function(e) {
             e.preventDefault()
         })
-    var target = $('#output').find('.time_con').html(firstDrop).find('.first_drop')
+    let target = $('#' + timeLineId).find('.time_con').html(firstDrop).find('.first_drop')
+    GetLastPlace(pageCount)
     _activateFirstDrop(target)
+}
+
+function GetLastPlace(index) {
+
+    if (index >= 1) {
+        let id = $('#timeLine' + (index)),
+            prev = $('#timeLine' + (index - 1)),
+            lastPlace = prev.find('.time_place').last(),
+            html,
+            placeId,
+            newId,
+            noPlace
+        if (lastPlace.length >= 1) {
+            html = lastPlace.html(),
+                placeId = lastPlace.attr('placeId'),
+                newId = dragId + placeId
+        } else {
+            html = '',
+                placeId = '',
+                newId = (dragId + 'noPrevPlace'),
+                noPlace = 'noPlace'
+        }
+        id.find('#prevPlace').html('<p>前天停留地點</p>' 
+        	+ '<div class="time_place" id="' + newId + '" placeId="' + placeId + '">' + html + '</div>')
+        id.find('.time_place').addClass(noPlace).find('#delList').remove()
+
+        dragId++
+    }
 }
 
 function _activateFirstDrop(target) {
@@ -33,14 +144,14 @@ function _activateFirstDrop(target) {
 
 function _firstdrop(e, target) {
     $('.tempor').remove()
-    var ele = e.originalEvent.dataTransfer.getData('text'),
+    let ele = e.originalEvent.dataTransfer.getData('text'),
         eleAry = ele.split(","),
         id = eleAry[1]
     if (eleAry[0] == 'new') {
-        var content = $('#' + id).html()
+        let content = $('#' + id).html()
         _newList(eleAry[1], target, content, eleAry[1])
     } else if (eleAry[0] == 'edit') {
-        var content = $('#' + id).find('.distance_name').html()
+        let content = $('#' + id).find('.distance_name').html()
         _retrivePlan(id)
         _refillFirstDrop(id)
         $('#' + id).remove()
@@ -49,7 +160,7 @@ function _firstdrop(e, target) {
 }
 
 function _newList(ele, target, content, placeId) { //first drop
-    var id = '#' + ele,
+    let id = '#' + ele,
         newId = dragId + ele
     _createList({
         step: 'after',
@@ -75,19 +186,40 @@ function _createList(paramObj) {
         insert = '<div class="time_place" id="' + newId + '" draggable="true" ' +
         'placeId="' + placeId + '" front="" end="">' +
         '<p class="distance_name">' + content + '</p>' +
-        '<p class="distance_info"></p></div>'
+        '<p class="distance_info"></p>' +
+        '<p class="distance_detail"></p></div>'
+
+    
     if (step == 'before') {
         $(insert).insertBefore(target)
     } else if (step == 'after') {
         $(insert).insertAfter(target)
     }
-    _distanceMarker(placeId)
+    _activateDetail(newId)
+    _distanceMarker(placeId, newId)
 }
-
+function _activateDetail(newId){
+	$('#' + newId).find('.distance_info')
+        .on('click', function() {
+            let detail = $(this).next('.distance_detail')
+            if (detail.hasClass('show'))
+                detail.css('display', 'none').removeClass('show')
+            else
+                detail.css('display', 'block').addClass('show')
+        })
+    $('#' + newId).find('.distance_detail')
+    	.on('click', function() {
+            let detail = $(this)
+            if (detail.hasClass('show'))
+                detail.css('display', 'none').removeClass('show')
+            else
+                detail.css('display', 'block').addClass('show')
+        })
+}
 function _timePDrop() {
     $('#output').find('.time_place').unbind()
         .on('dragstart', function(e) {
-            var data = ['edit', e.target.id, $(this).attr('placeId')]
+            let data = ['edit', e.target.id, $(this).attr('placeId')]
             e.originalEvent.dataTransfer.setData('text', data)
         })
         .on('dragover', function(e) {
@@ -101,9 +233,8 @@ function _timePDrop() {
             _tempP(e, $(this))
         })
         .on('click', function() {
-            console.log('placeId :' + $(this).attr('placeId'))
-            console.log('front :' + $(this).attr('front'))
-            console.log('end :' + $(this).attr('end'))
+            // console.log('placeId :' + $(this).attr('placeId'))
+            // console.log('classes :' + $(this).attr('class'))
         })
 }
 
@@ -128,11 +259,12 @@ function _activateDel(id) {
                 parent.remove()
                 PlanDistance()
             }
+            _distanceMarkerDel(id)
         })
 }
 
 function _tempP(e, target) {
-    var id = '#' + target.attr('id')
+    let id = '#' + target.attr('id')
     $('.tempor').remove()
     $('<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>').insertAfter(id)
     $('<p class="tempor" id="temp_first" name="' + target.attr('id') + '">' + '</p>').insertBefore(id)
@@ -151,7 +283,6 @@ function _tempP(e, target) {
 }
 
 function _retrivePlan(id) {
-
     let places = $('#output').find('.time_place')
     places.each(function(i) {
         if ($(this).attr('id') == id) {
@@ -217,23 +348,27 @@ function _refillFirstDrop(id) {
     if (num == 1) {
 
         let firstDrop = $('.first_drop_ex').html()
-        var target = parent.html(firstDrop).find('.first_drop')
+        let target = parent.html(firstDrop).find('.first_drop')
         _activateFirstDrop(target)
     }
 }
 
-function PlanDistance() {
-    var places = $('#output').find('.time_place')
+function PlanDistance(num) {
+    let count = pageCount
+    if (num)
+        count = num
+    let places = $('#timeLine' + count).find('.time_place')
     if (places.length >= 2) {
         places.each(function(index) {
             console.log('PlanDistance')
             let //first_f=places.eq(index).attr('front'),
                 first_e = places.eq(index).attr('end'),
                 last_f = places.eq(index + 1).attr('front'),
-                id = this.id
+                id = this.id,
+                noPlace = $('#' + id).hasClass('noPlace')
 
             //last_e=places.eq(index+1).attr('end')
-            if ((first_e != 'yes' || last_f != 'yes') && index != places.length - 1) {
+            if ((first_e != 'yes' || last_f != 'yes') && index != places.length - 1 && noPlace == false) {
                 console.log('change')
                 let firstId = $(this).attr('placeId'),
                     lastId = places.eq(index + 1).attr('placeId')
@@ -244,20 +379,53 @@ function PlanDistance() {
                 disInfoCount++;
             } else if (index == places.length - 1) {
                 $('#' + id).find('.distance_info').empty()
-                if (displays[id]) {
-                    console.log('remove render')
-                    displays[id].setMap(null)
-                }
+                $('#' + id).find('.distance_detail').empty().css('display', 'none')
+                _renderDel(id)
+                    // if (displays[id]) {
+                    //     console.log('remove render')
+                    //     displays[id].setMap(null)
+                    // }
             }
 
         })
     } else if (places.length >= 1) {
         places.last().find('.distance_info').empty()
+        places.last().find('.distance_detail').empty().css('display', 'none')
+        _renderDel(places.last().attr('id'))
+    }
+    console.log('count:'+count)
+    if(count<dayCount-1)
+    	_nextDayPlace(count)
+}
+
+function _nextDayPlace(index) {
+	console.log('nextPlace')
+    if (pageCount < dayCount - 1) {
+        let id = $('#timeLine' + (index)),
+            next = $('#timeLine' + (index + 1)),
+            nextFirst = next.find('#prevPlace').find('.time_place'),
+            place = id.find('.time_place').last(),
+            placeId = place.attr('placeId')
+
+        if (place.length >= 1) {
+
+            let html = place.html()
+
+            nextFirst.removeClass('noPlace')
+                .attr('end', '').attr('placeId', placeId)
+            nextFirst.html(html).find('#delList').remove()
+            PlanDistance(index + 1)
+        } else {
+            nextFirst.addClass('noPlace')
+                .attr('end', '').attr('placeId', '')
+            nextFirst.html('')
+            PlanDistance(index + 1)
+        }
     }
 }
 
-function _distanceMarker(id) {
-    let place = _findPlaceInfo(id),
+function _distanceMarker(placeId, id) {
+    let place = _findPlaceInfo(placeId),
         mark = new google.maps.Marker({
             map: map,
             position: place.geometry.location,
@@ -267,8 +435,21 @@ function _distanceMarker(id) {
             }
         }),
         info = new google.maps.InfoWindow()
+    displayMarkers.push({
+        id: id,
+        marker: mark
+    })
     info.setContent(place.name)
     info.open(map, mark)
+}
+
+function _distanceMarkerDel(id) {
+    for (let i = 0; i < displayMarkers.length; i++) {
+        if (displayMarkers[i].id == id) {
+            displayMarkers[i].marker.setMap(null)
+            displayMarkers[i] = ''
+        }
+    }
 }
 
 function _findPlaceInfo(id) {
@@ -297,9 +478,14 @@ function _distances(firstId, lastId, id) {
         }
     directions.route(request, function(result, status) {
         if (status == 'OK') {
-            let distance = result.routes[0].legs[0].distance.text
+            let distance = result.routes[0].legs[0].distance.text,
+                instruct = ''
+            for (let i = 0; i < result.routes[0].legs[0].steps.length; i++) {
+                instruct += result.routes[0].legs[0].steps[i].instructions + '<br>';
+            }
             $('#' + id).find('.distance_info')
                 .empty().html('<i class="fa fa-car" aria-hidden="true"></i>' + distance)
+            $('#' + id).find('.distance_detail').empty().html(instruct)
             _directionRender(result, id)
         }
     })
@@ -309,17 +495,16 @@ function _directionRender(result, id) {
 
     let display = new google.maps.DirectionsRenderer({
             map: map
-        }),
-        places = $('#output').find('.time_place')
+        })
     display.setOptions({ suppressMarkers: true })
     display.setDirections(result)
     _renderDel(id)
     displays[id] = display
+
 }
 
 function _renderDel(id) {
-    console.log('fk')
-    console.log(displays)
+
     if (displays[id]) {
         displays[id].setMap(null)
         delete displays[id]

@@ -14,7 +14,7 @@ function setButton() {
         //
     $('#option_bar').find('a').on('click', function(e) {
             e.preventDefault()
-            var key = $(this).attr('key')
+            let key = $(this).attr('key')
             NearbySearch(key)
         })
         //
@@ -24,6 +24,7 @@ function setButton() {
         //
     $('#scheduleGoback').on('click', function(e) {
             e.preventDefault()
+       		$('#welcomeOption').removeClass('showNow')
             SetPage('close_schedule')
         })
         //
@@ -38,14 +39,14 @@ function setButton() {
 
 function newMap() {
     console.log('newMap,searchBox');
-    map = new google.maps.Map(document.getElementById('map'), {
+   	map = new google.maps.Map(document.getElementById('map'), {
         center: center,
         zoom: 8,
         disableDefaultUI: true,
         disableDoubleClickZoom: true
             //scrollwheel: false
     })
-    var defaultBounds = new google.maps.LatLngBounds(
+    let defaultBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(26.037, 122.69),
         new google.maps.LatLng(21.268, 119.333)
     );
@@ -56,15 +57,22 @@ function newMap() {
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('searchArea'))
     map.addListener('bounds_changed', function() {
         searchBox.setBounds(map.getBounds())
-    });
+    })
     searchBox.addListener('places_changed', function() {
-        var places = searchBox.getPlaces()
+        let places = searchBox.getPlaces()
         SearchConsole(places)
     })
     setButton()
     close_block();
 }
-
+function _resizeMap(num) {
+	let wid=num+'vw'
+	$('#map').css({width:wid})
+	let lastBounds=map.getBounds()
+	google.maps.event.trigger(map, "resize")
+	map.fitBounds(lastBounds)
+	console.log('resize')
+}
 function SearchConsole(places) {
     SetPage('placeList')
 
@@ -87,7 +95,7 @@ function _initPlace() {
 }
 
 function _placeList(place) {
-    var src = 'img/red-dot.png',
+    let src = 'img/red-dot.png',
         infowindow = new google.maps.InfoWindow()
     infowindow.setContent(place.name)
         //get photo
@@ -100,7 +108,7 @@ function _placeList(place) {
         bounds.union(place.geometry.viewport)
     else
         bounds.extend(place.geometry.location)
-    var mark = _createMarker(place, infowindow)
+    let mark = _createMarker(place, infowindow)
     $('#allPlaces').find('p').last()
         .on('mouseover', function() {
             _infowindowOpen(infowindow, mark)
@@ -117,8 +125,8 @@ function _infowindowOpen(infowindow, mark) {
 }
 
 function _createMarker(place, infowindow) {
-    var location = place.geometry.location
-    var mark = new google.maps.Marker({
+    let location = place.geometry.location
+    let mark = new google.maps.Marker({
         map: map,
         position: location,
         icon: 'img/red-dot.png'
@@ -134,8 +142,8 @@ function _createMarker(place, infowindow) {
 }
 
 function _createListMarker(place, infowindow) {
-    var location = place.geometry.location
-    var mark = new google.maps.Marker({
+    let location = place.geometry.location
+    let mark = new google.maps.Marker({
         map: map,
         position: location,
         optimized: false,
@@ -152,12 +160,12 @@ function _createListMarker(place, infowindow) {
 }
 function _hideListMarker() {
 	console.log(list_marker)
-	for (var i = 0; i < list_marker.length; i++) {
+	for (let i = 0; i < list_marker.length; i++) {
         list_marker[i].setMap(null)
     }
 }
 function _showListMarker() {
-	for (var i = 0; i < list_marker.length; i++) {
+	for (let i = 0; i < list_marker.length; i++) {
         list_marker[i].setMap(map)
     }
 }
@@ -165,13 +173,13 @@ function _delListMarker(){
 
 }
 function _showMarker() {
-    for (var i = 0; i < marker.length; i++) {
+    for (let i = 0; i < marker.length; i++) {
         marker[i].setMap(map)
     }
 }
 
 function _hideMarker() {
-    for (var i = 0; i < marker.length; i++) {
+    for (let i = 0; i < marker.length; i++) {
         marker[i].setMap(null)
     }
 }
@@ -185,7 +193,7 @@ function _markInfo(place) {
     //...
     SetPage('markInfo')
     _initMarkInfo()
-    var location = place.geometry.location,
+    let location = place.geometry.location,
         src = 'img/red-dot.png'
 
     map.panTo(location)
@@ -199,7 +207,7 @@ function _markInfo(place) {
 }
 
 function _markInfoPanel(place_id, place_name, src) {
-    var vicinity,
+    let vicinity,
         website,
         phone,
         rating,
@@ -207,7 +215,7 @@ function _markInfoPanel(place_id, place_name, src) {
     service.getDetails({ placeId: place_id }, function(result, status) {
         if (status == 'OK') {
             if (result.photos) {
-                for (var i = 1; i < result.photos.length; i++) {
+                for (let i = 1; i < result.photos.length; i++) {
                     $('#info').append('<img src="' + result.photos[i].getUrl({ 'maxWidth': 600, 'maxHeight': 600 }) + '" >')
                 }
             }
@@ -229,10 +237,10 @@ function _markInfoPanel(place_id, place_name, src) {
                 '</p>')
             $('#infoText').find('a').click(function(e) {
                 e.preventDefault()
-                var href = $(this).attr('href')
+                let href = $(this).attr('href')
                 window.open(href)
             })
-            var add = '<a id="add">+加入清單</a>',
+            let add = '<a id="add">+加入清單</a>',
                 num = _foundListExist(place_id)
             if (num > 0) {
                 add = '<a id="add">已加入</a>'
@@ -247,19 +255,19 @@ function _markInfoPanel(place_id, place_name, src) {
 }
 
 function _openingHour(opening_hours) {
-    var openInfo = [],
+    let openInfo = [],
         dayChar = function(day) {
-            var days = [0, 1, 2, 3, 4, 5, 6],
+            let days = [0, 1, 2, 3, 4, 5, 6],
                 char = ['日', '一', '二', '三', '四', '五', '六']
-            for (var i = 0; i < days.length; i++) {
+            for (let i = 0; i < days.length; i++) {
                 if (day == days[i])
                     return char[i]
             }
         };
     (opening_hours.open_now) ? openInfo[0] = '營業中': openInfo[0] = '休息中';
     openInfo[1] = ''
-    var exday
-    for (var i = 0; i < opening_hours.periods.length; i++) {
+    let exday
+    for (let i = 0; i < opening_hours.periods.length; i++) {
         let day = opening_hours.periods[i].open.day,
             time = opening_hours.periods[i].open.time,
             close;
@@ -291,7 +299,7 @@ function SetPage(step) {
             $('#hint').animate({ height: '0' })
             $('#schedule').css('zIndex', '0')
             $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            $('#map').animate({ width: '75vw' })
+            _resizeMap(75)
             break
 
         case 'placeList':
@@ -300,7 +308,7 @@ function SetPage(step) {
             $('#hint').animate({ height: '50px' })
             $('#schedule').css('zIndex', '0')
             $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            $('#map').animate({ width: '75vw' })
+            _resizeMap(75)
             if (bounds) map.fitBounds(bounds)
             break
 
@@ -316,15 +324,15 @@ function SetPage(step) {
             _hideMarker()
             _hideListMarker()
             $('#planDistance').css('zIdex', '1').animate({ opacity: '1' })
-            $('#map').css({ width: '50vw' })
+            _resizeMap(50)
             break
 
         case 'close_plan':
             console.log('close_plan')
             _showMarker()
-            _showListMarker()
+            _showListMarker()        	
             $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            $('#map').animate({ width: '75vw' })
+            _resizeMap(75)
             break
     }
 }
@@ -332,7 +340,7 @@ function SetPage(step) {
 function AddToList(place, src) {
     $('#add').unbind().on('click', function(e) {
         e.preventDefault()
-        var name = place.name,
+        let name = place.name,
             placeId = place.place_id,
             infowindow = new google.maps.InfoWindow()
         $(this).text('已加入').unbind()
@@ -376,13 +384,13 @@ function _dragstart(ele) {
 }
 
 function _foundListExist(_id) {
-    var id = '#' + _id,
+    let id = '#' + _id,
         num = $('#schedule').find(id).length
     return num
 }
 
 function _showListNum() {
-    var num = $('#schedule').find('.list_con').length - 1
+    let num = $('#schedule').find('.list_con').length - 1
     if (num == 0)
         $('#welcomeOption').text('清單')
     else
@@ -392,7 +400,7 @@ function _showListNum() {
 function NearbySearch(key) {
     //radius=1000;
     //console.log('NearbySearch');
-    var request = {
+    let request = {
         location: center,
         radius: '1000',
         type: key

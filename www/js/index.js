@@ -55,7 +55,7 @@ function LoginOption(){
 
 }
 function welcomeOption(text,func){//can only be used in reload pages
-	$('#welcomeOption').text(text);
+	$('#welcomeOption').text(text).removeClass('showNow')
 	$('#welcomeOption').unbind().click(function(e){
 		func(e,$(this))
 	})	
@@ -92,7 +92,7 @@ function HeaderButton(target,text){
 		option=target.attr('optional')
 	if(!text)
 		var text=target.text();
-	$("[name='title']").text(text);
+	$("[name='title']").text(href);
 	$('._content').find('._pages').css('display','none');
 	$('._reloadPages').remove();
 	if(option&&localStorage.logined=='no')
