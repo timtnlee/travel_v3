@@ -291,24 +291,34 @@ function _initMarkInfo() {
     $('#infoText').empty()
 }
 
-function SetPage(step) {
+function SetPage(step) {    
     switch (step) {
         case 'markInfo':
             $('#allPlaces').css('display', 'none')
             $('#option').css('display', 'block')
             $('#hint').animate({ height: '0' })
-            $('#schedule').css('zIndex', '0')
-            $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            _resizeMap(75)
+            $('#schedule').css('zIndex', '-1')
+            $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
+            if(Window()>500)
+                _resizeMap(75)
+            else
+                _resizeMap(100)
             break
 
         case 'placeList':
+            if(Window()>500){
+                $('#hint').animate({ height: '50px' })
+                _resizeMap(75)
+            } else {
+                $('#hint').animate({ height: '0px' })
+                _resizeMap(100)
+            }
             $('#allPlaces').css('display', 'block')
             $('#option').css('display', 'none')
-            $('#hint').animate({ height: '50px' })
-            $('#schedule').css('zIndex', '0')
-            $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            _resizeMap(75)
+            
+            $('#schedule').css('zIndex', '-1')
+            $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
+            
             if (bounds) map.fitBounds(bounds)
             break
 
@@ -317,22 +327,25 @@ function SetPage(step) {
             break
 
         case 'close_schedule':
-            $('#schedule').css('zIndex', '0')
+            $('#schedule').css('zIndex', '-1')
             break
 
         case 'plan':
+        console.log('plan')
             _hideMarker()
             _hideListMarker()
-            $('#planDistance').css('zIdex', '1').animate({ opacity: '1' })
-            _resizeMap(50)
+            $('#planDistance').css('zIndex', '2').animate({ opacity: '1' })
+            if(Window()>500)
+                _resizeMap(50)
             break
 
         case 'close_plan':
             console.log('close_plan')
             _showMarker()
             _showListMarker()        	
-            $('#planDistance').css('zIdex', '-1').animate({ opacity: '0' })
-            _resizeMap(75)
+            $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
+            if(Window()>500)
+                _resizeMap(75)
             break
     }
 }

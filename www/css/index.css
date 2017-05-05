@@ -140,7 +140,7 @@ a{
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;
-		font-size: 25px;
+		font-size: 14px;
 		display: inline-block;
 		text-decoration: none;
 		color: white;
@@ -167,6 +167,25 @@ a{
 	}
 }
 @media (max-width:500px){
+	[name='title']{
+		font-size: 14px;
+	}
+	.welcome{
+		height:25px;
+		padding: 3px;
+		font-size:14px;
+		background: linear-gradient(to top,#808080 ,DimGrey );
+		color: white;
+	}
+	#welcomeOption{
+	font-size: 14px;
+	cursor: pointer;
+	padding:1px;
+	margin: 1px 1px 0px 1px;
+	float: right;
+	color:white;
+	display: none;
+}
 	.pageMiddle{
 		width: 98vw;
 		margin: 0px 1vw 0px 1vw;
@@ -195,10 +214,11 @@ a{
 
 	}
 	#menuBar{
+		padding-top: 3px;
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;
-		font-size: 25px;
+		font-size: 14px;
 		display: inline-block;
 		text-decoration: none;
 		color: white;

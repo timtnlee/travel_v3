@@ -11,17 +11,24 @@ var _articleObj={
         _display_mode=[];
     	//Dom events go here
 $(function(){
+
             setIp(); 
             LoadHomePage();    		
             $('._header').find('a').on('click',function(e){
              e.preventDefault();
-             $('.welcome').css({height:'0px'}).animate({height:'40px'});
+             if(Window()>500)
+             	$('.welcome').css({height:'0px'}).animate({height:'40px'});
+             else
+             	$('.welcome').css({height:'0px'}).animate({height:'25px'});
              HeaderButton($(this));
          })
             PhoneButton();
 })
 
-
+function Window(){
+	let w=window.innerWidth
+	return w
+}
 
 function setIp(){
 	ip=window.prompt('local host?','http://140.119.19.15:3000/');

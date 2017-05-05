@@ -495,5 +495,93 @@ $('#schedule_block').click(function() {
 
 @media (orientation:portrait) {}
 
-@media (max-width:500px) {}
+@media (max-width:500px) {
+    #map {
+    z-index: 0;
+    width: 100vw;
+    height: 43vh;
+    position: relative;
+    top:0;
+    left: 0;
+}
+
+#mapInfo {
+    font-size: 12px;
+    background: white;
+    margin: 0;
+    padding: 0px;
+    width: 100vw;
+    height: 50%;
+    position: relative;
+    top:40%;
+    right: 0vw;
+    /* overflow-y: scroll; */
+    z-index: 1;
+}
+#option {
+    overflow-y: scroll;
+    height: 48vh;
+    display: none;
+}
+#allPlaces {
+    padding: 0px 0px 100px 0px;
+    height: 90vh;
+    overflow-y: scroll;
+}
+#allPlaces p{
+    display: inline-block;
+}
+.placeIcon {
+    width: 13vw;
+    height: 13vw;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.placeName {
+    padding-left: 1vw;
+    /* padding-top:1.7vw;  */
+    min-height: 13vw;
+    width: 79vw;
+    margin-left: 0.1vw;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.placeIcon img {
+    height: 100%;
+}
+#info img {
+    width: 90vw;
+}
+
+#planDistance {
+    background: white;
+    margin: 0;
+    padding: 0px 0px 200px 0px;
+    width: 100vw;
+    height: 43vh;
+    position: absolute;
+    top:25px;
+    left: 0;
+    overflow-y: scroll;
+    opacity:0;
+    z-index:-1;
+}
+
+#schedule {
+    z-index: -1;
+    overflow-y: scroll;
+    width: 100vw;
+    height: 57vh;
+    position:absolute;
+    right: 0;  
+    bottom: 0; 
+    margin: 0;
+    padding: 0;
+    background-color: lightgoldenrodyellow;
+    opacity: 1;
+    }
+
+}
 </style>
