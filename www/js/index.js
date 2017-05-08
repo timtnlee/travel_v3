@@ -19,7 +19,7 @@ $(function(){
              if(Window()>500)
              	$('.welcome').css({height:'0px'}).animate({height:'40px'});
              else
-             	$('.welcome').css({height:'0px'}).animate({height:'25px'});
+             	$('.welcome').css({height:'0px'}).animate({height:'30px'});
              HeaderButton($(this));
          })
             PhoneButton();

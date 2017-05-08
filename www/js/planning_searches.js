@@ -1,3 +1,17 @@
+function scrollEvent(){
+	$('#allPlaces,#option').on('scroll',function(e){
+		let scroll=$(this).scrollTop()
+		if(Window()<500){
+			if(scroll>50){
+				$('#mapInfo').stop().animate({top:'0'},200)
+			} else{
+				console.log('<50')
+				$('#mapInfo').stop().animate({top:'43vh'})
+			}
+		}
+	})
+}
+
 function setButton() {
     $('#searchSubmit').on('click', function(e) {
             e.preventDefault()
@@ -63,7 +77,8 @@ function newMap() {
         SearchConsole(places)
     })
     setButton()
-    close_block();
+    scrollEvent()
+    close_block()
 }
 function _resizeMap(num) {
 	let wid=num+'vw'
@@ -96,13 +111,15 @@ function _initPlace() {
 
 function _placeList(place) {
     let src = 'img/red-dot.png',
-        infowindow = new google.maps.InfoWindow()
+        infowindow = new google.maps.InfoWindow(),
+        add='<a id="add">+加入清單</a>'
     infowindow.setContent(place.name)
         //get photo
     if (place.photos)
         src = place.photos[0].getUrl({ 'maxWidth': 100, 'maxHeight': 100 })
     $('#allPlaces').append('<p><span class="placeIcon"><img src="' + src + '"></span>' +
-            '<span class="placeName">' + place.name + '</span></p>')
+            '<span class="placeName">' + place.name + add+'</span></p>')
+    AddToList(place, src,$('#allPlaces').find('p').last())    
         //generate bounds
     if (place.geometry.viewport)
         bounds.union(place.geometry.viewport)
@@ -113,6 +130,7 @@ function _placeList(place) {
         .on('mouseover', function() {
             _infowindowOpen(infowindow, mark)
         }).on('click', function() {
+        	console.log('p click')
             _markInfo(place)
         })
 }
@@ -245,10 +263,10 @@ function _markInfoPanel(place_id, place_name, src) {
             if (num > 0) {
                 add = '<a id="add">已加入</a>'
             }
-            $('#optionTag').prepend('<span class="placeIcon"><img src="' + src + '"></span>' +
+            $('#optionTag').html('<span class="placeIcon"><img src="' + src + '"></span>' +
                 '<span class="placeName">' + place_name + add + '</span>')
             if (num == 0)
-                AddToList(result, src)
+                AddToList(result, src,$('#optionTag'))
         }
     })
 
@@ -298,6 +316,7 @@ function SetPage(step) {
             $('#option').css('display', 'block')
             $('#hint').animate({ height: '0' })
             $('#schedule').css('zIndex', '-1')
+            $('#welcomeOption').attr('class','')
             $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
             if(Window()>500)
                 _resizeMap(75)
@@ -317,6 +336,7 @@ function SetPage(step) {
             $('#option').css('display', 'none')
             
             $('#schedule').css('zIndex', '-1')
+            $('#welcomeOption').attr('class','')
             $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
             
             if (bounds) map.fitBounds(bounds)
@@ -324,9 +344,11 @@ function SetPage(step) {
 
         case 'schedule':
             $('#schedule').css('zIndex', '19')
+            $('#welcomeOption').attr('class','showNow')
             break
 
         case 'close_schedule':
+        	$('#welcomeOption').attr('class','')
             $('#schedule').css('zIndex', '-1')
             break
 
@@ -350,8 +372,11 @@ function SetPage(step) {
     }
 }
 
-function AddToList(place, src) {
-    $('#add').unbind().on('click', function(e) {
+function AddToList(place, src,target) {
+	let add=$('#add')
+	if(target)
+		add=target.find('#add')
+    add.unbind().on('click', function(e) {
         e.preventDefault()
         let name = place.name,
             placeId = place.place_id,

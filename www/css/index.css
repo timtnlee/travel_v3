@@ -117,7 +117,7 @@ a{
 	margin: 0px;
 	padding:0px;
 }
-@media screen and (orientation:portrait) {
+/* @media screen and (orientation:portrait) {
 	.pageContainer{
 		padding:2px 0px 2px 0px;
 	}
@@ -165,20 +165,20 @@ a{
 		background-color:black;
 		padding: 20px 20px 40px 20px;
 	}
-}
+} */
 @media (max-width:500px){
 	[name='title']{
 		font-size: 14px;
 	}
 	.welcome{
-		height:25px;
-		padding: 3px;
-		font-size:14px;
+		height:30px;
+		padding: 5px;
+		font-size:16px;
 		background: linear-gradient(to top,#808080 ,DimGrey );
 		color: white;
 	}
 	#welcomeOption{
-	font-size: 14px;
+	font-size: 16px;
 	cursor: pointer;
 	padding:1px;
 	margin: 1px 1px 0px 1px;
@@ -214,7 +214,7 @@ a{
 
 	}
 	#menuBar{
-		padding-top: 3px;
+		padding-top: 5px;
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;

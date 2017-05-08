@@ -47,8 +47,8 @@
         <h4>路線規劃(拖曳到這裡)<span class="btn btn-link" id="saveRouting">儲存行程</span></h4>
         <div>
         	<span id='maxDay'></span>
-        	<a id='addADay' class="btn btn-link">+加一天</a>
-			<a id='delADay' class="btn btn-link">-減一天</a>
+        	<a id='addADay' class="btn btn-link dayplus">+加一天</a>
+			<a id='delADay' class="btn btn-link dayplus">-減一天</a>
         </div>
         <div class='dayBar'>
             <span id='prevDay' class="dayBtn"> < </span>
@@ -149,10 +149,8 @@ function showShedule(e,target) {
     console.log('click'+target.attr('class'))
     if(target.hasClass('showNow')){
     	SetPage('close_schedule')
-		target.removeClass('showNow')
     }else{
     	SetPage('schedule')
-    	target.addClass('showNow')
     }
        	
 }
@@ -377,6 +375,7 @@ $('#schedule_block').click(function() {
 }
 
 #allPlaces {
+	z-index: 1;
     padding: 0px 0px 100px 0px;
     height: 90vh;
     overflow-y: scroll;
@@ -405,7 +404,7 @@ $('#schedule_block').click(function() {
 }
 
 .placeName {
-    padding-left: 1vw;
+    padding-left: 0.1vw;
     /* padding-top:1.7vw;  */
     min-height: 5vw;
     width: 16vw;
@@ -423,6 +422,8 @@ $('#schedule_block').click(function() {
 }
 
 #add {
+	display: inline-block;
+	z-index: 2;
     font-size: 12px;
     cursor: pointer;
     color: blue;
@@ -500,8 +501,8 @@ $('#schedule_block').click(function() {
     z-index: 0;
     width: 100vw;
     height: 43vh;
-    position: relative;
-    top:0;
+    position: absolute;
+    top:30px;
     left: 0;
 }
 
@@ -511,27 +512,33 @@ $('#schedule_block').click(function() {
     margin: 0;
     padding: 0px;
     width: 100vw;
-    height: 50%;
-    position: relative;
-    top:40%;
+    position: absolute;
+    height: 100%;
+    top: 43vh;
     right: 0vw;
     /* overflow-y: scroll; */
     z-index: 1;
 }
 #option {
+	padding: 0px;
     overflow-y: scroll;
-    height: 48vh;
+    height: 100vh;
     display: none;
+}
+#optionTag{
+	margin: 0px;
+    padding: 0px;
+    /* border-top: 1px solid gray; */
+    border-bottom: 1px solid lightgray;
 }
 #allPlaces {
     padding: 0px 0px 100px 0px;
-    height: 90vh;
+    height: 100vh;
     overflow-y: scroll;
 }
-#allPlaces p{
-    display: inline-block;
-}
+
 .placeIcon {
+	margin: 0px;
     width: 13vw;
     height: 13vw;
     overflow: hidden;
@@ -542,16 +549,17 @@ $('#schedule_block').click(function() {
     padding-left: 1vw;
     /* padding-top:1.7vw;  */
     min-height: 13vw;
-    width: 79vw;
-    margin-left: 0.1vw;
+    width: 78vw;
+    margin:0px 0px 0px 0.1vw;
     display: inline-block;
     overflow: hidden;
 }
 
 .placeIcon img {
-    height: 100%;
+    width: 100%;
 }
 #info img {
+	margin-left: 2vw;
     width: 90vw;
 }
 
@@ -559,29 +567,77 @@ $('#schedule_block').click(function() {
     background: white;
     margin: 0;
     padding: 0px 0px 200px 0px;
-    width: 100vw;
-    height: 43vh;
+    width: 50vw;
+    height: 100vh;
     position: absolute;
-    top:25px;
+    top:30px;
     left: 0;
     overflow-y: scroll;
     opacity:0;
     z-index:-1;
+    font-size: 10px;
 }
 
 #schedule {
     z-index: -1;
     overflow-y: scroll;
-    width: 100vw;
-    height: 57vh;
+    width: 50vw;
+    height: 100vh;
     position:absolute;
     right: 0;  
-    bottom: 0; 
+    top: 30px; 
     margin: 0;
-    padding: 0;
+    padding: 0px 0px 100px 0px ;
     background-color: lightgoldenrodyellow;
     opacity: 1;
+    font-size: 10px;
     }
-
+#schedule h4 {
+	font-size: 16px;
+}
+#schedule small{
+	font-size: 10px;
+}
+#schedule .placeIcon{
+		width: 6.5vw;
+    	height: 6.5vw;
+    	overflow: hidden;
+    	display: inline-block;
+	}
+#schedule .placeName{
+	font-size: 10px;
+	 padding-left: 1vw;
+    /* padding-top:1.7vw;  */
+    min-height: 6.5vw;
+    width: 37.5vw;
+    margin-left: 0.1vw;
+    display: inline-block;
+    overflow: hidden;
+	}
+#planDistance .placeIcon{
+		width: 6.5vw;
+    	height: 6.5vw;
+    	overflow: hidden;
+    	display: inline-block;
+	}
+#planDistance .placeName{
+	font-size: 10px;
+	 padding-left: 1vw;
+    /* padding-top:1.7vw;  */
+    min-height: 6.5vw;
+    width: 37.5vw;
+    margin-left: 0.1vw;
+    display: inline-block;
+    overflow: hidden;
+	}
+#planDistance h4{
+	font-size: 13px;
+}
+#delList{
+	font-size: 10px;
+}
+.dayplus{
+	font-size: 10px;
+}
 }
 </style>
