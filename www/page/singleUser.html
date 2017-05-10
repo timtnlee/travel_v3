@@ -1,0 +1,87 @@
+<div class="pageContainer">
+<div class="pageMiddle">
+	
+	<div class="singleUser">
+		<div class="row">
+		<div class="col-sm-6 single_userIcon">
+			<img src=''>
+		</div>
+		<div class="col-sm-6 single_userInfo">
+			<div id='singleuser_username'></div>
+			<div id='singleuser_article'></div>
+			<div id='singleuser_schedule'></div>
+		</div>
+	</div>
+	</div>
+
+</div>
+</div>
+<style type="text/css">
+	
+	.singleUser img{
+		width: 100%;
+	}
+	#singleuser_username{
+
+	}
+	#singleuser_article p{
+		cursor:  pointer;
+		background-color: lightgray;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
+	}
+	#singleuser_schedule p{
+		cursor:  pointer;
+		background-color: lightskyblue;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
+	}
+	.single_userInfo div{
+		margin: 10px;
+	}	
+</style>
+<script type="text/javascript">
+console.log(_user_name)
+		var single=$('.singleUser')
+		block()
+		AjaxPost('user/personal',{name:_user_name},function(res){
+			single.find('img').attr('src',res.icon)
+			$('#singleuser_username').text('名稱:'+_user_name)
+			$('#singleuser_article').text('文章: ')
+		
+		for(let i in res.articles){
+			console.log(res.articles[i].Title)
+			$('#singleuser_article')
+			.append('<p href="#singleArticle">'+res.articles[i].Title+'</p>')
+			.find('p').last()
+			.click(function(){
+			_goback='users';
+			console.log(res.articles[i].Title)
+			_articleObj.title=res.articles[i].Title,
+			_articleObj.author=res.articles[i].Username,
+			_articleObj.date=res.articles[i].Date,
+			_articleObj.id=res.articles[i]._id;
+			location.href=$(this).attr('href')
+			})
+		}
+		$('#singleuser_schedule').text('行程: ')
+		if(res.schedules){
+		for (var i = 0; i <res.schedules.length; i++) {
+				var title=res.schedules[i].Title,
+					place=res.schedules[i].Places,
+					mode=res.schedules[i].Modes;
+				$('#singleuser_schedule').append(
+					'<p href="#schedule">'
+					+title+'</p>')
+					.find('p').last().on('click',function(){
+						_display_title=title,
+						_display_place=place,
+						_display_mode=mode;		
+						location.href=$(this).attr('href')
+					})
+				
+				}
+			}
+		close_block()
+		})
+</script>

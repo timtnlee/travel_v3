@@ -8,7 +8,9 @@ var _articleObj={
         _goback='',
         _display_title,
         _display_place=[],
-        _display_mode=[];
+        _display_mode=[],
+        _user_name,
+        _user_icon
     	//Dom events go here
 $(function(){
 			URLset();
@@ -64,7 +66,7 @@ function URLset(){
 	})
 }
 function reloadPage(ch){
-	let page=['planning','schedule','singleArticle','mapArticle']
+	let page=['planning','schedule','singleArticle','mapArticle','singleUser']
 	for(let i=0;i<page.length;i++) {
 		if(ch==page[i])
 			return true
