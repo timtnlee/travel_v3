@@ -79,7 +79,7 @@ function Window(){
 }
 
 function setIp(){
-	ip=window.prompt('local host?','http://127.0.0.1:3000/');
+	ip=window.prompt('local host?','http://140.119.19.15:3000/');
 }
 
 if(!localStorage.logined)
