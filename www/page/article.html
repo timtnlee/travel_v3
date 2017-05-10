@@ -9,18 +9,21 @@
 	</div>
 </div>
 <script>
+	$('._loading').css('display','block')
 	AjaxPost(
 		'article/article',
 		'',
 		function(res){
-			for (var i=0; i<res.length ; i++) {
-				$('#articleArea').prepend('<p>'+res[i].Title+'</p>');
+			$.map(res,function(article){
+				$('#articleArea').prepend('<p>'+article.Title+'<span>'+article.Username+'</span></p>');
 				$('#articleArea').find('p').first()
-					.attr('title',res[i].Title)
-					.attr('date',res[i].Date)
-					.attr('author',res[i].Username)
-					.attr('id',res[i]._id);
-				}
+					.attr('title',article.Title)
+					.attr('date',article.Date)
+					.attr('author',article.Username)
+					.attr('id',article._id)
+					$('._loading').css('display','none')
+			})
+			
 			$('#articleArea').find('p').click(function(){
 				_goback='article';
 				_articleObj.title=$(this).attr('title'),
@@ -40,6 +43,9 @@
 		border-bottom: 1px solid lightgray;
 		margin: 0;
 		cursor: pointer;
+	}
+	.article_title p span {
+		float: right;
 	}
 	.article_title p:hover{
 		background-color: lightgray;

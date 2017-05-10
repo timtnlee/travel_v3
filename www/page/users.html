@@ -24,22 +24,24 @@ $('._loading').css('display','block');
 		'user/users',
 		'',
 		function(res){
-			for(var i=0;i<res.length;i++){
-					var count=i%4;
-					var img='img/icon.png';					
-					if(res[i].Usericon){
+			let i=0
+			$.map(res,function(user) {
+				var count=i%4;
+				var img='img/icon.png';					
+					if(user.Usericon){
 					$('#usersArea').find('.col-md-6').eq(count)
-					.prepend('<div class="users"><p>'+res[i].Username
-						+'</p><p><img src="'+res[i].Usericon+'"></p></div>');
+					.prepend('<div class="users"><p>'+user.Username
+						+'</p><p><img src="'+user.Usericon+'"></p></div>');
 					}
 					else{
 					$('#usersArea').find('.col-md-6').eq(count)
-					.prepend('<div class="users"><p>'+res[i].Username
+					.prepend('<div class="users"><p>'+user.Username
 						+'</p><p><img src="'+img+'"></p></div>');
 					}
-				}
-				UserClick();
-				$('._loading').css('display','none');
+					i++
+			})
+			UserClick();
+			$('._loading').css('display','none');
 			}
 		)
 function UserClick(){

@@ -1,146 +1,160 @@
 //var ip='http://127.0.0.1:3000/';
-var _articleObj={
-            title:'',
-            date:'',
-            author:'',
-            id:''
-        },
-        _goback='',
-        _display_title,
-        _display_place=[],
-        _display_mode=[],
-        _user_name,
-        _user_icon
-    	//Dom events go here
-$(function(){
-			URLset();
-            setIp(); 
-            LoadHomePage();    		
-            $('._header').find('a').on('click',function(e){
-             //e.preventDefault();
-             if(Window()>500)
-             	$('.welcome').css({height:'0px'}).animate({height:'40px'});
-             else
-             	$('.welcome').css({height:'0px'}).animate({height:'30px'});
-             //HeaderButton($(this));
-         })
-            PhoneButton();
+var _articleObj = {
+        title: '',
+        date: '',
+        author: '',
+        id: ''
+    },
+    _goback = '',
+    _display_title,
+    _display_place = [],
+    _display_mode = [],
+    _user_name,
+    _user_icon
+    //Dom events go here
+$(function() {
+    URLset();
+    setIp();
+    LoadHomePage();
+    $('._header').find('a').on('click', function(e) {
+        //e.preventDefault();
+        if (Window() > 500)
+            $('.welcome').css({ height: '0px' }).animate({ height: '40px' });
+        else
+            $('.welcome').css({ height: '0px' }).animate({ height: '30px' });
+        //HeaderButton($(this));
+    })
+    PhoneButton();
 })
-function URLset(){
-	$(window).on('hashchange',function(e){
-			let hash=location.hash,
-				page=hash.substr(1),
-				allcontain=$('._content').find('._pages'),
-				contain=$('._content').find('#page_'+page),
-				reload=$('._reloadPage')
-		$('[name="title"]').text(page)
-		allcontain.css('display','none')
-		reload.html('')
-		if(reloadPage(page)){
-			console.log('reloadPage')			
-			$.ajax({
-			url: "page/"+page+".html", 
-			success: function(result){        	
-        			reload.html(result)
-				}
-			})
-			reload.css('display','block')
-		}	
-		else {
-			console.log('page')
-			
-			if(contain.length==1){
-				console.log('old')
-				contain.css('display','block')
-			} else{
-				console.log('new')
-				
-				$.ajax({
-					url: "page/"+page+".html", 
-					success: function(result){        	
-        				$('._content').append('<div id="page_'+page+'" class="_pages">'+result+'</div>')
-					}
-				})
-			}
-		}		
-	})
-}
-function reloadPage(ch){
-	let page=['planning','schedule','singleArticle','mapArticle','singleUser']
-	for(let i=0;i<page.length;i++) {
-		if(ch==page[i])
-			return true
-	}
-	return false
-}
-function Window(){
-	let w=window.innerWidth
-	return w
+
+function URLset() {
+    $(window).on('hashchange', function(e) {
+        let hash = location.hash,
+            page = hash.substr(1),
+            allcontain = $('._content').find('._pages'),
+            contain = $('._content').find('#page_' + page),
+            reload = $('._reloadPage')
+        $('[name="title"]').text(page)
+        allcontain.css('display', 'none')
+        reload.html('')
+        if (reloadPage(page)) {
+            console.log('reloadPage')
+            $.ajax({
+                url: "page/" + page + ".html",
+                success: function(result) {
+                    reload.html(result)
+                }
+            })
+            reload.css('display', 'block')
+        } else {
+            console.log('page')
+
+            if (contain.length == 1) {
+                console.log('old')
+                contain.css('display', 'block')
+            } else {
+                console.log('new')
+
+                $.ajax({
+                    url: "page/" + page + ".html",
+                    success: function(result) {
+                        $('._content').append('<div id="page_' + page + '" class="_pages">' + result + '</div>')
+                    }
+                })
+            }
+        }
+    })
 }
 
-function setIp(){
-	ip=window.prompt('local host?','http://140.119.19.15:3000/');
+function reloadPage(ch) {
+    let page = ['planning', 'schedule', 'singleArticle', 'mapArticle', 'singleUser']
+    for (let i = 0; i < page.length; i++) {
+        if (ch == page[i])
+            return true
+    }
+    return false
 }
 
-if(!localStorage.logined)
-    	localStorage.logined='no';
-if(!localStorage.username)
-    	localStorage.username='';
+function Window() {
+    let w = window.innerWidth
+    return w
+}
 
-function LoadHomePage(){
-	
-	$("._content").prepend('<div id="home" class="_pages">瀏覽器不支援</div>');
-	$.ajax({
-		url: "page/home.html", 
-		success: function(result){
-        $("#home").html(result);
-		}
-	});
-	LoginOption();
+function setIp() {
+    ip = window.prompt('local host?', 'http://140.119.19.15:3000/');
 }
-function LoginOption(){
-	var first=$('._loginOption').find('a').first(),
-		last=$('._loginOption').find('a').last();
-	if(localStorage.logined=='yes'){
-		first.css('display','none')
-	}
-	else{
-		last.css('display','none')
-	}
 
+if (!localStorage.logined)
+    localStorage.logined = 'no';
+if (!localStorage.username)
+    localStorage.username = '';
+
+function LoadHomePage() {
+
+    $("._content").prepend('<div id="home" class="_pages">瀏覽器不支援</div>');
+    $.ajax({
+        url: "page/home.html",
+        success: function(result) {
+            $("#home").html(result);
+        }
+    });
+    LoginOption();
 }
-function welcomeOption(text,func){//can only be used in reload pages
-	$('#welcomeOption').text(text).removeClass('showNow')
-	$('#welcomeOption').unbind().click(function(e){
-		func(e,$(this))
-	})	
+
+function LoginOption() {
+    $('._loginOption').each(function() {
+        var a = $(this).find('a'),
+            first = a.first(),
+            last = a.last();
+        if (a.length == 2) {
+            if (localStorage.logined == 'yes') {
+                first.css('display', 'none')
+            } else {
+                last.css('display', 'none')
+            }
+        } else {
+            if (localStorage.logined == 'no') {
+                first.css('display', 'none')
+            }
+        }
+    })
 }
-function reNewPage(href){
-	
-		id='#'+href;
-		$('._content').find('._pages').css('display','none');
-		$('._reloadPages').remove();
-		$(id).remove();
-		$("._content").prepend('<div id="'+href+'" class="_pages"></div>');
-		$.ajax({
-			url: "page/"+href+".html", 
-			success: function(result){        	
-        		$(id).html(result);
-				}
-			});
-} 
-function InsertImg(ele,insert){
-	$(ele).on('change',function(){
-				var file= document.querySelector(ele).files[0];
-				var reader  = new FileReader();				
-				//----------檔案讀取+預覽------
-				reader.addEventListener("load", function () {
-					console.log('load');
-					var result=reader.result;
-					insert(result);
-				})
-				if(file)reader.readAsDataURL(file);
-			})}
+
+function welcomeOption(text, func) { //can only be used in reload pages
+    $('#welcomeOption').text(text).removeClass('showNow')
+    $('#welcomeOption').unbind().click(function(e) {
+        func(e, $(this))
+    })
+}
+
+function reNewPage(href) {
+
+    id = '#' + href;
+    $('._content').find('._pages').css('display', 'none');
+    $('._reloadPages').remove();
+    $(id).remove();
+    $("._content").prepend('<div id="' + href + '" class="_pages"></div>');
+    $.ajax({
+        url: "page/" + href + ".html",
+        success: function(result) {
+            $(id).html(result);
+        }
+    });
+}
+
+function InsertImg(ele, insert) {
+    $(ele).on('change', function() {
+        var file = document.querySelector(ele).files[0];
+        var reader = new FileReader();
+        //----------檔案讀取+預覽------
+        reader.addEventListener("load", function() {
+            console.log('load');
+            var result = reader.result;
+            insert(result);
+        })
+        if (file) reader.readAsDataURL(file);
+    })
+}
 // function HeaderButton(target,text){
 // 	var href=target.attr('href'),
 // 		reload=target.attr('reload'),
@@ -162,7 +176,7 @@ function InsertImg(ele,insert){
 // 				}
 // 			});
 // 	}
-	
+
 // 	else{
 // 		if(document.getElementById(href)){
 // 			$(id).css('display','block');
@@ -178,66 +192,73 @@ function InsertImg(ele,insert){
 // 		}
 // 	}	
 // }
-function PhoneButton(){
-	 $('#menuBar').click(function(){
-            $('._menu').animate({left:'0'});
-            })
-	 $('._menu').click(function(){
-	 		$('._menu').animate({left:'-100%'});
-	 })
+function PhoneButton() {
+    $('#menuBar').click(function() {
+        $('._menu').animate({ left: '0' });
+    })
+    $('._menu').click(function() {
+        $('._menu').animate({ left: '-100%' });
+    })
 }
-function ResetInput(input){
-	$(input).on('focus',function(){
-		$(this).val('');
-		return;
-	})
+
+function ResetInput(input) {
+    $(input).on('focus', function() {
+        $(this).val('');
+        return;
+    })
 }
-function EnterSubmit(ele){
-	$(window).unbind('keydown').keydown(function(e){
-		if(e.which==13){
-			e.preventDefault();
-			$(ele).click();
-		}
-	})
+
+function EnterSubmit(ele) {
+    $(window).unbind('keydown').keydown(function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            $(ele).click();
+        }
+    })
 }
-function checkData(str){
-		var regExp=/[^0-9a-zA-Z]/;
-		return regExp.test(str);
-	}
-function CheckInput(ele,addition){
-	$(ele).on('change keyup',function(){
-		console.log('323');
-		var str=$(this).val();
-		var display=$(this).parent().next().children();
-		if(str=='')
-			display.text('未輸入');
-		else if(checkData(str))
-			display.text('請輸入英文或數字');
-		else{
-			if(addition)addition();			
-			else display.text('✔');
-		}
-	})
+
+function checkData(str) {
+    var regExp = /[^0-9a-zA-Z]/;
+    return regExp.test(str);
 }
-function AjaxPost(route,data,success,error){
-	console.log('AjaxPost');
-	$.ajax({
-			type:"POST",
-			url:ip+route,
-			data:data,
-			success:function(res){
-				if(success)success(res);
-			},
-			error:function(res){
-				if(error)error(res);
-			}
-		}).done(function(){
-			console.log('POST done');
-		})
-	}
-function block(){
-	$('#block_you').css('display','block');
+
+function CheckInput(ele, addition) {
+    $(ele).on('change keyup', function() {
+        console.log('323');
+        var str = $(this).val();
+        var display = $(this).parent().next().children();
+        if (str == '')
+            display.text('未輸入');
+        else if (checkData(str))
+            display.text('請輸入英文或數字');
+        else {
+            if (addition) addition();
+            else display.text('✔');
+        }
+    })
 }
-function close_block(){
-	$('#block_you').css('display','none');
+
+function AjaxPost(route, data, success, error) {
+    console.log('AjaxPost');
+    $.ajax({
+        type: "POST",
+        url: ip + route,
+        data: data,
+        success: function(res) {
+            if (success) success(res);
+        },
+        error: function(res) {
+            if (error) error(res);
+        }
+    }).done(function() {
+        console.log('POST done');
+    })
+}
+
+function block() {
+    $('#block_you').css('display', 'block');
+}
+
+function close_block() {
+    $('#block_you').css('display', 'none');
 }
