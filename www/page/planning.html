@@ -103,6 +103,14 @@
         </div>
     </div>
 </div>
+<div class="select_ex">
+	<select>
+		<option value="DRIVING">汽車</option>
+		<option value="TRANSIT">大眾運輸</option>
+		<option value="WALKING">走路</option>
+		<option value="BICYCLING">單車</option>
+	</select>
+</div>
 <script type="text/javascript">
 //var
 //map
@@ -135,11 +143,11 @@ var hint = document.getElementById('hint'),
 //process
 //planning_search
 //EnterSubmit('#searchSubmit');
+block();
+newMap();
 ResetInput('#textSearch');
 welcomeOption('清單', showShedule);
-block();
 
-newMap();
 Plan();
 //planning_distance
 
@@ -161,6 +169,9 @@ $('#schedule_block').click(function() {
 })
 </script>
 <style type="text/css">
+.select_ex{
+	display: none;
+}
 .time_line {
     display: none;
 }

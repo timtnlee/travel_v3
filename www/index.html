@@ -9,12 +9,13 @@
  <meta charset="utf-8">
  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: gap: https://ssl.gstatic.com  'unsafe-eval'; 
- script-src * 'self' 'unsafe-inline' 'unsafe-eval';
+ script-src * 'self' 'unsafe-inline';
  style-src * 'self' 'unsafe-inline'; 
  media-src *; 
  connect-src *">
  <script src='js/jquery-3.1.1.js'></script>
- <!-- 最新編譯和最佳化的 CSS -->
+ <!-- <script src='js/bbq.js'></script>
+ --> <!-- 最新編譯和最佳化的 CSS -->
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
  <!-- 選擇性佈景主題 -->
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
@@ -23,12 +24,14 @@
 
  <script src="https://use.fontawesome.com/e702146991.js"></script>
  <script src='js/index.js'></script>
+
  <script async defer
- src="https://maps.googleapis.com/maps/api/js?region=cn&language=zh-TW&key=AIzaSyCdVoiikIt7QWJ2Ea6M2JQ2Nu0suzM5P8A&libraries=places&callback=initMap"></script>                                           
+ src="https://maps.googleapis.com/maps/api/js?region=cn&language=zh-TW&key=AIzaSyCdVoiikIt7QWJ2Ea6M2JQ2Nu0suzM5P8A&libraries=places&callback=initMap"></script>                                          
  <link rel="stylesheet" type="text/css" href="css/index.css">
  <title>Travel</title>
 </head>
 <body>
+
     <script type="text/javascript" src="cordova.js"></script>
     <div id='block_you'><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
     
@@ -38,17 +41,17 @@
            <div class="_response-header">                  
              <div class="_menu">
                 <div class="_menuArea">
-                 <a href='home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
-                 <a href='article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
-                 <a href='users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
-                 <a href='trip' reload='true'><i class="fa fa-car" aria-hidden="true"></i>行程</a>              
-                 <a href='planning' reload='true' optional='login'>
+                 <a href='#home'><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
+                 <a href='#article'><i class="fa fa-book" aria-hidden="true"></i>文章</a>
+                 <a href='#users'><i class="fa fa-users" aria-hidden="true"></i>社群</a>
+                 <a href='#trip'><i class="fa fa-car" aria-hidden="true"></i>行程</a>              
+                 <a href='#planning'>
                     <i class="fa fa-plane" aria-hidden="true"></i>行程規劃</a>
-                    <a href='personal' optional='login'>
+                    <a href='#personal' optional='login'>
                         <i class="fa fa-user" aria-hidden="true"></i>個人頁面</a>
                         <p class="_loginOption">    
-                            <a href='login'><i class="fa fa-sign-in" aria-hidden="true"></i>登入</a>
-                            <a href="signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
+                            <a href='#login'><i class="fa fa-sign-in" aria-hidden="true"></i>登入</a>
+                            <a href="#signout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</a>
                         </p>
                     </div>
                 </div>
@@ -63,7 +66,8 @@
             </div>
         </div>
         
-        <div class="_content">        	
+        <div class="_content">   
+            <div class="_reloadPage"></div>     	
           <!-- content Pages go here -->
       </div>
   </div>

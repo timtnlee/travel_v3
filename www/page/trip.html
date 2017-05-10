@@ -1,7 +1,7 @@
 <div class="pageContainer">
 	<div class="map_article_title pageMiddle">	
 		<div class="articleBar">
-			<a href="mapArticle" reload='true' class="btn btn-link" optional='login' id='addMapArticle'>新增地圖文章</a>
+			<a href="#mapArticle" reload='true' class="btn btn-link" optional='login' id='addMapArticle'>新增地圖文章</a>
 		</div>	
 	
 		<div id='mapArticleArea'>
@@ -115,10 +115,10 @@ var map,
 	bounds;
 function setButton(){
 	//
-	$('.map_article_title').find('a').unbind().click(function(e){
-		e.preventDefault();
-		HeaderButton($(this));
-	})
+	// $('.map_article_title').find('a').unbind().click(function(e){
+	// 	e.preventDefault();
+	// 	HeaderButton($(this));
+	// })
 	//
 	$('#map_goback').unbind().click(function(){
 		$('.map_article_title').css('display','block');

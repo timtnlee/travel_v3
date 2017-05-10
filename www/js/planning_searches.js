@@ -111,15 +111,15 @@ function _initPlace() {
 
 function _placeList(place) {
     let src = 'img/red-dot.png',
-        infowindow = new google.maps.InfoWindow(),
-        add='<a id="add">+加入清單</a>'
+        infowindow = new google.maps.InfoWindow()
+        //,add='<a id="add">+加入清單</a>'
     infowindow.setContent(place.name)
         //get photo
     if (place.photos)
         src = place.photos[0].getUrl({ 'maxWidth': 100, 'maxHeight': 100 })
     $('#allPlaces').append('<p><span class="placeIcon"><img src="' + src + '"></span>' +
-            '<span class="placeName">' + place.name + add+'</span></p>')
-    AddToList(place, src,$('#allPlaces').find('p').last())    
+            '<span class="placeName">' + place.name +'</span></p>')
+    //AddToList(place, src,$('#allPlaces').find('p').last())    
         //generate bounds
     if (place.geometry.viewport)
         bounds.union(place.geometry.viewport)

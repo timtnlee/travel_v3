@@ -1,6 +1,6 @@
 <div class="pageContainer">
 	<div class="single_article singleMiddle">
-		<a id='goback'>
+		<a id='goback' href="#article">
 			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
 		<p id='title'></p>
 		<p id='date'></p>
@@ -31,9 +31,7 @@
 <script type="text/javascript">
 console.log(_articleObj)
 $('#goback').click(function(e){
-	$(this).attr('href',_goback)
-	e.preventDefault();
-	HeaderButton($(this))
+	
 })
 	block();
 	AjaxPost('article/single_article',{id:_articleObj.id},function(res){

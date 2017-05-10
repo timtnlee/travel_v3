@@ -27,35 +27,35 @@ AjaxPost(
 
 		var article=0;
 		for(let i in res.articles){
-			console.log(res.articles[i].Title)
 			$('#personal_article')
-			.append('<p href="singleArticle" reload="true">'+res.articles[i].Title+'</p>')
+			.append('<p href="#singleArticle">'+res.articles[i].Title+'</p>')
 			.find('p').last()
 			.click(function(){
-			_goback='personal';
-			console.log(res.articles[i].Title)
 			_articleObj.title=res.articles[i].Title,
 			_articleObj.author=res.articles[i].Username,
 			_articleObj.date=res.articles[i].Date,
-			_articleObj.id=res.articles[i]._id;
-			HeaderButton($(this));
+			_articleObj.id=res.articles[i]._id
+			location.href=$(this).attr('href')
 			})
 		}
 		if(res.schedules){
+			console.log(res.schedules)
 		for (var i = 0; i <res.schedules.length; i++) {
 				var title=res.schedules[i].Title,
-					place=res.schedules[i].Places,
-					mode=res.schedules[i].Modes;
+					schedule=res.schedules[i].Schedule
 				$('#personal_schedule').append(
-					'<p href="schedule" reload="true">'
+					'<p href="#schedule">'
 					+title+'</p>')
 					.find('p').last().on('click',function(){
-						var schObj={
-							title:title,
-							place:place,
-							mode:mode
-						}
-						personal_schedule_click(schObj,$(this));
+						location.href=$(this).attr('href')
+						_display_title=title
+ 						_display_place=schedule
+						// var schObj={
+						// 	title:title,
+						// 	place:place,
+						// 	mode:mode
+						// }
+						// personal_schedule_click(schObj);
 					})
 			}
 		}
@@ -64,14 +64,11 @@ AjaxPost(
 	}
 	)
 	$('#personal_name').text('名稱: '+localStorage.username);}
-function personal_schedule_click(schObj,target){
-		_display_title=schObj.title,
-		_display_place=schObj.place,
-		_display_mode=schObj.mode;
-		console.log(schObj.mode)
-		console.log(_display_mode)
-	HeaderButton(target);
-}
+// function personal_schedule_click(schObj){
+// 		_display_title=schObj.title,
+// 		_display_place=schObj.place,
+// 		_display_mode=schObj.mode;
+// }
 function uploadIcon(){
 	$('#iconUploadBtn').click(function(){
 		$('#iconUploadInput').click();

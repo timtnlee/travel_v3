@@ -7,6 +7,7 @@ var disInfoCount = 0,
     displayBounds = new google.maps.LatLngBounds()
 
 function Plan() { //will execute in planning.html
+	SaveSchedule()
     TimeLine()
     DayPageEvent()
     AddTimLine() //activate
@@ -264,10 +265,11 @@ function _activateDel(id) {
 }
 
 function _tempP(e, target) {
-    let id = '#' + target.attr('id')
+    let id = '#' + target.attr('id'),
+    	temp='<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>'
     $('.tempor').remove()
-    $('<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>').insertAfter(id)
-    $('<p class="tempor" id="temp_first" name="' + target.attr('id') + '">' + '</p>').insertBefore(id)
+    $(temp).insertAfter(id)
+    $(temp).insertBefore(id)
 
     $('.tempor')
         .on('dragenter', function(e) {
@@ -459,9 +461,10 @@ function _findPlaceInfo(id) {
     }
 }
 
-function _distances(firstId, lastId, id) {
+function _distances(firstId, lastId, id,travelMode) {
     let firstPlace = _findPlaceInfo(firstId),
-        lastPlace = _findPlaceInfo(lastId)
+        lastPlace = _findPlaceInfo(lastId),
+        mode=(travelMode)?travelMode:'DRIVING'
 
     console.log('distance: ' + firstId + ' ' + lastId)
     let directions = new google.maps.DirectionsService(),
@@ -470,27 +473,49 @@ function _distances(firstId, lastId, id) {
             destination: lastPlace.geometry.location,
             //waypoints:waypoints,
             optimizeWaypoints: true,
-            travelMode: 'DRIVING',
-            transitOptions: {
-                //modes: ['BUS'],
-                //routingPreference: 'FEWER_TRANSFERS'
-            }
+            travelMode: mode,
+            // transitOptions: {
+            //     //modes: ['BUS'],
+            //     //routingPreference: 'FEWER_TRANSFERS'
+            // }
         }
     directions.route(request, function(result, status) {
         if (status == 'OK') {
-            let distance = result.routes[0].legs[0].distance.text,
+            let select= $('.select_ex').html(),
+            	distance = result.routes[0].legs[0].distance.text,
                 instruct = ''
             for (let i = 0; i < result.routes[0].legs[0].steps.length; i++) {
                 instruct += result.routes[0].legs[0].steps[i].instructions + '<br>';
             }
-            $('#' + id).find('.distance_info')
-                .empty().html('<i class="fa fa-car" aria-hidden="true"></i>' + distance)
-            $('#' + id).find('.distance_detail').empty().html(instruct)
+            let distanceinfo=$('#' + id).find('.distance_info'),
+            	distancedetail=$('#' + id).find('.distance_detail')
+            if($('#' + id).find('.select')){
+            	$('#' + id).find('.select').remove()
+            }
+            $('<div class="select">'+select+'</div>').insertBefore(distanceinfo)
+            $('#' + id).find('select').val(mode)
+            $('#' + id).attr('mode',mode)
+            distanceinfo.empty().html('路程 : ' + distance )
+            distancedetail.empty().html(instruct)
             _directionRender(result, id)
+            _activateSelect(id,$('#' + id).find('select'))
         }
     })
 }
-
+function _activateSelect(id,target){
+	target.on('change',function(e){
+		let mode=$(this).val(),
+			firstId=$('#'+id).attr('placeId'),
+			lastId=''
+		$('#output').find('.time_place').each(function(i){
+			if($(this).attr('id')==id){
+				lastId=$('#output').find('.time_place').eq(i+1).attr('placeId')
+			}
+		})
+		_renderDel(id)
+		_distances(firstId, lastId, id,mode)
+	})
+}
 function _directionRender(result, id) {
 
     let display = new google.maps.DirectionsRenderer({
@@ -509,4 +534,22 @@ function _renderDel(id) {
         displays[id].setMap(null)
         delete displays[id]
     }
+}
+function SaveSchedule() {
+	$('#saveRouting').on('click',function(e) {
+		if($('#output').find('.time_place').length>=1){
+			let title=window.prompt('輸入名稱','我的行程')
+			
+			$('#output').find('.first_drop').text('未規劃地點')
+
+			AjaxPost('user/saveSchedule',
+				{name:localStorage.username,title:title,schedule:$('#output').html()},
+				function(res){
+				alert(res)
+			})
+		} else {
+			alert('未規劃地點')
+		}
+		
+	})
 }
