@@ -194,6 +194,7 @@ function _createList(paramObj) {
     if (step == 'before') {
         $(insert).insertBefore(target)
     } else if (step == 'after') {
+        console.log('after')
         $(insert).insertAfter(target)
     }
     _activateDetail(newId)
@@ -266,10 +267,11 @@ function _activateDel(id) {
 
 function _tempP(e, target) {
     let id = '#' + target.attr('id'),
-    	temp='<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>'
+    	tempLast='<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>',
+        tempFirst='<p class="tempor" id="temp_first" name="' + target.attr('id') + '">' + '</p>'
     $('.tempor').remove()
-    $(temp).insertAfter(id)
-    $(temp).insertBefore(id)
+    $(tempLast).insertAfter(id)
+    $(tempFirst).insertBefore(id)
 
     $('.tempor')
         .on('dragenter', function(e) {
