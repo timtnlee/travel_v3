@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Travel-v3</name>
-    <icon src="www/img/icon.png"/>
+    <icon src="www/img/chi.png"/>
     <description>
         A blank PhoneGap app.
     </description>
