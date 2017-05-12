@@ -28,7 +28,7 @@ AjaxPost(
 		var article=0;
 		for(let i in res.articles){
 			$('#personal_article')
-			.append('<p href="#singleArticle">'+res.articles[i].Title+'</p>')
+			.append('<p href="#singleArticle" class="user_info">'+res.articles[i].Title+'</p>')
 			.find('p').last()
 			.click(function(){
 			_articleObj.title=res.articles[i].Title,
@@ -44,7 +44,7 @@ AjaxPost(
 				var title=res.schedules[i].Title,
 					schedule=res.schedules[i].Schedule
 				$('#personal_schedule').append(
-					'<p href="#schedule">'
+					'<p href="#schedule" class="user_info">'
 					+title+'</p>')
 					.find('p').last().on('click',function(){
 						location.href=$(this).attr('href')
@@ -92,16 +92,14 @@ function SaveIcon(result){
 	#usericon{
 		width: 90%;
 	}
-	#personal_article p{
-		cursor:  pointer;
-		background-color: lightgray;
+	.user_info {
 		margin: 10px 0px 10px 0px;
-		padding: 5px;
+		color: gray;
+		cursor: pointer;
+		font-size: 16px;
+		border-bottom: 1px solid gray;
 	}
-	#personal_schedule p{
-		cursor:  pointer;
-		background-color: lightskyblue;
-		margin: 10px 0px 10px 0px;
-		padding: 5px;
+	.user_info:hover{
+		color: black;
 	}
 </style>

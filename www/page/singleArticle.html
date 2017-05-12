@@ -38,7 +38,7 @@ $('#goback').click(function(e){
 					//console.log(res);
 					var content=res[0].Article;
 					$('#title').text(_articleObj.title);
-					$('#date').text(_articleObj.date);
+					$('#date').text(_articleObj.date.substr(0,10));
 					$('#author').text('author: '+_articleObj.author);
 					$('#content').html(content);
 					close_block()

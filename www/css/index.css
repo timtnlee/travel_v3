@@ -171,9 +171,9 @@ a{
 		font-size: 14px;
 	}
 	.welcome{
-		height:30px;
+		height:40px;
 		padding: 5px;
-		font-size:16px;
+		font-size:18px;
 		background: linear-gradient(to top,#808080 ,DimGrey );
 		color: white;
 	}
@@ -214,11 +214,11 @@ a{
 
 	}
 	#menuBar{
-		padding-top: 5px;
+		padding-top: 6px;
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;
-		font-size: 14px;
+		font-size: 18px;
 		display: inline-block;
 		text-decoration: none;
 		color: white;

@@ -31,7 +31,7 @@
                 <a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a> .......
             </div>
             <div id='infoGotop'>
-                <i class="fa fa-arrow-up fa-3x" aria-hidden="true"></i>
+                <span  class="glyphicon glyphicon-circle-arrow-up"></span>
             </div>
             <div id='infoText'></div>
             <div id='info'>
@@ -42,7 +42,7 @@
     <!-- distance -->
     <div id='planDistance'>
         <p id='distanceGoback' class="back">
-            <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>收起
+            <i class="glyphicon glyphicon-eject"></i>收起
         </p>
         <h4>路線規劃(拖曳到這裡)<span class="btn btn-link" id="saveRouting">儲存行程</span></h4>
         <div>
@@ -62,7 +62,7 @@
     <div id='schedule_block'>
         <div id='schedule'>
             <p id='scheduleGoback' class="back">
-                收起
+                <i class="glyphicon glyphicon-eject"></i>收起
             </p>
             <div class="list_con" id='list_head'>
                 <h4 style="display: inline-block;">我的清單</h4>
@@ -272,12 +272,15 @@ $('#schedule_block').click(function() {
 #infoText {}
 
 #infoGotop {
+    /* border: 1px solid lightgray; */
+    border-radius: 20px;
     cursor: pointer;
-    background-color: rgba(80, 80, 80, 0.7);
+    /*background-color: rgba(80, 80, 80, 0.7);*/
     position: fixed;
     font-size: 20px;
     right: 35px;
     bottom: 20px;
+    padding: 2px;
     z-index: 19;
 }
 
@@ -374,9 +377,9 @@ $('#schedule_block').click(function() {
 .back {
     margin: 0px;
     cursor: pointer;
-    color: black;
+    color: slategray;
     padding: 2px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     background-color: lightblue;
     font-size: 16px;
 }
@@ -513,7 +516,7 @@ $('#schedule_block').click(function() {
     width: 100vw;
     height: 43vh;
     position: absolute;
-    top:30px;
+    top:40px;
     left: 0;
 }
 
@@ -581,7 +584,7 @@ $('#schedule_block').click(function() {
     width: 50vw;
     height: 100vh;
     position: absolute;
-    top:30px;
+    top:40px;
     left: 0;
     overflow-y: scroll;
     opacity:0;
@@ -596,7 +599,7 @@ $('#schedule_block').click(function() {
     height: 100vh;
     position:absolute;
     right: 0;  
-    top: 30px; 
+    top: 40px; 
     margin: 0;
     padding: 0px 0px 100px 0px ;
     background-color: lightgoldenrodyellow;

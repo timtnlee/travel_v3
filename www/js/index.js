@@ -16,14 +16,14 @@ $(function() {
     URLset();
     setIp();
     LoadHomePage();
-    $('._header').find('a').on('click', function(e) {
-        //e.preventDefault();
-        if (Window() > 500)
-            $('.welcome').css({ height: '0px' }).animate({ height: '40px' });
-        else
-            $('.welcome').css({ height: '0px' }).animate({ height: '30px' });
-        //HeaderButton($(this));
-    })
+    // $('._header').find('a').on('click', function(e) {
+    //     //e.preventDefault();
+    //     //if (Window() > 500)
+        
+    //     // else
+    //     //     $('.welcome').css({ height: '0px' }).animate({ height: '30px' });
+    //     //HeaderButton($(this));
+    // })
     PhoneButton();
 })
 
@@ -35,6 +35,7 @@ function URLset() {
             contain = $('._content').find('#page_' + page),
             reload = $('._reloadPage')
         $('[name="title"]').text(page)
+        $('.welcome').css({ height: '0px' }).animate({ height: '40px' });
         allcontain.css('display', 'none')
         reload.html('')
         if (reloadPage(page)) {
@@ -81,7 +82,7 @@ function Window() {
 }
 
 function setIp() {
-    ip = window.prompt('local host?', 'http://140.119.19.15:3000/');
+    ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
@@ -133,7 +134,7 @@ function reNewPage(href) {
     $('._content').find('._pages').css('display', 'none');
     $('._reloadPages').remove();
     $(id).remove();
-    $("._content").prepend('<div id="' + href + '" class="_pages"></div>');
+    $("._content").prepend('<div id="page_' + href + '" class="_pages"></div>');
     $.ajax({
         url: "page/" + href + ".html",
         success: function(result) {
