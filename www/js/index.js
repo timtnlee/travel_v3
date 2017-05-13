@@ -25,6 +25,9 @@ $(function() {
     //     //HeaderButton($(this));
     // })
     PhoneButton();
+    $(window).on('load',function(){
+    	location.hash='home'
+    })
 })
 
 function URLset() {
@@ -68,7 +71,7 @@ function URLset() {
 }
 
 function reloadPage(ch) {
-    let page = ['planning', 'schedule', 'singleArticle', 'mapArticle', 'singleUser']
+    let page = ['planning', 'schedule', 'singleArticle', 'mapArticle', 'singleUser','singleTrip']
     for (let i = 0; i < page.length; i++) {
         if (ch == page[i])
             return true
@@ -82,7 +85,8 @@ function Window() {
 }
 
 function setIp() {
-    ip = 'http://140.119.19.15:3000/';
+	ip = 'http://127.0.0.1:3000/';
+    //ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
@@ -130,7 +134,7 @@ function welcomeOption(text, func) { //can only be used in reload pages
 
 function reNewPage(href) {
 
-    id = '#' + href;
+    id = '#page_' + href;
     $('._content').find('._pages').css('display', 'none');
     $('._reloadPages').remove();
     $(id).remove();

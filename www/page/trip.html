@@ -8,34 +8,7 @@
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
 	</div>
-
-	<div class="single_map_article pageMiddle">
-		<div class="row">
-			<div class="col-sm-6">
-				<div id='map'></div>
-			</div>
-		
-			<div class="col-sm-6">
-				<div id='single_article'>
-						<a href='javascript:void(0)' id='map_goback'>
-							<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
-						</a>
-						<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
-						<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
-					<div id='map_article'>
-						<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-					</div>
-				</div>
-			</div>
-		
-		</div>
-	</div>
 </div>
-	<div id='start_page'>
-		<p id='map_title'></p>
-		<p id='map_date'></p>
-		<p id='map_author'></p>
-	</div>
 
 <style>
 	.map_article_title{
@@ -60,43 +33,9 @@
 		border-bottom: 1px solid lightgray;
 		margin: 0;
 	}
-	.single_map_article{
-		display:none;
-	}
-	.single_map_article img{
-		width: 90%;
-	}
-	.single_map_article a{
-		font-size: 18px;
-		color:#3C3C3C;
-	}
-	#map{			
-		width: 100%;
-		height: 100vh;
-	}
-	#single_article{
-		margin: 0;
-		height: 100%;
-		cursor: pointer;
-	}
-	.fa-chevron-left,.fa-chevron-right{
-		color: lightskyblue;
-		cursor: pointer;
-		margin-left: 20px;
-	}
-	#start_page{
-		display:none ;
-	}
+	
 @media screen and (orientation:portrait) {
-	#map{
-		width: 100vw;
-		height: 40vh;
-	}
-	#single_article{
-		overflow-y: scroll;
-		width: 100vw;
-		height: 60vh;
-	}
+
 }
 </style>
 
@@ -147,7 +86,7 @@ $('._loading').css('display','block');
 		'',
 		function(res){
 				for (var i = 0; i < res.length; i++) {
-					$('#mapArticleArea').prepend('<p>'+res[i].Title+'</p>');
+					$('#mapArticleArea').prepend('<p href="#singleTrip">'+res[i].Title+'</p>');
 					$('#mapArticleArea').find('p').first()
 						.attr('title',res[i].Title)
 						.attr('date',res[i].Date)
@@ -162,114 +101,9 @@ function mapArticleTitleClick(){
 			var title=$(this).attr('title'),
 				date=$(this).attr('date'),
 				author=$(this).attr('author');
-			$('.map_article_title').css('display','none');
-			$('.single_map_article').css('display','block');
-			newMap();
-			console.log(title);
-			startPage(title,author,date);
-			CleanMapMarker();
-			getPlaces(date,author);
+			location.href=$(this).attr('href')
 	})
 }
-function startPage(title,author,date){
-	console.log('startPage');
-	$('#start_page').find('#map_title').empty().text(title);
-	$('#start_page').find('#map_author').empty().text(author);
-	$('#start_page').find('#map_date').empty().text(date);
-	start=$('#start_page').html();
-	console.log(start);
-}	
-function newMap(){
-	console.log('newMap');
 
-	 map= new google.maps.Map(document.getElementById('map'), {
-      center: {lat:24,lng:121.2},
-      zoom: 10,
-      disableDefaultUI: true,
-      disableDoubleClickZoom: true
-    //scrollwheel: false
-  	});
-	  service = new google.maps.places.PlacesService(map);
-}
-
-function CleanMapMarker(){
-	console.log('CleanMapMarker');
-	for(var i=0;i<marker.length;i++){
-		marker[i].mark.setMap(null);
-	}
-	marker=[];
-	mapArticle=[];
-	pageCount=-1;
-}
-function getPlaces(date,name){
-	console.log('getPlaces');
-	AjaxPost('article//single_mapArticle',{name:name,date:date},function(res){
-		var place=res.Places,
-			article=res.Articles;
-		
-		CreateMarker(place);			
-		CreateArticle(article);
-	})
-}
-function getDetail(place){
-	var max=place.length;
-	var i=0; //這樣才能讀到i 如果用迴圈包service.getDetails(..callback(){...這裡會讀不到i}) 
-	console.log(max);
-	Delay();
-	function Delay(){
-		service.getDetails({placeId:place[i]}, function(result,status){
-			if(status === google.maps.places.PlacesServiceStatus.OK){							
-				var infowindow=new google.maps.InfoWindow();
-				var mark = new google.maps.Marker({
-    				map: map,
-    				position: result.geometry.location,
-    				icon: {
-     					path: google.maps.SymbolPath.CIRCLE,
-     					fillColor: 'orange',
-     					fillOpacity: 1,
-      					strokeColor: 'red',
-      					strokeWeight: 2,
-      					scale: 7
-    				}
-  					})
-				infowindow.setContent(i+':'+result.name);
-				infowindow.open(map,mark);
-				marker.push({
-					mark:mark,
-					center:result.geometry.location,
-					name:result.name
-				});
-				if (result.geometry.viewport) {// Only geocodes have viewport.
-        			bounds.union(result.geometry.viewport);} 
-        		else {bounds.extend(result.geometry.location);}        		
-        		map.fitBounds(bounds);
-        		i++;
-        		if(i!=max)
-        		Delay();
-			}//if(status == google.maps.places.PlacesServiceStatus.OK)
-		});//service.getDetails	
-	}
-	
-}
-function CreateMarker(place){	
-	bounds=new google.maps.LatLngBounds();
-	getDetail(place);//精髓 
-}
-function CreateArticle(article){
-	PageEvent(pageCount);
-	for(var i=0;i<article.length;i++){
-		mapArticle.push(article[i]);
-	}
-}
-function PageEvent(count){
-	if(count==-1){
-		$('#map_article').html(start);
-		map.fitBounds(bounds);
-	}
-	else{
-	$('#map_article').html(mapArticle[count]);
-		map.panTo(marker[count].center);
-	}	
-}
 </script>
 

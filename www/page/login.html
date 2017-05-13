@@ -20,13 +20,13 @@
 					<small>未輸入</small>
 				</div>				
 			</div>
-			<div class="form-group" align="left">
-				<div class='col-sm-offset-2 col-sm-10'>
+			<div class="form-group" align="center">
+				<div class='col-sm-offset-4 col-sm-8'>
 					<div class="col-xs-2">
-						<input class="btn btn-default" type="submit" name="submit" value="登入">
+						<a class="btn btn-default btn-sm" type="submit" name="submit">登入</a>
 					</div>
 					<div class="col-xs-2 col-xs-offset-1">
-						<a class="btn btn-default" href='register' type="submit" name="goregister">註冊</a>
+						<a class="btn btn-default btn-sm" href='#register' type="submit" name="goregister">註冊</a>
 					</div>		
 				</div>
 			</div>
@@ -43,10 +43,6 @@
 <script>
 CheckInput('[name="name"]');
 CheckInput('[name="passwd"]')
-	$('[name="goregister"]').click(function(e){
-		e.preventDefault();
-		HeaderButton($(this));
-	})
 	EnterSubmit('[name="submit"]');
 	$('[name="submit"]').click(function(e){
 		e.preventDefault();

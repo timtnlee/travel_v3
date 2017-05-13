@@ -2,13 +2,15 @@
 <div class="pageContainer">
 <div class="pageMiddle">
 	<div class="row">
-		<div class="col-sm-6">	
-			<button class="btn btn-success btn-xs" id='iconUploadBtn'>上傳</button>
-			<br>
-			<input type="file" name="" id='iconUploadInput' accept="image/*"> 			
-			<img id='usericon' src='img/icon.png'>
-		</div>
 		<div class="col-sm-6">
+			
+				
+				<img id='usericon' src=''>		
+			<button class="btn btn-success btn-xs" id='iconUploadBtn'>上傳</button>
+			<input type="file" name="" id='iconUploadInput' accept="image/*"> 			
+			
+		</div>
+		<div class="col-sm-6 info_contain">
 			<h4 id='personal_name'></h4>
 			<h4 id='personal_article'>文章:</h4>
 			<h4 id='personal_schedule'>行程:</h4>
@@ -24,32 +26,31 @@ AjaxPost(
 	'user/personal',
 	{name:localStorage.username},
 	function(res){
-
-		var article=0;
-		for(let i in res.articles){
+		var article=0
+		$.map(res.articles,function(art){
 			$('#personal_article')
-			.append('<p href="#singleArticle" class="user_info">'+res.articles[i].Title+'</p>')
+			.append('<p href="#singleArticle" class="user_info">'+art.Title+'</p>')
 			.find('p').last()
 			.click(function(){
-			_articleObj.title=res.articles[i].Title,
-			_articleObj.author=res.articles[i].Username,
-			_articleObj.date=res.articles[i].Date,
-			_articleObj.id=res.articles[i]._id
+			_articleObj.title=art.Title,
+			_articleObj.author=art.Username,
+			_articleObj.date=art.Date,
+			_articleObj.id=art._id
 			location.href=$(this).attr('href')
 			})
-		}
+		})
 		if(res.schedules){
-			console.log(res.schedules)
-		for (var i = 0; i <res.schedules.length; i++) {
-				var title=res.schedules[i].Title,
-					schedule=res.schedules[i].Schedule
+		$.map(res.schedules,function(sche){
+			var title=sche.Title,
+				schedule=sche.Schedule
 				$('#personal_schedule').append(
 					'<p href="#schedule" class="user_info">'
 					+title+'</p>')
 					.find('p').last().on('click',function(){
-						location.href=$(this).attr('href')
 						_display_title=title
  						_display_place=schedule
+						location.href=$(this).attr('href')
+						
 						// var schObj={
 						// 	title:title,
 						// 	place:place,
@@ -57,7 +58,8 @@ AjaxPost(
 						// }
 						// personal_schedule_click(schObj);
 					})
-			}
+			})
+		
 		}
 		$('#usericon').attr('src',res.icon);
 		$('._loading').css('display','none');
@@ -86,14 +88,29 @@ function SaveIcon(result){
 </script>
 
 <style>
+/* .info_contain{
+	position: relative;
+} */
+.icon_contain{
+	position: relative;
+}
+#iconUploadBtn{
+	z-index: 1;
+	opacity: 0.8;
+	top: 0;
+	left: 0;
+}
 	#iconUploadInput{
 		display: none;
 	}
 	#usericon{
-		width: 90%;
+		top: 0;
+		left: 0;
+		width: 95%;
 	}
 	.user_info {
 		margin: 10px 0px 10px 0px;
+		padding: 5px;
 		color: gray;
 		cursor: pointer;
 		font-size: 16px;

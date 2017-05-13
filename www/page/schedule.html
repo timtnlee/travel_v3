@@ -5,9 +5,9 @@
     <div class="col-sm-6">
         <div class='dayBar'>
             <p id='maxDay'></p>
-            <span id='prevDay' class="dayBtn"> < </span>
+            <span id='prevDay' class="dayBtn glyphicon glyphicon-triangle-left"></span>
             <span id='dayTitle'>第1天</span>
-            <span id='nextDay' class="dayBtn"> > </span>
+            <span id='nextDay' class="dayBtn glyphicon glyphicon-triangle-right"></span>
         </div>
         <div id='panel'></div>
     </div>
@@ -73,10 +73,11 @@ function newMap() {
             //scrollwheel: false
     })
     service = new google.maps.places.PlacesService(map1)
+    console.log(_display_place)
     $('#panel').html(_display_place)
     let panel = $('#panel'),
         day = panel.find('.time_line').length
-    $('#maxDay').text(day+'日遊')
+    _panel(panel,day)
     panel.find('.time_place').each(function(i) {
         let id=$(this).attr('id'),
             mode = $(this).attr('mode'),
@@ -87,18 +88,27 @@ function newMap() {
         $(this).find('.select').empty().text(mode)
         if (mode)
             modes.push(mode)
+        else
+            modes.push('none')     
         places.push(first)
-        //DisplayRoutes(first, last,mode)
+
         promises.push(placeDetail(first)) 
     })
     Promise.all(promises).then(()=>{
-        for(let i=0;i<places.length-1;i++) {
-            let first=_findDetail(places[i]),
+        console.log(places)
+        for(let i=0;i<places.length;i++) {
+            if(modes[i]!='none'){
+                 let first=_findDetail(places[i]),
                 last=_findDetail(places[i+1])
-            DisplayRoutes(first,last , modes[i])
+                DisplayRoutes(first,last , modes[i])
+            }           
         }
     })
     DayBtn(day)
+}
+function _panel(panel,day){
+    $('#maxDay').text(day+'日遊')
+    panel.find('.time_line').css({display:'block',opacity:'1'})
 }
 function _findDetail(placeId){
     for(let i=0;i<details.length;i++){
@@ -123,7 +133,6 @@ function DayBtn(day){
 }
 function _pageEvent(){
     let days=$('#panel').find('.time_line')
-
     days.css('display','none')
     days.eq(pagenow).css('display','block')
     $('#dayTitle').text('第'+(pagenow+1)+'天')
@@ -141,6 +150,7 @@ function placeDetail(placeId) {
 }
 
 function DisplayRoutes(first, last, mode) {
+    console.log('DisplayRoutes')
     let directions = new google.maps.DirectionsService(),
         renderer=new google.maps.DirectionsRenderer({map:map1}),
         request = {
@@ -162,59 +172,5 @@ function DisplayRoutes(first, last, mode) {
         }
     })
 }
-// function DisplaySchedule(){
-// 	var promises=[];
-// 	console.log('DisplaySchedule')
-// 	console.log(_display_mode)
-// 	for (var i = 0; i < _display_place.length; i++) {
-// 		promises.push(onePlace(_display_place[i],i))
-// 	}
-// 	Promise.all(promises).then(()=>{
-// 		for (var i = 0; i < places.length-1; i++) {
-// 			let requestObj={
-// 				start:places[i].geometry.location,
-// 				end:places[i+1].geometry.location,
-// 				mode:_display_mode[i]
-// 			}
-// 			DirctionsRender(requestObj)
-// 		}
-// 	})
-// }
 
-// function onePlace(placeId,i){
-// 	return new Promise(function(resolve,reject){
-// 		console.log(i)
-// 		let service = new google.maps.places.PlacesService(map);
-// 		service.getDetails({placeId:placeId},function(place,status){
-//        	if(status=='OK'){      
-//        		places[i]=place
-//        		resolve()
-//        		}
-//    		})
-// 	})
-// }
-
-// function DirctionsRender(requestObj){
-// 	var start=requestObj.start,
-// 		end=requestObj.end,
-// 		mode=requestObj.mode;
-// 	console.log('DirctionsRender')
-// 	directions=new google.maps.DirectionsService();
-// 	console.log(start+end+mode)
-// 			var request={
-// 				origin:start,
-//   				destination:end,
-//   				//waypoints:waypoints,
-//   				optimizeWaypoints: true,
-//   				travelMode:mode,
-//   				transitOptions: {
-//    					//modes: ['BUS'],
-//     				routingPreference: 'FEWER_TRANSFERS'
-//  					}
-// 				}
-// 	directions.route(request,function(result,status){
-// 		var display=new google.maps.DirectionsRenderer({map:map})
-// 		display.setDirections(result);
-// 	})
-// }
 </script>

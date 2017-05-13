@@ -1,0 +1,129 @@
+<div class="pageContainer">
+	<div class="pageMiddle">
+		<div class="row">
+			<div class="col-sm-6">
+				<div id='map'>123</div>
+			</div>
+		
+			<div class="col-sm-6">
+				<div class="trip_bar">
+					<span></span>
+					<span></span>
+				</div>
+						
+					<div id='map_article'>
+						<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	#map{
+		width:100%;
+		height: 90vh;
+	}
+</style>
+<script type="text/javascript">
+newMap()
+	function startPage(title,author,date){
+	console.log('startPage');
+	$('#start_page').find('#map_title').empty().text(title);
+	$('#start_page').find('#map_author').empty().text(author);
+	$('#start_page').find('#map_date').empty().text(date);
+	start=$('#start_page').html();
+	console.log(start);
+}	
+function newMap(){
+	console.log('newMap');
+
+	 map= new google.maps.Map(document.getElementById('map'), {
+      center: {lat:24,lng:121.2},
+      zoom: 10,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true
+    //scrollwheel: false
+  	});
+	  service = new google.maps.places.PlacesService(map);
+}
+
+function CleanMapMarker(){
+	console.log('CleanMapMarker');
+	for(var i=0;i<marker.length;i++){
+		marker[i].mark.setMap(null);
+	}
+	marker=[];
+	mapArticle=[];
+	pageCount=-1;
+}
+function getPlaces(date,name){
+	console.log('getPlaces');
+	AjaxPost('article//single_mapArticle',{name:name,date:date},function(res){
+		var place=res.Places,
+			article=res.Articles;
+		
+		CreateMarker(place);			
+		CreateArticle(article);
+	})
+}
+function getDetail(place){
+	var max=place.length;
+	var i=0; //這樣才能讀到i 如果用迴圈包service.getDetails(..callback(){...這裡會讀不到i}) 
+	console.log(max);
+	Delay();
+	function Delay(){
+		service.getDetails({placeId:place[i]}, function(result,status){
+			if(status === google.maps.places.PlacesServiceStatus.OK){							
+				var infowindow=new google.maps.InfoWindow();
+				var mark = new google.maps.Marker({
+    				map: map,
+    				position: result.geometry.location,
+    				icon: {
+     					path: google.maps.SymbolPath.CIRCLE,
+     					fillColor: 'orange',
+     					fillOpacity: 1,
+      					strokeColor: 'red',
+      					strokeWeight: 2,
+      					scale: 7
+    				}
+  					})
+				infowindow.setContent(i+':'+result.name);
+				infowindow.open(map,mark);
+				marker.push({
+					mark:mark,
+					center:result.geometry.location,
+					name:result.name
+				});
+				if (result.geometry.viewport) {// Only geocodes have viewport.
+        			bounds.union(result.geometry.viewport);} 
+        		else {bounds.extend(result.geometry.location);}        		
+        		map.fitBounds(bounds);
+        		i++;
+        		if(i!=max)
+        		Delay();
+			}//if(status == google.maps.places.PlacesServiceStatus.OK)
+		});//service.getDetails	
+	}
+	
+}
+function CreateMarker(place){	
+	bounds=new google.maps.LatLngBounds();
+	getDetail(place);//精髓 
+}
+function CreateArticle(article){
+	PageEvent(pageCount);
+	for(var i=0;i<article.length;i++){
+		mapArticle.push(article[i]);
+	}
+}
+function PageEvent(count){
+	if(count==-1){
+		$('#map_article').html(start);
+		map.fitBounds(bounds);
+	}
+	else{
+	$('#map_article').html(mapArticle[count]);
+		map.panTo(marker[count].center);
+	}	
+}
+</script>

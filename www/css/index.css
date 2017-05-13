@@ -46,7 +46,7 @@ a{
 	color: #87CEEB;
 }
 ._header a i{
-	color:gray;
+	color:lightblue;
 	margin-right: 10px
 }
 ._loginOption{
@@ -55,6 +55,10 @@ a{
 	padding: 0;
 	color:black;
 
+}
+._pages{
+	padding: 0px;
+	margin: 0px;
 }
 .welcome{
 		height:40px;
