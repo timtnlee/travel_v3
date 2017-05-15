@@ -2,15 +2,13 @@
 <div class="pageContainer">
 <div class="pageMiddle">
 	<div class="row">
-		<div class="col-sm-6">
-			
-				
-				<img id='usericon' src=''>		
+		<div class="col-sm-6">	
 			<button class="btn btn-success btn-xs" id='iconUploadBtn'>上傳</button>
+			<br>
 			<input type="file" name="" id='iconUploadInput' accept="image/*"> 			
-			
+			<img id='usericon' src='img/icon.png'>
 		</div>
-		<div class="col-sm-6 info_contain">
+		<div class="col-sm-6">
 			<h4 id='personal_name'></h4>
 			<h4 id='personal_article'>文章:</h4>
 			<h4 id='personal_schedule'>行程:</h4>
@@ -26,51 +24,54 @@ AjaxPost(
 	'user/personal',
 	{name:localStorage.username},
 	function(res){
-		var article=0
-		$.map(res.articles,function(art){
+
+		var article=0;
+		for(let i in res.articles){
+			console.log(res.articles[i].Title)
 			$('#personal_article')
-			.append('<p href="#singleArticle" class="user_info">'+art.Title+'</p>')
+			.append('<p href="singleArticle" reload="true">'+res.articles[i].Title+'</p>')
 			.find('p').last()
 			.click(function(){
-			_articleObj.title=art.Title,
-			_articleObj.author=art.Username,
-			_articleObj.date=art.Date,
-			_articleObj.id=art._id
-			location.href=$(this).attr('href')
+			_goback='personal';
+			console.log(res.articles[i].Title)
+			_articleObj.title=res.articles[i].Title,
+			_articleObj.author=res.articles[i].Username,
+			_articleObj.date=res.articles[i].Date,
+			_articleObj.id=res.articles[i]._id;
+			HeaderButton($(this));
 			})
-		})
+		}
 		if(res.schedules){
-		$.map(res.schedules,function(sche){
-			var title=sche.Title,
-				schedule=sche.Schedule
+		for (var i = 0; i <res.schedules.length; i++) {
+				var title=res.schedules[i].Title,
+					place=res.schedules[i].Places,
+					mode=res.schedules[i].Modes;
 				$('#personal_schedule').append(
-					'<p href="#schedule" class="user_info">'
+					'<p href="schedule" reload="true">'
 					+title+'</p>')
 					.find('p').last().on('click',function(){
-						_display_title=title
- 						_display_place=schedule
-						location.href=$(this).attr('href')
-						
-						// var schObj={
-						// 	title:title,
-						// 	place:place,
-						// 	mode:mode
-						// }
-						// personal_schedule_click(schObj);
+						var schObj={
+							title:title,
+							place:place,
+							mode:mode
+						}
+						personal_schedule_click(schObj,$(this));
 					})
-			})
-		
+			}
 		}
 		$('#usericon').attr('src',res.icon);
 		$('._loading').css('display','none');
 	}
 	)
 	$('#personal_name').text('名稱: '+localStorage.username);}
-// function personal_schedule_click(schObj){
-// 		_display_title=schObj.title,
-// 		_display_place=schObj.place,
-// 		_display_mode=schObj.mode;
-// }
+function personal_schedule_click(schObj,target){
+		_display_title=schObj.title,
+		_display_place=schObj.place,
+		_display_mode=schObj.mode;
+		console.log(schObj.mode)
+		console.log(_display_mode)
+	HeaderButton(target);
+}
 function uploadIcon(){
 	$('#iconUploadBtn').click(function(){
 		$('#iconUploadInput').click();
@@ -88,35 +89,22 @@ function SaveIcon(result){
 </script>
 
 <style>
-/* .info_contain{
-	position: relative;
-} */
-.icon_contain{
-	position: relative;
-}
-#iconUploadBtn{
-	z-index: 1;
-	opacity: 0.8;
-	top: 0;
-	left: 0;
-}
 	#iconUploadInput{
 		display: none;
 	}
 	#usericon{
-		top: 0;
-		left: 0;
-		width: 95%;
+		width: 90%;
 	}
-	.user_info {
+	#personal_article p{
+		cursor:  pointer;
+		background-color: lightgray;
 		margin: 10px 0px 10px 0px;
 		padding: 5px;
-		color: gray;
-		cursor: pointer;
-		font-size: 16px;
-		border-bottom: 1px solid gray;
 	}
-	.user_info:hover{
-		color: black;
+	#personal_schedule p{
+		cursor:  pointer;
+		background-color: lightskyblue;
+		margin: 10px 0px 10px 0px;
+		padding: 5px;
 	}
 </style>

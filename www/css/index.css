@@ -1,7 +1,6 @@
 body{
 	margin: 0;
 	padding: 0;
-	font-family: "游ゴシック",YuGothic,"メイリオ", "Meiryo", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "ＭＳ Ｐゴシック", "MS P Gothic", Verdana, Arial, Helvetica, sans-serif;
 	-webkit-tap-highlight-color:rgba(255,0,0,0);
 }
 a{
@@ -10,7 +9,7 @@ a{
 }
 ._container{
 	position: fixed;
-	left: 0;
+	left: 1000;
 	top: 0;
 	width: 100%;
 	height: 100%;
@@ -46,7 +45,7 @@ a{
 	color: #87CEEB;
 }
 ._header a i{
-	color:lightblue;
+	color:gray;
 	margin-right: 10px
 }
 ._loginOption{
@@ -55,10 +54,6 @@ a{
 	padding: 0;
 	color:black;
 
-}
-._pages{
-	padding: 0px;
-	margin: 0px;
 }
 .welcome{
 		height:40px;
@@ -109,7 +104,7 @@ a{
 	padding:0px;
 	margin: 1px 5px 0px 5px;
 	float: right;
-	color:white;
+	color: black;
 	display: none;
 }
 ._menu{
@@ -121,7 +116,7 @@ a{
 	margin: 0px;
 	padding:0px;
 }
-/* @media screen and (orientation:portrait) {
+@media screen and (orientation:portrait) {
 	.pageContainer{
 		padding:2px 0px 2px 0px;
 	}
@@ -144,7 +139,7 @@ a{
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;
-		font-size: 14px;
+		font-size: 25px;
 		display: inline-block;
 		text-decoration: none;
 		color: white;
@@ -169,27 +164,8 @@ a{
 		background-color:black;
 		padding: 20px 20px 40px 20px;
 	}
-} */
-@media (max-width:500px){
-	[name='title']{
-		font-size: 14px;
-	}
-	.welcome{
-		height:40px;
-		padding: 5px;
-		font-size:18px;
-		background: linear-gradient(to top,#808080 ,DimGrey );
-		color: white;
-	}
-	#welcomeOption{
-	font-size: 16px;
-	cursor: pointer;
-	padding:1px;
-	margin: 1px 1px 0px 1px;
-	float: right;
-	color:white;
-	display: none;
 }
+@media (max-width:500px){
 	.pageMiddle{
 		width: 98vw;
 		margin: 0px 1vw 0px 1vw;
@@ -218,11 +194,10 @@ a{
 
 	}
 	#menuBar{
-		padding-top: 6px;
 		float: left;
 		margin-top: -5px;
 		cursor: pointer;
-		font-size: 18px;
+		font-size: 25px;
 		display: inline-block;
 		text-decoration: none;
 		color: white;

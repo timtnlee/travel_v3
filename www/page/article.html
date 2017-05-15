@@ -1,7 +1,7 @@
 <div class="pageContainer">	
 	<div class='article_title pageMiddle'>
 		<div class="articleBar">
-			<a href="#addArticle" class="btn btn-link">新增文章</a>
+			<a href="addArticle" optiona='login' reload='true' class="btn btn-link">新增文章</a>
 		</div>
 		<div id='articleArea'>
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
@@ -9,28 +9,29 @@
 	</div>
 </div>
 <script>
-	$('._loading').css('display','block')
+$('.articleBar').find('.btn-link').click(function(e){
+	e.preventDefault();
+	HeaderButton($(this));
+})
 	AjaxPost(
 		'article/article',
 		'',
 		function(res){
-			$.map(res,function(article){
-				$('#articleArea').prepend('<p>'+article.Title+'<span>'+article.Username+'</span></p>');
+			for (var i=0; i<res.length ; i++) {
+				$('#articleArea').prepend('<p href="singleArticle" reload="true">'+res[i].Title+'</p>');
 				$('#articleArea').find('p').first()
-					.attr('title',article.Title)
-					.attr('date',article.Date)
-					.attr('author',article.Username)
-					.attr('id',article._id)
-					$('._loading').css('display','none')
-			})
-			
+					.attr('title',res[i].Title)
+					.attr('date',res[i].Date)
+					.attr('author',res[i].Username)
+					.attr('id',res[i]._id);
+				}
 			$('#articleArea').find('p').click(function(){
 				_goback='article';
 				_articleObj.title=$(this).attr('title'),
 				_articleObj.author=$(this).attr('author'),
 				_articleObj.date=$(this).attr('date'),
 				_articleObj.id=$(this).attr('id');
-				location.href='#singleArticle';
+				HeaderButton($(this));
 				})
 			}
 		)
@@ -43,9 +44,6 @@
 		border-bottom: 1px solid lightgray;
 		margin: 0;
 		cursor: pointer;
-	}
-	.article_title p span {
-		float: right;
 	}
 	.article_title p:hover{
 		background-color: lightgray;
