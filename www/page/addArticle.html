@@ -2,22 +2,34 @@
 <div class="pageContainer">
 	<div class="singleMiddle">
 		<input type="text" name="art_title" class="form-control" placeholder="標題">
+		<button class="btn uploadbtn">上傳圖片</button>
 		<div><input type="file" id='Insert' accept = "image/*"></div>
 		<div class="" id='contentArea' contenteditable="true"></div>
 		<button class="btn btn-default" id='submit'>發表</button>
 	</div>
 </div>
 <style type="text/css">
+	#Insert{
+		display: none;
+	}
+	.uploadbtn{
+		margin: 2px;
+		background-color: lightblue;
+	}
 	#contentArea{
 		border: 1px solid gray;
-		min-height: 300px;
+		min-height: 70vh;
 	}
 	#contentArea img{
-		width: 90%;
+		width: 80%;
 	}
 </style>
 <script type="text/javascript">
+	leadToLogin()
 	InsertImg('#Insert',Insert);
+	$('.uploadbtn').on('click',function(){
+		$('#Insert').click()
+	})
 	AddNewArticle();
 	function AddNewArticle(){
 		$('#submit').click(function(){

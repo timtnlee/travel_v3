@@ -1,81 +1,89 @@
 <div class="pageContainer">
-<div class="pageMiddle">
-	
-	<div class="singleUser">
-		<div class="row">
-		<div class="col-sm-6 single_userIcon">
-			<img src=''>
-		</div>
-		<div class="col-sm-6 single_userInfo">
-			<h4 id='singleuser_username'></h4>
-			<h4 id='singleuser_article'></h4>
-			<h4 id='singleuser_schedule'></h4>
-		</div>
-	</div>
-	</div>
-
-</div>
+    <div class="pageMiddle">
+        <div class="singleUser">
+            <div class="row">
+                <div class="col-sm-6 single_userIcon">
+                    <img src=''>
+                </div>
+                <div class="col-sm-6 single_userInfo">
+                    <h4 id='singleuser_username'></h4>
+                    <h4 id='singleuser_article'></h4>
+                    <h4 id='singleuser_schedule'></h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <style type="text/css">
-	
-	.singleUser img{
-		width: 100%;
-	}s
-	#singleuser_username{
+.singleUser img {
+    width: 100%;
+}
 
-	}
-	
-	.single_userInfo h4{
-		margin: 10px;
-	}	
-	.single_userInfo h4 p{
-		margin: 10px 0px 10px 0px;
-		padding: 5px;
-		color: gray;
-		cursor: pointer;
-		font-size: 16px;
-		border-bottom: 1px solid gray;
-	}
+#singleuser_username {}
+
+.single_userInfo h4 {
+    margin: 10px;
+}
+
+.single_userInfo h4 p {
+    margin: 10px 0px 10px 0px;
+    padding: 5px;
+    color: gray;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 1px solid gray;
+}
 </style>
 <script type="text/javascript">
-		var single=$('.singleUser')
-		block()
-		AjaxPost('user/personal',{name:_user_name},function(res){
-			single.find('img').attr('src',res.icon)
-			$('#singleuser_username').text('名稱:'+_user_name)
-			$('#singleuser_article').text('文章: ')
-		$.map(res.articles,function(article) {
-			console.log(article.Title)
-			$('#singleuser_article')
-			.append('<p href="#singleArticle">'+article.Title+'</p>')
-			.find('p').last()
-			.click(function(){
-			_goback='users';
-			_articleObj.title=article.Title,
-			_articleObj.author=article.Username,
-			_articleObj.date=article.Date,
-			_articleObj.id=article._id;
-			location.href=$(this).attr('href')
-			})
-		})
-		
-		$('#singleuser_schedule').text('行程: ')
-		if(res.schedules){
-			$.map(res.schedules,function(schedule){
-				var title=schedule.Title,
-					_schedule=schedule.Schedule
-				$('#singleuser_schedule').append(
-					'<p href="#schedule">'
-					+title+'</p>')
-					.find('p').last().on('click',function(){
-						_display_title=title
- 						_display_place=_schedule
-						location.href=$(this).attr('href')
-					})
-				})
-			}
-		close_block()
-		},function(){
-			close_block()
-		})
+var single = $('.singleUser')
+block()
+AjaxPost('user/personal', {
+    name: _user_name
+}, function(res) {
+    single.find('img').attr('src', res.icon)
+    $('#singleuser_username').text('名稱:' + _user_name)
+    $('#singleuser_article').text('文章: ')
+    if (res.articles.length <= 0) {
+        $('#singleuser_article').append('尚無文章')
+    } else {
+        $.map(res.articles, function(article) {
+            console.log(article.Title)
+            $('#singleuser_article')
+                .append('<p href="#singleArticle">' + article.Title + '</p>')
+                .find('p').last()
+                .click(function() {
+                    _goback = 'users';
+                    _articleObj.title = article.Title,
+                        _articleObj.author = article.Username,
+                        _articleObj.date = article.Date,
+                        _articleObj.id = article._id;
+                    location.href = $(this).attr('href')
+                })
+        })
+    }
+
+    $('#singleuser_schedule').text('行程: ')
+    if (res.schedules.length <= 0) {
+        $('#singleuser_schedule').append('尚無行程')
+    } else {
+        $.map(res.schedules, function(schedule) {
+            var title = schedule.Title,
+                _schedule = schedule.Schedule
+            $('#singleuser_schedule').append(
+                    '<p href="#schedule">' + title + '</p>')
+                .find('p').last().on('click', function() {
+                    _display_name = _user_name
+                    _display_title = title
+                    _display_place = _schedule
+                    location.href = $(this).attr('href')
+                })
+        })
+    }
+
+
+
+    close_block()
+}, function() {
+    close_block()
+})
 </script>

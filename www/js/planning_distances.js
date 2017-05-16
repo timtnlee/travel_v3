@@ -4,7 +4,8 @@ var disInfoCount = 0,
     maxPage = 0,
     displays = {},
     displayMarkers = [],
-    displayBounds = new google.maps.LatLngBounds()
+    displayBounds = new google.maps.LatLngBounds(),
+    delcount=0
 
 function Plan() { //will execute in planning.html
 	SaveSchedule()
@@ -42,7 +43,7 @@ function _delTimeLine() {
     	places=$('#'+id).find('.time_place')
     places.each(function(i){
     	if(i!=0){
-    		console.log(places.eq(i).attr('id'))
+    		
     		_renderDel(places.eq(i).attr('id'))
     	}
     })
@@ -150,19 +151,26 @@ function _firstdrop(e, target) {
         id = eleAry[1]
     if (eleAry[0] == 'new') {
         let content = $('#' + id).html()
-        _newList(eleAry[1], target, content, eleAry[1])
+        _newList(eleAry[1], target, content, eleAry[1],'new')
     } else if (eleAry[0] == 'edit') {
         let content = $('#' + id).find('.distance_name').html()
         _retrivePlan(id)
         _refillFirstDrop(id)
         $('#' + id).remove()
-        _newList(id, target, content, eleAry[2])
+        _newList(id, target, content, eleAry[2],'edit')
     }
 }
 
-function _newList(ele, target, content, placeId) { //first drop
+function _newList(ele, target, content, placeId,type) { //first drop
     let id = '#' + ele,
-        newId = dragId + ele
+        newId
+    if(type=='new'){
+         newId= dragId+ ele
+         dragId++
+     }
+    else{
+        newId=ele
+    }
     _createList({
         step: 'after',
         insertTarget: target,
@@ -172,9 +180,9 @@ function _newList(ele, target, content, placeId) { //first drop
     })
 
     target.remove()
-    _activateDel((dragId + ele))
+    _activateDel((newId))
     _timePDrop()
-    dragId++
+    
     PlanDistance()
 }
 
@@ -194,7 +202,7 @@ function _createList(paramObj) {
     if (step == 'before') {
         $(insert).insertBefore(target)
     } else if (step == 'after') {
-        console.log('after')
+       
         $(insert).insertAfter(target)
     }
     _activateDetail(newId)
@@ -235,8 +243,7 @@ function _timePDrop() {
             _tempP(e, $(this))
         })
         .on('click', function() {
-            // console.log('placeId :' + $(this).attr('placeId'))
-            // console.log('classes :' + $(this).attr('class'))
+          
         })
 }
 
@@ -290,7 +297,7 @@ function _retrivePlan(id) {
     let places = $('#output').find('.time_place')
     places.each(function(i) {
         if ($(this).attr('id') == id) {
-            console.log('_retrivePlan:' + i)
+            
             places.eq(i - 1).attr('end', '')
             places.eq(i + 1).attr('front', '')
         }
@@ -364,7 +371,7 @@ function PlanDistance(num) {
     let places = $('#timeLine' + count).find('.time_place')
     if (places.length >= 2) {
         places.each(function(index) {
-            console.log('PlanDistance')
+          
             let //first_f=places.eq(index).attr('front'),
                 first_e = places.eq(index).attr('end'),
                 last_f = places.eq(index + 1).attr('front'),
@@ -373,7 +380,7 @@ function PlanDistance(num) {
 
             //last_e=places.eq(index+1).attr('end')
             if ((first_e != 'yes' || last_f != 'yes') && index != places.length - 1 && noPlace == false) {
-                console.log('change')
+              
                 let firstId = $(this).attr('placeId'),
                     lastId = places.eq(index + 1).attr('placeId')
                     //$('#'+id).find('.distance_info').empty().text(disInfoCount+'\n'+firstId+'\n'+lastId)
@@ -383,12 +390,10 @@ function PlanDistance(num) {
                 disInfoCount++;
             } else if (index == places.length - 1) {
                 $('#' + id).find('.distance_info').empty()
+                $('#' + id).find('.select').remove()
                 $('#' + id).find('.distance_detail').empty().css('display', 'none')
                 _renderDel(id)
-                    // if (displays[id]) {
-                    //     console.log('remove render')
-                    //     displays[id].setMap(null)
-                    // }
+                  
             }
 
         })
@@ -397,13 +402,13 @@ function PlanDistance(num) {
         places.last().find('.distance_detail').empty().css('display', 'none')
         _renderDel(places.last().attr('id'))
     }
-    console.log('count:'+count)
+
     if(count<dayCount-1)
     	_nextDayPlace(count)
 }
 
 function _nextDayPlace(index) {
-	console.log('nextPlace')
+	
     if (pageCount < dayCount - 1) {
         let id = $('#timeLine' + (index)),
             next = $('#timeLine' + (index + 1)),
@@ -468,7 +473,7 @@ function _distances(firstId, lastId, id,travelMode) {
         lastPlace = _findPlaceInfo(lastId),
         mode=(travelMode)?travelMode:'DRIVING'
 
-    console.log('distance: ' + firstId + ' ' + lastId)
+    
     let directions = new google.maps.DirectionsService(),
         request = {
             origin: firstPlace.geometry.location,
@@ -531,7 +536,8 @@ function _directionRender(result, id) {
 }
 
 function _renderDel(id) {
-
+    delcount++
+    console.log('delete render:'+delcount+' '+'id:'+id)
     if (displays[id]) {
         displays[id].setMap(null)
         delete displays[id]

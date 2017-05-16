@@ -1,16 +1,22 @@
 <div class="pageContainer">
 	<div class="single_article singleMiddle">
-		<a id='goback'>
-			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回</a>
+		<a id='goback' href="#article" class="btn btn-sm">
+			<i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
+		</a>
 		<p id='title'></p>
 		<p id='date'></p>
 		<p id='author'></p>
-		<div id='content'>
+		<div id='content' class="article_content">
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
 	</div>
 </div>
 <style type="text/css">
+#goback{
+	background-color: lightblue;
+	margin-bottom:5px;
+	letter-spacing : 2px;
+}
 	.single_article{
 	}
 	.single_article a{
@@ -21,6 +27,12 @@
 		font-size: 20px;
 		font-weight: bold;
 	}
+	#author{
+		border-bottom: 1px solid lightgray;
+	}
+	#content{
+		margin-top: 20px;
+	}
 @media screen and (orientation:portrait) {
 
 	.single_article img{
@@ -30,16 +42,14 @@
 </style>
 <script type="text/javascript">
 $('#goback').click(function(e){
-	$(this).attr('href',_goback)
-	e.preventDefault();
-	HeaderButton($(this))
+	
 })
 	block();
 	AjaxPost('article/single_article',{id:_articleObj.id},function(res){
 					//console.log(res);
 					var content=res[0].Article;
 					$('#title').text(_articleObj.title);
-					$('#date').text(_articleObj.date);
+					$('#date').text(_articleObj.date.substr(0,10));
 					$('#author').text('author: '+_articleObj.author);
 					$('#content').html(content);
 					close_block()

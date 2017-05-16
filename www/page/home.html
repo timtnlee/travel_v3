@@ -1,55 +1,156 @@
-<div class="pageContainer">
-	<div class="pageMiddle">
-		<div class="introduce">
-			<button class="btn btn-primary" onclick="" id=getstart>
-			GET STARTED
-			</button>
-		</div>	
 
+		
 		<div class="introContent">
-			<h4>規劃自己的行程</h4>
-			<p>
-				introduce<br>
-				<img src="img/intro1.jpg" alt="">
-			</p>
-			<h4>寫出地圖故事</h4>
-			<p>
-				介紹內容
-				introduce<br>
-				<img src="img/intro2.jpg" alt="">
-			</p>
+			<h4 class="intro_tab tab1">
+				
+				<div class="words">
+					<p class="welcomeUser"></p>
+					開始Ultravel，一趟屬於自己的旅行<br>
+					<button class="btn loginin_btn">登入</button>
+					<p><i class="glyphicon glyphicon-chevron-down"></i></p>
+				</div>				
+			</h4>
+			<div class="intro intro1">
+				lkdfljsdklf,asdlfkjadkfj amn,asdf.
+			</div>
+			<h4 class="intro_tab tab2">
+				<div class="words">
+					遊玩並分享
+					<p><i class="glyphicon glyphicon-chevron-down"></i></p>
+				</div>
+				
+			</h4>
+			<div class="intro intro2">
+				kjashdfkjm,f,d.,na,d.fnlkd ,zmdnf,.~
+			</div>
+			<h4 class="intro_tab tab3">
+				<div class="words">
+					看看別人去哪玩
+					<p><i class="glyphicon glyphicon-chevron-down"></i></p>
+				</div>
+			</h4>
+			<div class="intro intro3">
+				askhdfjhadsf as,df ,mn
+			</div>
 		</div>	
-	</div>
-</div>
+		<div class="intro_gotop">
+			<i class="glyphicon glyphicon-circle-arrow-up"></i>
+		</div>
+
+
 
 <style type="text/css">
-	.introduce{
-		padding: 10px;
-		text-align: center;
-	}
-	#getstart{
+@keyframes bounce {
+    0% {margin-top: 30px;}
+    50% {margin-top: 20px;}
+    100%{margin-top: 30px;}
+}
+	.loginin_btn{
+		margin-top: 20px;
+		background-color: gray;
+		opacity: 0.8;
+		letter-spacing : 2px;
 		color: white;
 	}
+	.loginin_btn:hover{
+		background-color: lightgray;
+		color: white;
+	}
+	.intro_gotop{
+		display: none;
+		cursor: pointer;
+		font-size: 30px;
+		position: fixed;
+		right: 30px;
+		bottom: 30px;
+		z-index: 1;
+	}
+	.words{
+		padding-top: 40vh;
+	}
+	.intro_tab{
+		height: 100vh;
+	}
+	.intro_tab i{
+		cursor: pointer;
+		margin-top: 30px;
+		font-size: 40px;
+		color: white;
+	}
+	.intro_tab i:hover{
+		animation-name: bounce;
+    	animation-duration: .8s;
+    	animation-iteration-count: infinite;
+	}
+	.tab1{
+		background-image: url("img/bg1.jpg");
+		background-color: rgba(0, 0, 0, 0.6);
+		background-repeat: no-repeat;
+		background-size: cover;
+    	background-origin: content-box;
+	}
+	.tab2{
+		background-color: #4DFFFF;
+	}
+	.tab2 i{
+		color: lightgray;
+	}
+	.tab3{
+		background-color: lightyellow;
+	}
+	.tab3 i{
+		color: gray;
+	}
+	.intro{
+		height: 100vh;
+		padding-top:30vh;
+	}
 	.introContent{
+		margin-top: -10px;
+		padding: 0px;
 		text-align: center;
 	}
 	.introContent h4{
 		font-weight: bold;
 	}
-	.introContent p{
-		border-bottom:1px solid lightgray;
-		border-top:1px solid lightgray;
-	}
-	.introContent img{
-		width: 70vw;
-	}
 </style>
 
 <script>
-
-	
-
+welcomeTitle()
+introScroll()
 function welcomeTitle(){
-	$('[name="title"]').text('Welcome to Utravel !'+localStorage.username);
+	$('.welcomeUser').text(localStorage.username);
+	console.log('localStorage:'+localStorage.logined)
+	if(localStorage.logined!='yes'){
+		$('.loginin_btn').on('click',function(){
+			location.href='#login'
+		})
+	}
+	else{
+		$('.loginin_btn').css('display','none')
+	}
 }
+
+function introScroll(){
+	$('.intro_tab').find('i').on('click',function(){
+		let cla=$(this).parents('.intro_tab').next().attr('class'),
+			position=$(this).parents('.intro_tab').next('.intro').position(),
+			top=position.top,
+			con_top=$('._container').scrollTop()
+
+		$('._container').animate({scrollTop:con_top+top})
+	})
+	$('.intro_gotop').on('click',function(){
+		$('._container').animate({scrollTop:'0'})
+	})
+	$('._container').on('scroll',function(){
+		let top=$(this).scrollTop()
+		if(top>500){
+			$('.intro_gotop').css('display','block')
+		}
+		else{
+			$('.intro_gotop').css('display','none')
+		}
+	})
+} 
 </script>

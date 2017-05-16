@@ -1,5 +1,4 @@
-<script src='js/planning_searches.js'></script>
-<script src='js/planning_distances.js'></script>
+<script src='js/mapArticles.js'></script>
 <div id='searchArea'>
     <div class="row">
         <div class="col-xs-9">
@@ -16,20 +15,19 @@
     <div id='map'></div>
     <!-- search info -->
     <div id='mapInfo'>
-        <p id='hint'>選擇一個想去的地點吧(ex:台北101)
-            <br>或是一個地區(ex:台北市)</p>
+        <p id='hint'>先把要編輯的地點加入清單吧</p>
         <div id='allPlaces'></div>
         <div id='option'>
             <p id='goback' class="back">
                 <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
             </p>
             <p id='optionTag'></p>
-            <h4 class="btn btn-link option_bar_btn">附近找</h4>
+            <!-- <h4 class="btn btn-link option_bar_btn">附近找</h4>
             <div id='option_bar'>
                 <a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
                 <a key='cafe'><i class="fa fa-coffee" aria-hidden="true"></i>Cafe'</a>
                 <a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a> .......
-            </div>
+            </div> -->
             <div id='infoGotop'>
                 <span  class="glyphicon glyphicon-circle-arrow-up"></span>
             </div>
@@ -37,25 +35,6 @@
             <div id='info'>
             </div>
             <a>網路熱門</a>
-        </div>
-    </div>
-    <!-- distance -->
-    <div id='planDistance'>
-        <p id='distanceGoback' class="back">
-            <i class="glyphicon glyphicon-eject"></i>收起
-        </p>
-        <h4>路線規劃(拖曳到這裡)<span class="btn btn-link" id="saveRouting">儲存行程</span></h4>
-        <div>
-        	<span id='maxDay'></span>
-        	<a id='addADay' class="btn btn-link dayplus">+加一天</a>
-			<a id='delADay' class="btn btn-link dayplus">-減一天</a>
-        </div>
-        <div class='dayBar'>
-            <span id='prevDay' class="dayBtn"> < </span>
-            <span id='dayTitle'>第1天</span>
-            <span id='nextDay' class="dayBtn"> > </span>
-        </div>
-        <div id='output' class="down">
         </div>
     </div>
     <!-- shedule -->
@@ -67,7 +46,7 @@
             <div class="list_con" id='list_head'>
                 <h4 style="display: inline-block;">我的清單</h4>
                 <small>點擊看詳細資料</small>
-                <a id='plan'><i class="fa fa-road" aria-hidden="true"></i>開始規劃</a>
+                <a id='plan'>開始編輯</a>
             </div>
         </div>
     </div>
@@ -149,7 +128,6 @@ newMap();
 ResetInput('#textSearch');
 welcomeOption('清單', showShedule);
 
-Plan();
 //planning_distance
 
 function showShedule(e,target) {

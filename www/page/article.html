@@ -1,7 +1,7 @@
 <div class="pageContainer">	
 	<div class='article_title pageMiddle'>
 		<div class="articleBar">
-			<a href="addArticle" optiona='login' reload='true' class="btn btn-link">新增文章</a>
+			<a href="#addArticle" class="btn btn-link">新增文章</a>
 		</div>
 		<div id='articleArea'>
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
@@ -9,34 +9,48 @@
 	</div>
 </div>
 <script>
-$('.articleBar').find('.btn-link').click(function(e){
-	e.preventDefault();
-	HeaderButton($(this));
-})
+	$('._loading').css('display','block')
 	AjaxPost(
 		'article/article',
 		'',
 		function(res){
-			for (var i=0; i<res.length ; i++) {
-				$('#articleArea').prepend('<p href="singleArticle" reload="true">'+res[i].Title+'</p>');
+			$.map(res,function(article){
+				$('#articleArea').prepend('<p><span class="atitle">'+article.Title+
+					'<br></span>'+
+					'<span class="popular">人氣:'+article.Popular+
+					'</span><span class="author">'+article.Username+'<br>'+
+					article.Date.toString().substr(0,10)+
+					'</span></p>');
 				$('#articleArea').find('p').first()
-					.attr('title',res[i].Title)
-					.attr('date',res[i].Date)
-					.attr('author',res[i].Username)
-					.attr('id',res[i]._id);
-				}
+					.attr('title',article.Title)
+					.attr('date',article.Date)
+					.attr('author',article.Username)
+					.attr('id',article._id)
+					$('._loading').css('display','none')
+			})
+			
 			$('#articleArea').find('p').click(function(){
 				_goback='article';
 				_articleObj.title=$(this).attr('title'),
 				_articleObj.author=$(this).attr('author'),
 				_articleObj.date=$(this).attr('date'),
 				_articleObj.id=$(this).attr('id');
-				HeaderButton($(this));
+				location.href='#singleArticle';
 				})
 			}
 		)
 </script>
 <style>
+.atitle{
+	font-size: 18px;
+}
+.popular{
+	color: gray;
+}
+.author{
+	font-size: 14px;
+	float: right;
+}
 	.article_title{
 	}
 	.article_title p{
@@ -46,7 +60,7 @@ $('.articleBar').find('.btn-link').click(function(e){
 		cursor: pointer;
 	}
 	.article_title p:hover{
-		background-color: lightgray;
+		background-color: #E0E0E0;
 	}
 	.article_title h3{
 		padding: 15px;

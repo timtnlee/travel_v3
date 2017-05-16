@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<div class='col-sm-offset-2 col-sm-10'>
 					<div class="col-sm-2">
-						<input class="btn btn-default" type="submit" name="register" value="註冊">
+						<input class="btn btn-default btn-sm" type="submit" name="register" value="註冊">
 					</div>
 				</div>
 			</div>
@@ -41,6 +41,7 @@
 <script type="text/javascript">
 CheckInput('[name="register_name"]',nameCheck);
 CheckInput('[name="register_passwd"]');
+
 function nameCheck(){
 	var display=$('[name="register_name"]').parent().next().children(),
 		name=$('[name="register_name"]').val();
@@ -49,10 +50,10 @@ function nameCheck(){
 				display.text('✔');
 			}
 			else{
-				display.text('此帳號已使用');
+				display.text('帳號重複');
 			}
 		})
-}
+	}
 	
 
 	EnterSubmit('[name="register"]');
@@ -78,3 +79,4 @@ function nameCheck(){
 			})
 		}
 	})
+	</script>
