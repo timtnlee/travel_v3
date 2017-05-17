@@ -43,7 +43,7 @@ if (localStorage.logined == 'yes') {
                 })
             }
             if(res.mapArticles.length <= 0){
-                $('#personal_mapArticle').text('文章 : 尚無文章')
+                $('#personal_mapArticle').text('地圖故事 : 尚無文章')
             }else{
                 $.map(res.mapArticles, function(art) {
                     $('#personal_mapArticle')

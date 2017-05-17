@@ -119,14 +119,26 @@ function Window() {
 }
 
 function setIp() {
-	//ip = 'http://127.0.0.1:3000/';
-    ip = 'http://140.119.19.15:3000/';
+	ip = 'http://127.0.0.1:3000/';
+    //ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
     localStorage.logined = 'no';
 if (!localStorage.username)
     localStorage.username = '';
+
+function Message(input,btn,url,id,page){
+    
+    
+    btn.click(function(e){
+        e.preventDefault()
+        var data=input.val()
+        AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
+            reNewPage(page)
+        })
+    })
+}
 
 function LoadHomePage() {
 
@@ -166,20 +178,21 @@ function welcomeOption(text, func) { //can only be used in reload pages
     })
 }
 
-// function reNewPage(href) {
-
-//     id = '#page_' + href;
-//     $('._content').find('._pages').css('display', 'none');
-//     $('._reloadPages').remove();
-//     $(id).remove();
-//     $("._content").prepend('<div id="page_' + href + '" class="_pages"></div>');
-//     $.ajax({
-//         url: "page/" + href + ".html",
-//         success: function(result) {
-//             $(id).html(result);
-//         }
-//     });
-// }
+function reNewPage(href) {
+    page=href
+    reload = $('._reloadPage')
+    $('._content').find('._pages').css('display', 'none');
+    reload.html();
+       
+            console.log('reloadPage')
+            $.ajax({
+                url: "page/" + page + ".html",
+                success: function(result) {
+                    reload.html(result)
+                }
+            })
+            reload.css('display', 'block')
+}
 
 function InsertImg(ele, insert) {
     $(ele).on('change', function() {

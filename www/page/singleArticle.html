@@ -9,9 +9,28 @@
 		<div id='content' class="article_content">
 			<div class="_loading"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
 		</div>
+		<div class="message">
+			<h4>留言</h4>
+			<div class="row">
+				<div class="col-xs-10">
+					<input type="text" class="message_input form-control">
+				</div>
+				<div class="col-xs-2">
+					<button class="btn message_btn">留言</button>
+				</div>
+			</div>
+			<div class="message_area">
+				
+			</div>
+		</div>
 	</div>
 </div>
 <style type="text/css">
+.message{
+	border-top:1px solid lightgray;
+	margin-top:100px; 
+}
+
 #goback{
 	background-color: lightblue;
 	margin-bottom:5px;
@@ -25,33 +44,50 @@
 	}
 	.single_article p{
 		font-size: 20px;
-		font-weight: bold;
 	}
+	.message_area p{
+	border-bottom: 1px solid lightgray;
+	padding: 5px;
+	font-size:16px;
+	color: gray;
+}
+.message_area small{
+	float: right;
+	color: lightgray;
+}
 	#author{
 		border-bottom: 1px solid lightgray;
 	}
+	#content img{
+		max-width: 95%;
+	}
 	#content{
+		line-height: 50px;
 		margin-top: 20px;
 	}
 @media screen and (orientation:portrait) {
-
-	.single_article img{
-		width: 96vw;
+	#content img{
+		max-width: 96vw;
 	}
 }
 </style>
 <script type="text/javascript">
-$('#goback').click(function(e){
-	
-})
+	Message($('.message_input'),$('.message_btn'),'message',_articleObj.id,'singleArticle')
 	block();
 	AjaxPost('article/single_article',{id:_articleObj.id},function(res){
 					//console.log(res);
-					var content=res[0].Article;
+					var content=res[0].Article,
+						message=res[0].Message
+					console.log(message)
 					$('#title').text(_articleObj.title);
 					$('#date').text(_articleObj.date.substr(0,10));
 					$('#author').text('author: '+_articleObj.author);
 					$('#content').html(content);
+					$.map(message,function(mes){
+						$('.message_area').prepend('<p>'+mes.message+
+							'<small>'+mes.name+' '+
+							mes.date.toString().substring(0,10)+'</small></p>')
+					})
 					close_block()
 				})		
 </script>

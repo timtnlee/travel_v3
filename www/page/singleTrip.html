@@ -23,6 +23,24 @@
 				</div>
 			</div>
 		</div>
+		<div class="message">
+			
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-2">
+					<h4>留言</h4>
+				</div>
+				<div class="col-xs-6 col-xs-offset-2">					
+					<input type="text" class="message_input form-control">
+				</div>
+				<div class="col-xs-2">
+					<button class="btn message_btn">留言</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6 col-xs-offset-2 message_area">
+				</div>
+			</div>
+		</div>
 </div>
 <style type="text/css">
 @keyframes goBtn {
@@ -67,6 +85,20 @@
 	.trip_content img{
 		width: 95%;
 	}
+	.message{
+	border-top:1px solid lightgray;
+	margin-top:100px; 
+}
+	.message_area p{
+	border-bottom: 1px solid lightgray;
+	padding: 5px;
+	font-size:16px;
+	color: gray;
+}
+.message_area small{
+	float: right;
+	color: lightgray;
+}
 </style>
 <script type="text/javascript">
 var map,
@@ -77,6 +109,7 @@ var map,
 	start,
 	bounds;
 newMap()
+Message($('.message_input'),$('.message_btn'),'message_map',_tripObj.id,'singleTrip')
 function newMap(){
 	console.log('newMap');
 	 map= new google.maps.Map(document.getElementById('map'), {
@@ -123,8 +156,13 @@ function getPlaces(){
 	$('#trip_author').text(_tripObj.author)
 	AjaxPost('article/single_mapArticle',{id:_tripObj.id},function(res){
 		var place=res.Places,
-			article=res.Articles		
-			
+			article=res.Articles,
+			message=res.Message	
+		$.map(message,function(mes){
+			$('.message_area').prepend('<p>'+mes.message+
+							'<small>'+mes.name+' '+
+							mes.date.toString().substring(0,10)+'</small></p>')
+		})
 		Promise.all(getDetail(place)).then(()=>{
 			CreateArticle(article)
 			_btn(res.Articles.length)
