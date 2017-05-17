@@ -1,3 +1,24 @@
+function Insert(result) {
+    if ($('#edit' + pageNow).length >= 1) {
+        $('#edit' + pageNow).focus();
+
+        var selection = window.getSelection ? window.getSelection() : document.selection;
+        var range = selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+        range.collapse(false);
+        var tag = range.createContextualFragment('<br><img class="uploadImg" src="' + result + '"><br>');
+        var lastChild = tag.lastChild;
+        range.insertNode(tag);
+        console.log(lastChild)
+        if (lastChild) {
+            //range.setEndAfter(lastChild);?
+            range.setStartAfter(lastChild);
+        }
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+
+}
+
 function scrollEvent() {
     $('#allPlaces,#option').on('scroll', function(e) {
         let scroll = $(this).scrollTop()
@@ -43,12 +64,35 @@ function setButton() {
         })
         //
     $('#plan').on('click', function() {
+        CreateEditArea()
         SetPage('plan')
     })
     $('#distanceGoback').on('click', function() {
             SetPage('close_plan')
         })
         //
+    $('.saveArticle').on('click', function() {
+        SaveArticle()
+    })
+    $('#prev').on('click', function() {
+        console.log(pageNow)
+        if ($('#schedule').find('#' + pageNow).prev('.list_con').length >= 1) {
+            var prev = $('#schedule').find('#' + pageNow).prev('.list_con').attr('id')
+            console.log(pageNow)
+            _editPage(prev)
+        }
+    })
+    $('#next').on('click', function() {
+        console.log(pageNow)
+        if ($('#schedule').find('#' + pageNow).next('.list_con').length >= 1) {
+            var next = $('#schedule').find('#' + pageNow).next('.list_con').attr('id')
+            console.log(pageNow)
+            _editPage(next)
+        }
+    })
+    $('.uploadbtn').on('click', function() {
+        $('#Insert').click()
+    })
 }
 
 function newMap() {
@@ -168,9 +212,12 @@ function _createListMarker(place, infowindow) {
         position: location,
         optimized: false,
         zIndex: 2,
-        icon: 'img/green-dot.png'
+        icon: {
+            url: 'img/blue-dot.png',
+            scaledSize: { width: 40, height: 32 }
+        }
     })
-    list_marker.push(mark)
+    list_marker.push({ id: place.place_id, mark: mark })
     mark.addListener('click', function() {
         _markInfo(place) //...
     })
@@ -182,18 +229,21 @@ function _createListMarker(place, infowindow) {
 function _hideListMarker() {
     console.log(list_marker)
     for (let i = 0; i < list_marker.length; i++) {
-        list_marker[i].setMap(null)
+        list_marker[i].mark.setMap(null)
     }
 }
 
 function _showListMarker() {
     for (let i = 0; i < list_marker.length; i++) {
-        list_marker[i].setMap(map)
+        list_marker[i].mark.setMap(map)
     }
 }
 
-function _delListMarker() {
-
+function _delListMarker(id) {
+    $.map(list_marker, function(marker) {
+        if (marker.id == id)
+            marker.mark.setMap(null)
+    })
 }
 
 function _showMarker() {
@@ -247,15 +297,19 @@ function _markInfoPanel(place_id, place_name, src) {
                 open = _openingHour(result.opening_hours)
             else
                 open[0] = open[1] = '';
-            (result.rating) ? rating = '評分 : ' + result.rating: rating = '';
-            (result.formatted_phone_number) ? phone = result.formatted_phone_number: phone = '';
-            (result.vicinity) ? vicinity = '地址 : ' + result.vicinity: vicinity = '';
-            (result.website) ? website = '<a href="' + result.website + '">網頁</a>': website = '';
-            $('#infoText').prepend('<p><strong>' +
-                rating + '</strong><br>' +
-                vicinity + '<br>' +
-                phone + '<br>' +
-                website + '<br>' +
+            (result.rating) ?
+            rating = '<strong>評分 : ' + result.rating + '</strong><br>': rating = '';
+            (result.formatted_phone_number) ?
+            phone = '<span>電話 : ' + result.formatted_phone_number + '</span><br>': phone = '';
+            (result.vicinity) ?
+            vicinity = '<span>地址 : ' + result.vicinity + '</span><br>': vicinity = '';
+            (result.website) ?
+            website = '<a href="' + result.website + '">網頁</a><br>': website = '';
+            $('#infoText').prepend('<p>' +
+                rating +
+                vicinity +
+                phone +
+                website +
                 open[0] +
                 open[1] +
                 '</p>')
@@ -324,6 +378,7 @@ function SetPage(step) {
             $('#schedule').css('zIndex', '-1')
             $('#welcomeOption').attr('class', '')
             $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
+            _editMode('list')
             if (Window() > 500)
                 _resizeMap(75)
             else
@@ -344,37 +399,56 @@ function SetPage(step) {
             $('#schedule').css('zIndex', '-1')
             $('#welcomeOption').attr('class', '')
             $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
-
+            _editMode('list')
             if (bounds) map.fitBounds(bounds)
             break
 
         case 'schedule':
             $('#schedule').css('zIndex', '19')
             $('#welcomeOption').attr('class', 'showNow')
+            _editMode('list')
             break
 
         case 'close_schedule':
             $('#welcomeOption').attr('class', '')
             $('#schedule').css('zIndex', '-1')
+            _editMode('list')
             break
 
         case 'plan':
             console.log('plan')
             _hideMarker()
-            _hideListMarker()
+            _editMode('edit')
+            _editPage()
+                //_hideListMarker()
             $('#planDistance').css('zIndex', '2').animate({ opacity: '1' })
             if (Window() > 500)
-                _resizeMap(50)
+                _resizeMap(25)
             break
 
         case 'close_plan':
             console.log('close_plan')
             _showMarker()
-            _showListMarker()
+            _editMode('list')
+                //_showListMarker()
             $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
             if (Window() > 500)
                 _resizeMap(75)
             break
+    }
+}
+
+function _editMode(type) {
+    if (type == 'edit') {
+        $('#schedule').find('.list_con').attr('mode', 'edit')
+        $('.sch_hint').text('點擊進行編輯\n拖曳可排序')
+        $('#plan').css({ opacity: '0.5' }).attr('disabled', 'true')
+        $('#saveArticle').css('opacity', '1')
+    } else {
+        $('#schedule').find('.list_con').attr('mode', 'list').css('background-color', '#FFE66F')
+        $('.sch_hint').text('點擊看詳細資料\n拖曳可排序')
+        $('#plan').css({ opacity: '1' }).attr('disabled', 'false')
+        $('#saveArticle').css('opacity', '0.5')
     }
 }
 
@@ -389,7 +463,7 @@ function AddToList(place, src, target) {
             infowindow = new google.maps.InfoWindow()
         $(this).text('已加入').unbind()
         _createListMarker(place, infowindow)
-        $('#schedule').append(
+        $('#schedule').find('.listArea').append(
             '<p class="list_con" id="' + placeId + '" draggable="true">' +
             '<span class="placeIcon"><img src="' + src + '" draggable="false"></span>' +
             '<span class="placeName">' + name + '<a id="delList" class="btn btn-link">移除</a></span>' +
@@ -403,12 +477,23 @@ function AddToList(place, src, target) {
             //list info     
         $('#schedule').find('#' + placeId).on('click', function(e) {
             e.preventDefault()
-            SetPage('close_schedule')
-            _markInfo(place)
+            if ($(this).attr('mode') == 'edit') {
+                // $('.list_con').css('background-color','#FFE66F')
+                // $(this).css('background-color','#FFFFB9')
+                _editPage(placeId)
+            } else {
+                SetPage('close_schedule')
+                _markInfo(place)
+            }
+
         }).find('#delList').on('click', function(e) { //delete
             e.preventDefault()
+
+            $('#planDistance ').find('#edit' + placeId).remove()
             $('#schedule').find('#' + placeId).remove()
+            _delListMarker(placeId)
             _showListNum()
+            CreateEditArea()
         })
         _dragevent('#' + placeId)
     })
@@ -416,12 +501,12 @@ function AddToList(place, src, target) {
 
 function _dragevent(ele) {
     $('#schedule').find(ele)
-        .on('dragstart', function(e) {             
-            e.originalEvent.dataTransfer.setData('text',e.target.id)
+        .on('dragstart', function(e) {
+            e.originalEvent.dataTransfer.setData('text', e.target.id)
         })
         .on('dragenter', function(e) {
             e.preventDefault()
-            let target=$(this),
+            let target = $(this),
                 id = '#' + target.attr('id'),
                 tempLast = '<p class="tempor" id="temp_last" name="' + target.attr('id') + '">' + '</p>',
                 tempFirst = '<p class="tempor" id="temp_first" name="' + target.attr('id') + '">' + '</p>'
@@ -438,23 +523,25 @@ function _dragevent(ele) {
                     e.preventDefault()
                 })
                 .on('drop', function(e) {
-                   _temporDrop(e, $(this))
+                    _temporDrop(e, $(this))
                 })
         })
         .on('dragexit', function() {
 
         })
         .on('dragend', function(e) {
-            console.log('end1')
+            e.preventDefault()
             $('.tempor').remove()
         })
 }
+
 function _temporDrop(e, target) {
     let ele = e.originalEvent.dataTransfer.getData('text'),
-        tempId=target.attr('id')
-    $('#'+ele).insertAfter('#'+tempId)
+        tempId = target.attr('id')
+    $('#' + ele).insertAfter('#' + tempId)
     console.log('tempor')
 }
+
 function _foundListExist(_id) {
     let id = '#' + _id,
         num = $('#schedule').find(id).length
@@ -462,11 +549,91 @@ function _foundListExist(_id) {
 }
 
 function _showListNum() {
-    let num = $('#schedule').find('.list_con').length - 1
+    let num = $('#schedule').find('.list_con').length
     if (num == 0)
         $('#welcomeOption').text('清單')
     else
         $('#welcomeOption').text('清單(' + num + ')')
+}
+
+function CreateEditArea() {
+    var list = $('#schedule').find('.list_con')
+    edit_list = []
+    if (list.length > 0) {
+
+        $('.noPlace').css('display', 'none')
+        $('#schedule').find('.list_con').each(function(i) {
+            var id = $(this).attr('id'),
+                exist = $('#planDistance ').find('#edit' + id)
+            pageNow = id
+            if (exist.length <= 0) {
+                $('#planDistance ')
+                    .append('<div class="edit_area" contenteditable="true" ' +
+                        'id="edit' + $(this).attr('id') + '">' +
+                        '</div>')
+            }
+        })
+    } else {
+        $('.noPlace').css('display', 'block')
+    }
+
+}
+
+function _editPage(condition) {
+    $('.edit_area').css('display', 'none')
+    $('.list_con').css('background-color', '#FFE66F')
+    if (!condition) {
+        var condition = $('#schedule').find('.list_con').first().attr('id')
+    }
+    var name = $('#schedule').find('#' + condition).find('.placeName').text()
+    name = name.substring(0, name.length - 2)
+    $('.placeTitle').text(name)
+    $('#edit' + condition).css({ display: 'block' })
+    $('#' + condition).css({ backgroundColor: '#FFFFB9' })
+    pageNow = condition
+}
+
+function SaveArticle() {
+    var empty = false
+    if ($('#planDistance').find('.edit_area').length <= 0)
+        empty = true
+    $('#planDistance').find('.edit_area').each(function(i) {
+        if ($(this).text() == '' && $(this).find('img').length <= 0)
+            empty = true
+    })
+    if (empty == true) {
+        alert('有地點尚未編輯')
+    } else {
+        let title = window.prompt('標題'),
+            articles = [],
+            places = [],
+            data = {}
+        if (title == '') {
+            alert('請輸入標題')
+        } else {
+            $('#schedule').find('.list_con').each(function() {
+                let id = $(this).attr('id'),
+                    art = $('#planDistance').find('#edit' + id).html()
+                places.push(id)
+                articles.push(art)
+
+            })
+            data[0] = title
+            data[1] = new Date()
+            data[2] = localStorage.username
+            for (let i = 0; i < places.length; i++) {
+                let set = 2 + (i + 1) * 2;
+                data[set - 1] = places[i]
+                data[set] = articles[i]
+            }
+            AjaxPost('article/newMapArticle', data, function(res) {
+                alert(res)
+                location.href='#trip'
+            }, function(res) {
+                alert('儲存失敗')
+            })
+        }
+    }
 }
 
 function NearbySearch(key) {

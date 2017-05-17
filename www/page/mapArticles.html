@@ -29,7 +29,7 @@
                 <a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a> .......
             </div> -->
             <div id='infoGotop'>
-                <span  class="glyphicon glyphicon-circle-arrow-up"></span>
+                <span class="glyphicon glyphicon-circle-arrow-up"></span>
             </div>
             <div id='infoText'></div>
             <div id='info'>
@@ -43,149 +43,62 @@
             <p id='scheduleGoback' class="back">
                 <i class="glyphicon glyphicon-eject"></i>收起
             </p>
-            <div class="list_con" id='list_head'>
+            <div id='list_head'>
                 <h4 style="display: inline-block;">我的清單</h4>
-                <small>點擊看詳細資料</small>
+                <small class="sch_hint">點擊看詳細資料，<br>拖曳可排序</small><br>
                 <a id='plan'>開始編輯</a>
+                <div class="listArea"></div>
+                <button class="btn saveArticle">儲存</button>
             </div>
         </div>
+    </div>
+    <div id='planDistance'>
+        <div class="trip_bar">
+            <span id="prev" class="btn dayBtn glyphicon glyphicon-triangle-left"></span>
+            <span class="placeTitle">編輯地點</span>
+            <span id="next" class="btn dayBtn glyphicon glyphicon-triangle-right"></span>
+        </div>
+        <div>
+            <button class="btn uploadbtn">上傳圖片</button>
+            <div><input type="file" id='Insert' accept = "image/*"></div>
+        </div>
+        <div class="noPlace">清單中沒有地點</div>
     </div>
 </div>
 <div class="first_drop_ex">
     <div class="first_drop">拖曳加入地點</div>
 </div>
-<div class="timeline_ex">
-    <div class="time_line">
-    	<div>
-    		<div id="prevPlace"></div>
-    	</div>
-    	
-        <div>
-            <p class="time_title morning" draggable="true">早上</p>
-            <div class="time_con">
-            </div>
-        </div>
-        <div>
-            <p class="time_title noon">中午</p>
-            <div class="time_con">
-            </div>
-        </div>
-        <div>
-            <p class="time_title afternoon">下午</p>
-            <div class="time_con">
-            </div>
-        </div>
-        <div>
-            <p class="time_title night">晚上</p>
-            <div class="time_con">
-            </div>
-        </div>
-    </div>
-</div>
-<div class="select_ex">
-	<select>
-		<option value="DRIVING">汽車</option>
-		<option value="TRANSIT">大眾運輸</option>
-		<option value="WALKING">走路</option>
-		<option value="BICYCLING">單車</option>
-	</select>
-</div>
-<script type="text/javascript">
-leadToLogin()
-//var
-//map
-var map,
-    searchBox,
-    service,
-    DirectionsService,
-    query,
-    bounds,
-    mark_bounds,
-    radius = 500000,
-    focusMark,
-    marker = [],
-    list_marker = [],
-    center = {
-        lat: 23.5,
-        lng: 121.2
-    },
-    infowindows, //has 's'
-    //listCount = 0,
-    my_list = []
-    
-//dom
-var hint = document.getElementById('hint'),
-    input = document.getElementById('textSearch'),
-    dragCount = '',
-    temporCount = '',
-    dragId = 0;
 
-//process
-//planning_search
-//EnterSubmit('#searchSubmit');
-block();
-newMap();
-ResetInput('#textSearch');
-welcomeOption('清單', showShedule);
 
-//planning_distance
-
-function showShedule(e,target) {
-
-    //var target=$('#welcomeOption')
-    console.log('click'+target.attr('class'))
-    if(target.hasClass('showNow')){
-    	SetPage('close_schedule')
-    }else{
-    	SetPage('schedule')
-    }
-       	
-}
-$('#schedule_block').click(function() {
-    $(this).css('zIndex', '0').animate({
-        top: '55vh'
-    })
-})
-</script>
 <style type="text/css">
-#searchSubmit{
-    background-color:#46A3FF;
-    color: white;
-}
-.select_ex{
-	display: none;
-}
-.time_line {
+.uploadbtn{
+        margin: 2px;
+        background-color: lightblue;
+    }
+#Insert{
     display: none;
 }
-
-.dayBar {
-    padding: 3px;
-    background-color: #F0F0F0;
-    text-align: center;
-    font-size: 18px;
+.edit_area{
+    border: 1px solid lightgray;
+    width: 100%;
+    min-height: 80vh;
+}
+ .edit_area img{
+        max-width: 90%;
+        margin: 10px 0px 10px 0px;
+    }
+.trip_bar{
+    text-align: center
+}
+#searchSubmit {
+    background-color: #46A3FF;
+    color: white;
 }
 
-#nextDay {
-    float: right;
-    color: gray;
-}
-.distance_info :hover{
-	background-color: lightyellow;
-}
-.distance_detail {
-	display: none;
-}
-.dayBtn {
-	display: inline-block;
-	min-width: 20px;
-	min-height: 10px;
-    cursor: pointer;
-}
 
-#prevDay {
-    float: left;
-    color: gray;
+
+.distance_info:hover {
+    background-color: lightyellow;
 }
 
 #delList {
@@ -198,8 +111,8 @@ $('#schedule_block').click(function() {
 }
 
 .time_title {
-	border-top: 0.5px solid  #F0F0F0;
-	height: 40px;
+    border-top: 0.5px solid #F0F0F0;
+    height: 40px;
     margin: 0;
     padding: 3px;
 }
@@ -229,23 +142,20 @@ $('#schedule_block').click(function() {
 }
 
 .morning {
-	background: linear-gradient(to bottom,#00FFFF ,white );
+    background: linear-gradient(to bottom, #00FFFF, white);
 }
 
 .noon {
-	background: linear-gradient(to bottom,#FFFFAA ,white );
-   
+    background: linear-gradient(to bottom, #FFFFAA, white);
 }
 
 .afternoon {
-	background: linear-gradient(to bottom,#FFC78E ,#FFE4CA,white );
-   
+    background: linear-gradient(to bottom, #FFC78E, #FFE4CA, white);
 }
 
 .night {
-	background: linear-gradient(to bottom, #28004D,#5A5AAD ,white );
+    background: linear-gradient(to bottom, #28004D, #5A5AAD, white);
     color: white;
-   
 }
 
 ._container {
@@ -309,8 +219,8 @@ $('#schedule_block').click(function() {
 #planDistance {
     background: white;
     margin: 0;
-    padding: 0px 0px 200px 0px;
-    width: 25vw;
+    padding: 2% 2% 200px 2%;
+    width: 50vw;
     height: 100vh;
     position: absolute;
     right: 25vw;
@@ -368,11 +278,11 @@ $('#schedule_block').click(function() {
 }
 
 #goback {
-    /* display: none;	 */
+    /* display: none;    */
 }
 
 #allPlaces {
-	z-index: 1;
+    z-index: 1;
     padding: 0px 0px 100px 0px;
     height: 90vh;
     overflow-y: scroll;
@@ -415,12 +325,12 @@ $('#schedule_block').click(function() {
 }
 
 #allPlaces p:hover {
-    background-color:#F0F0F0;
+    background-color: #F0F0F0;
 }
 
 #add {
-	display: inline-block;
-	z-index: 2;
+    display: inline-block;
+    z-index: 2;
     font-size: 12px;
     cursor: pointer;
     color: blue;
@@ -428,16 +338,19 @@ $('#schedule_block').click(function() {
 }
 
 #plan {
+    margin: 0px 0px 5px 0px ;
     cursor: pointer;
     color: black;
     padding: 2px;
     border-radius: 5px;
     background-color: lightgray;
-    font-weight: bold;
+    font-weight: lighter;
     font-size: 18px;
     display: inline-block;
 }
-
+.saveArticle{
+    margin: 5px 0px 5px 0px ;
+}
 #info {
     padding-bottom: 100px;
 }
@@ -447,7 +360,7 @@ $('#schedule_block').click(function() {
 }
 
 #infoImg {
-    /* 	height: 350px; */
+    /*  height: 350px; */
     /* overflow-y: scroll; */
 }
 
@@ -466,10 +379,10 @@ $('#schedule_block').click(function() {
 
 .dragP {
     /* font-size: 18px;
-		cursor: pointer;
-		padding: 5px;
-		margin: 0px;
-		height:30px; */
+        cursor: pointer;
+        padding: 5px;
+        margin: 0px;
+        height:30px; */
 }
 
 .fa-bars {
@@ -495,146 +408,201 @@ $('#schedule_block').click(function() {
 
 @media (max-width:500px) {
     #map {
-    z-index: 0;
-    width: 100vw;
-    height: 43vh;
-    position: absolute;
-    top:40px;
-    left: 0;
-}
-
-#mapInfo {
-    font-size: 12px;
-    background: white;
-    margin: 0;
-    padding: 0px;
-    width: 100vw;
-    position: absolute;
-    height: 100%;
-    top: 43vh;
-    right: 0vw;
-    /* overflow-y: scroll; */
-    z-index: 1;
-}
-#option {
-	padding: 0px;
-    overflow-y: scroll;
-    height: 100vh;
-    display: none;
-}
-#optionTag{
-	margin: 0px;
-    padding: 0px;
-    /* border-top: 1px solid gray; */
-    border-bottom: 1px solid lightgray;
-}
-#allPlaces {
-    padding: 0px 0px 100px 0px;
-    height: 100vh;
-    overflow-y: scroll;
-}
-
-.placeIcon {
-	margin: 0px;
-    width: 13vw;
-    height: 13vw;
-    overflow: hidden;
-    display: inline-block;
-}
-
-.placeName {
-    padding-left: 1vw;
-    /* padding-top:1.7vw;  */
-    min-height: 13vw;
-    width: 78vw;
-    margin:0px 0px 0px 0.1vw;
-    display: inline-block;
-    overflow: hidden;
-}
-
-.placeIcon img {
-    width: 100%;
-}
-#info img {
-	margin-left: 2vw;
-    width: 90vw;
-}
-
-#planDistance {
-    background: white;
-    margin: 0;
-    padding: 0px 0px 200px 0px;
-    width: 50vw;
-    height: 100vh;
-    position: absolute;
-    top:40px;
-    left: 0;
-    overflow-y: scroll;
-    opacity:0;
-    z-index:-1;
-    font-size: 10px;
-}
-
-#schedule {
-    z-index: -1;
-    overflow-y: scroll;
-    width: 50vw;
-    height: 100vh;
-    position:absolute;
-    right: 0;  
-    top: 40px; 
-    margin: 0;
-    padding: 0px 0px 100px 0px ;
-    background-color: lightgoldenrodyellow;
-    opacity: 1;
-    font-size: 10px;
+        z-index: 0;
+        width: 100vw;
+        height: 43vh;
+        position: absolute;
+        top: 40px;
+        left: 0;
     }
-#schedule h4 {
-	font-size: 16px;
-}
-#schedule small{
-	font-size: 10px;
-}
-#schedule .placeIcon{
-		width: 6.5vw;
-    	height: 6.5vw;
-    	overflow: hidden;
-    	display: inline-block;
-	}
-#schedule .placeName{
-	font-size: 10px;
-	 padding-left: 1vw;
-    /* padding-top:1.7vw;  */
-    min-height: 6.5vw;
-    width: 37.5vw;
-    margin-left: 0.1vw;
-    display: inline-block;
-    overflow: hidden;
-	}
-#planDistance .placeIcon{
-		width: 6.5vw;
-    	height: 6.5vw;
-    	overflow: hidden;
-    	display: inline-block;
-	}
-#planDistance .placeName{
-	font-size: 10px;
-	 padding-left: 1vw;
-    /* padding-top:1.7vw;  */
-    min-height: 6.5vw;
-    width: 37.5vw;
-    margin-left: 0.1vw;
-    display: inline-block;
-    overflow: hidden;
-	}
-#planDistance h4{
-	font-size: 13px;
-}
-#delList{
-	font-size: 10px;
-}
-.dayplus{
-	font-size: 10px;
-}
+    #mapInfo {
+        font-size: 12px;
+        background: white;
+        margin: 0;
+        padding: 0px;
+        width: 100vw;
+        position: absolute;
+        height: 100%;
+        top: 43vh;
+        right: 0vw;
+        /* overflow-y: scroll; */
+        z-index: 1;
+    }
+    #option {
+        padding: 0px;
+        overflow-y: scroll;
+        height: 100vh;
+        display: none;
+    }
+    #optionTag {
+        margin: 0px;
+        padding: 0px;
+        /* border-top: 1px solid gray; */
+        border-bottom: 1px solid lightgray;
+    }
+    #allPlaces {
+        padding: 0px 0px 100px 0px;
+        height: 100vh;
+        overflow-y: scroll;
+    }
+    .placeIcon {
+        margin: 0px;
+        width: 13vw;
+        height: 13vw;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .placeName {
+        padding-left: 1vw;
+        /* padding-top:1.7vw;  */
+        min-height: 13vw;
+        width: 78vw;
+        margin: 0px 0px 0px 0.1vw;
+        display: inline-block;
+        overflow: hidden;
+    }
+    .placeIcon img {
+        width: 100%;
+    }
+    #info img {
+        margin-left: 2vw;
+        width: 90vw;
+    }
+    #planDistance {
+        background: white;
+        margin: 0;
+        padding: 0px 0px 200px 0px;
+        width: 50vw;
+        height: 100vh;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        overflow-y: scroll;
+        opacity: 0;
+        z-index: -1;
+        font-size: 10px;
+    }
+    #schedule {
+        z-index: -1;
+        overflow-y: scroll;
+        width: 50vw;
+        height: 100vh;
+        position: absolute;
+        right: 0;
+        top: 40px;
+        margin: 0;
+        padding: 0px 0px 100px 0px;
+        background-color: lightgoldenrodyellow;
+        opacity: 1;
+        font-size: 10px;
+    }
+    #schedule h4 {
+        font-size: 16px;
+    }
+    #schedule small {
+        font-size: 10px;
+    }
+    #schedule .placeIcon {
+        width: 6.5vw;
+        height: 6.5vw;
+        overflow: hidden;
+        display: inline-block;
+    }
+    #schedule .placeName {
+        font-size: 10px;
+        padding-left: 1vw;
+        /* padding-top:1.7vw;  */
+        min-height: 6.5vw;
+        width: 37.5vw;
+        margin-left: 0.1vw;
+        display: inline-block;
+        overflow: hidden;
+    }
+    #planDistance .placeIcon {
+        width: 6.5vw;
+        height: 6.5vw;
+        overflow: hidden;
+        display: inline-block;
+    }
+    #planDistance .placeName {
+        font-size: 10px;
+        padding-left: 1vw;
+        /* padding-top:1.7vw;  */
+        min-height: 6.5vw;
+        width: 37.5vw;
+        margin-left: 0.1vw;
+        display: inline-block;
+        overflow: hidden;
+    }
+    #planDistance h4 {
+        font-size: 13px;
+    }
+    #delList {
+        font-size: 10px;
+    }
+    .dayplus {
+        font-size: 10px;
+    }
 }
 </style>
+
+<script type="text/javascript">
+leadToLogin()
+InsertImg('#Insert', Insert)
+    //var
+    //map
+var map,
+    searchBox,
+    service,
+    DirectionsService,
+    query,
+    bounds,
+    mark_bounds,
+    radius = 500000,
+    focusMark,
+    marker = [],
+    list_marker = [],
+    center = {
+        lat: 23.5,
+        lng: 121.2
+    },
+    infowindows, //has 's'
+    //listCount = 0,
+    my_list = [],
+    edit_list=[],
+    pageNow=''
+
+//dom
+var hint = document.getElementById('hint'),
+    input = document.getElementById('textSearch'),
+    dragCount = '',
+    temporCount = '',
+    dragId = 0;
+
+//process
+//planning_search
+//EnterSubmit('#searchSubmit');
+block();
+newMap();
+ResetInput('#textSearch');
+welcomeOption('清單', showShedule);
+
+//planning_distance
+
+function showShedule(e, target) {
+
+    //var target=$('#welcomeOption')
+    console.log('click' + target.attr('class'))
+    if (target.hasClass('showNow')) {
+        SetPage('close_schedule')
+    } else {
+        SetPage('schedule')
+    }
+
+}
+$('#schedule_block').click(function() {
+    $(this).css('zIndex', '0').animate({
+        top: '55vh'
+    })
+})
+</script>

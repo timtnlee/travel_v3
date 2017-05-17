@@ -30,12 +30,14 @@ a{
 		display: none;
 	}
 ._header{
-	background-color:rgba(0,0,0,0.9);
+	background-color:#4F4F4F; 
+	/* background-color:rgba(0,0,0,0.9); */
 	text-align: center;
 	font-size: 15px;
 	margin: 0px;
 }
 ._header a{
+	font-size: 18px;
 	display: inline-block;
 	margin: 10px;
 	text-decoration: none;
@@ -43,10 +45,10 @@ a{
 	margin-left: 20px;
 }
 ._header a:hover{
-	color: #87CEEB;
+	color: #F0F0F0;
 }
 ._header a i{
-	color:lightblue;
+	color:#00CACA;
 	margin-right: 10px
 }
 ._loginOption{
@@ -67,8 +69,10 @@ a{
 		margin: 0px;
 		text-align: center;
 		font-size:20px;
-		background: linear-gradient(to top,#808080 ,DimGrey );
-		color: white;
+		background: linear-gradient(to top,#F0F0F0 ,white );
+		color: gray;
+		/* background: linear-gradient(to top,#808080 ,DimGrey );
+		color: white; */
 	}
 .articleBar{
 		background-color:lightyellow;
@@ -110,7 +114,7 @@ a{
 	padding:0px;
 	margin: 1px 5px 0px 5px;
 	float: right;
-	color:white;
+	color:gray;
 	display: none;
 }
 ._menu{
@@ -126,53 +130,7 @@ a{
 		line-height: 25px;　
 	}
 /* @media screen and (orientation:portrait) {
-	.pageContainer{
-		padding:2px 0px 2px 0px;
-	}
 
-   ._response-header{
-		text-align: left;
-	}
-	._menu{
-		top: 0;
-		z-index: 20;
-		width:100%;
-		position: fixed;
-		left: -100%;
-		height: 100%;
-	}
-	._loginOption{
-
-	}
-	#menuBar{
-		float: left;
-		margin-top: -5px;
-		cursor: pointer;
-		font-size: 14px;
-		display: inline-block;
-		text-decoration: none;
-		color: white;
-	}
-	._header a{
-		color: white;
-		display: block;
-		margin: 20px 5px 10px 20px;
-	}
-	._menuArea{
-		height: 100%;
-		padding: 2px;
-		width: 200px;
-		background-color:rgba(60,60,60,0.9);
-	}
-	.pageMiddle{
-		width: 98vw;
-		margin: 0px 1vw 0px 1vw;
-	}
-	.singleMiddle{
-		margin: 0px 1vw 0px 1vw;
-		background-color:black;
-		padding: 20px 20px 40px 20px;
-	}
 } */
 @media (max-width:500px){
 	.article_content{
@@ -181,23 +139,13 @@ a{
 	[name='title']{
 		font-size: 14px;
 	}
-	.welcome{
-		height:40px;
-		padding: 5px;
+	.welcome{		
 		font-size:18px;
-		font-weight: lighter;
-		background: linear-gradient(to top,#808080 ,DimGrey );
-		color: white;
 	}
 	#welcomeOption{
-	font-weight: lighter;
 	font-size: 16px;
-	cursor: pointer;
 	padding:1px;
 	margin: 1px 1px 0px 1px;
-	float: right;
-	color:white;
-	display: none;
 }
 	.pageMiddle{
 		width: 98vw;
@@ -234,10 +182,10 @@ a{
 		font-size: 18px;
 		display: inline-block;
 		text-decoration: none;
-		color: white;
+		color: gray;
 	}
 	._header a{
-		color:white;
+		font-size: 15px;
 		display: block;
 		margin: 20px 5px 10px 20px;
 	}
@@ -245,6 +193,7 @@ a{
 		height: 100%;
 		padding: 2px;
 		width: 200px;
-		background-color:rgba(0,0,0,0.9);
+		background-color:rgba(79,79,79,0.88); 
+		/* background-color:rgba(0,0,0,0.9); */
 	}
 }

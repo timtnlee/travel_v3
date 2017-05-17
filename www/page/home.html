@@ -47,21 +47,21 @@
 }
 	.loginin_btn{
 		margin-top: 20px;
-		background-color: gray;
+		background-color: rgba(74, 74, 74, 0.8);
 		opacity: 0.8;
-		letter-spacing : 2px;
+		/* letter-spacing : 2px; */
 		color: white;
 	}
 	.loginin_btn:hover{
-		background-color: lightgray;
+		background-color: rgba(155,155, 155, 0.8);;
 		color: white;
 	}
 	.intro_gotop{
 		display: none;
 		cursor: pointer;
-		font-size: 30px;
+		font-size: 40px;
 		position: fixed;
-		right: 30px;
+		right: 50px;
 		bottom: 30px;
 		z-index: 1;
 	}
@@ -120,7 +120,6 @@ welcomeTitle()
 introScroll()
 function welcomeTitle(){
 	$('.welcomeUser').text(localStorage.username);
-	console.log('localStorage:'+localStorage.logined)
 	if(localStorage.logined!='yes'){
 		$('.loginin_btn').on('click',function(){
 			location.href='#login'

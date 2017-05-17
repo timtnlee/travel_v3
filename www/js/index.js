@@ -102,7 +102,6 @@ function _translate(check){
     
     $.map(engAry,function(match,i){
         if(match==check){
-            console.log(chiAry[i])
             reval=chiAry[i]
         }
     })

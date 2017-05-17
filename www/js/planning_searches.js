@@ -168,7 +168,7 @@ function _createListMarker(place, infowindow) {
         zIndex: 2,
         icon: 'img/green-dot.png'
     })
-    list_marker.push(mark)
+    list_marker.push({id:place.place_id,mark:mark})
     mark.addListener('click', function() {
         _markInfo(place) //...
     })
@@ -179,16 +179,19 @@ function _createListMarker(place, infowindow) {
 function _hideListMarker() {
 	console.log(list_marker)
 	for (let i = 0; i < list_marker.length; i++) {
-        list_marker[i].setMap(null)
+        list_marker[i].mark.setMap(null)
     }
 }
 function _showListMarker() {
 	for (let i = 0; i < list_marker.length; i++) {
-        list_marker[i].setMap(map)
+        list_marker[i].mark.setMap(map)
     }
 }
-function _delListMarker(){
-
+function _delListMarker(id) {
+    $.map(list_marker,function(marker){
+        if(marker.id==id)
+             marker.mark.setMap(null)
+    })   
 }
 function _showMarker() {
     for (let i = 0; i < marker.length; i++) {
@@ -241,15 +244,19 @@ function _markInfoPanel(place_id, place_name, src) {
                 open = _openingHour(result.opening_hours)
             else
                 open[0] = open[1] = '';
-            (result.rating) ? rating = '評分 : ' + result.rating: rating = '';
-            (result.formatted_phone_number) ? phone = result.formatted_phone_number: phone = '';
-            (result.vicinity) ? vicinity = '地址 : ' + result.vicinity: vicinity = '';
-            (result.website) ? website = '<a href="' + result.website + '">網頁</a>': website = '';
-            $('#infoText').prepend('<p><strong>' +
-                rating + '</strong><br>' +
-                vicinity + '<br>' +
-                phone + '<br>' +
-                website + '<br>' +
+            (result.rating) ?
+                rating = '<strong>評分 : ' + result.rating+'</strong><br>': rating = '';
+            (result.formatted_phone_number) ? 
+                phone = '<span>電話 : ' +result.formatted_phone_number+'</span><br>': phone = '';
+            (result.vicinity) ? 
+                vicinity = '<span>地址 : ' + result.vicinity +'</span><br>': vicinity = '';
+            (result.website) ? 
+                website = '<a href="' + result.website + '">網頁</a><br>': website = '';
+            $('#infoText').prepend('<p>' +
+                rating + 
+                vicinity + 
+                phone + 
+                website +
                 open[0] +
                 open[1] +
                 '</p>')
@@ -402,6 +409,7 @@ function AddToList(place, src,target) {
         }).find('#delList').on('click', function(e) { //delete
             e.preventDefault()
             $('#schedule').find('#' + placeId).remove()
+            _delListMarker(placeId)
             _showListNum()
         })
         _dragstart('#' + placeId)
