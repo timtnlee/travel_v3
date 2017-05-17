@@ -119,8 +119,8 @@ function Window() {
 }
 
 function setIp() {
-	ip = 'http://127.0.0.1:3000/';
-    //ip = 'http://140.119.19.15:3000/';
+	//ip = 'http://127.0.0.1:3000/';
+    ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
