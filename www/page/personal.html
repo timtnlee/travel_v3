@@ -10,6 +10,7 @@
             <div class="col-sm-6 info_contain">
                 <h4 id='personal_name'></h4>
                 <h4 id='personal_article'>文章:</h4>
+                <h4 id='personal_mapArticle'>地圖故事:</h4>
                 <h4 id='personal_schedule'>行程:</h4>
             </div>
         </div>
@@ -37,6 +38,22 @@ if (localStorage.logined == 'yes') {
                                 _articleObj.author = art.Username,
                                 _articleObj.date = art.Date,
                                 _articleObj.id = art._id
+                            location.href = $(this).attr('href')
+                        })
+                })
+            }
+            if(res.mapArticles.length <= 0){
+                $('#personal_mapArticle').text('文章 : 尚無文章')
+            }else{
+                $.map(res.mapArticles, function(art) {
+                    $('#personal_mapArticle')
+                        .append('<p href="#singleTrip" class="user_info">' + art.Title + '</p>')
+                        .find('p').last()
+                        .click(function() {
+                            _tripObj.title = art.Title,
+                            _tripObj.author = art.Username,
+                            _tripObj.date = art.Date,
+                            _tripObj.id = art._id
                             location.href = $(this).attr('href')
                         })
                 })

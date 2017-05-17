@@ -8,6 +8,7 @@
                 <div class="col-sm-6 single_userInfo">
                     <h4 id='singleuser_username'></h4>
                     <h4 id='singleuser_article'></h4>
+                    <h4 id='singleuser_mapArticle'></h4>
                     <h4 id='singleuser_schedule'></h4>
                 </div>
             </div>
@@ -61,6 +62,23 @@ AjaxPost('user/personal', {
                 })
         })
     }
+    $('#singleuser_mapArticle').text('地圖故事: ')
+    if(res.mapArticles.length <= 0){
+                $('#singleuser_mapArticle').append('尚無文章')
+            }else{
+                $.map(res.mapArticles, function(art) {
+                    $('#singleuser_mapArticle')
+                        .append('<p href="#singleTrip" class="user_info">' + art.Title + '</p>')
+                        .find('p').last()
+                        .click(function() {
+                            _tripObj.title = art.Title,
+                            _tripObj.author = art.Username,
+                            _tripObj.date = art.Date,
+                            _tripObj.id = art._id
+                            location.href = $(this).attr('href')
+                        })
+                })
+            }
 
     $('#singleuser_schedule').text('行程: ')
     if (res.schedules.length <= 0) {

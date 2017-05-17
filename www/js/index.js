@@ -119,8 +119,8 @@ function Window() {
 }
 
 function setIp() {
-	//ip = 'http://127.0.0.1:3000/';
-    ip = 'http://140.119.19.15:3000/';
+	ip = 'http://127.0.0.1:3000/';
+    //ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
@@ -166,20 +166,20 @@ function welcomeOption(text, func) { //can only be used in reload pages
     })
 }
 
-function reNewPage(href) {
+// function reNewPage(href) {
 
-    id = '#page_' + href;
-    $('._content').find('._pages').css('display', 'none');
-    $('._reloadPages').remove();
-    $(id).remove();
-    $("._content").prepend('<div id="page_' + href + '" class="_pages"></div>');
-    $.ajax({
-        url: "page/" + href + ".html",
-        success: function(result) {
-            $(id).html(result);
-        }
-    });
-}
+//     id = '#page_' + href;
+//     $('._content').find('._pages').css('display', 'none');
+//     $('._reloadPages').remove();
+//     $(id).remove();
+//     $("._content").prepend('<div id="page_' + href + '" class="_pages"></div>');
+//     $.ajax({
+//         url: "page/" + href + ".html",
+//         success: function(result) {
+//             $(id).html(result);
+//         }
+//     });
+// }
 
 function InsertImg(ele, insert) {
     $(ele).on('change', function() {
