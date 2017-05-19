@@ -181,7 +181,7 @@ function CreateMarker(result,i,resolve,reject){
                 		scaledSize: { width: 40, height: 32 }
     				}
   					})
-				infowindow.setContent(i+'.'+result.name)
+				infowindow.setContent((i+1)+'.'+result.name)
 				infowindow.open(map,mark);
 				marker[i]={
 					mark:mark,

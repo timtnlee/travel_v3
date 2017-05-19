@@ -610,7 +610,7 @@ function SaveArticle() {
             data = {}
         if (title == '') {
             alert('請輸入標題')
-        } else {
+        } else if(title){
             $('#schedule').find('.list_con').each(function() {
                 let id = $(this).attr('id'),
                     art = $('#planDistance').find('#edit' + id).html()

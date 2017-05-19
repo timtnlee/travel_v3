@@ -68,7 +68,7 @@ if (localStorage.logined == 'yes') {
                     $('#personal_schedule').append(
                             '<p href="#schedule" class="user_info">' + title + '</p>')
                         .find('p').last().on('click', function() {
-                            _display_user = localStorage.username
+                            _display_name = localStorage.username
                             _display_title = title
                             _display_place = schedule
                             location.href = $(this).attr('href')

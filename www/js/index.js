@@ -132,11 +132,16 @@ function Message(input,btn,url,id,page){
     
     
     btn.click(function(e){
+        leadToLogin()
         e.preventDefault()
-        var data=input.val()
-        AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
-            reNewPage(page)
-        })
+        if(localStorage.logined=='yes'){
+            var data=input.val()
+            AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
+                reNewPage(page)
+            })
+        }
+        
+        
     })
 }
 
@@ -172,6 +177,7 @@ function LoginOption() {
 }
 
 function welcomeOption(text, func) { //can only be used in reload pages
+    console.log('welcome')
     $('#welcomeOption').text(text).removeClass('showNow')
     $('#welcomeOption').unbind().click(function(e) {
         func(e, $(this))

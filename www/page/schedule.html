@@ -1,9 +1,20 @@
-<div class="row">
-    <div class="col-sm-6">
-        <div id='map1'></div>
-    </div>
-    <div class="col-sm-6">
+<div class='pageContainer'>
+    <div id='map1'></div>
+    
+    
+        <div class="mapInfo">
+            <p id='goback' class="back">
+                收起
+            </p>
+            <div id='optionTag'></div>
+            <div id='infoText'></div>
+            <div id='info'></div>
+        </div>
+   
+    
+        <div class="tripInfo">
         <div class='dayBar'>
+            
             <h4 id='_schedule_title'></h4>
             <p id='maxDay'></p>
             <span id='prevDay' class="dayBtn glyphicon glyphicon-triangle-left"></span>
@@ -11,12 +22,73 @@
             <span id='nextDay' class="dayBtn glyphicon glyphicon-triangle-right"></span>
         </div>
         <div id='panel'></div>
-    </div>
+        </div>
+   
 </div>
 <style type="text/css">
+._container{
+    overflow-y: hidden;
+}
+#optionTag{
+    margin-bottom: 50px;
+    border-bottom: 1px solid lightgray;
+}
 #map1 {
-    width: 100%;
+    z-index: 0;
+    width: 75vw;
     height: 100vh;
+    position: absolute;
+    left: 0;
+}
+
+.tripInfo {
+    background: white;
+    margin: 0;
+    padding: 0px;
+    width: 25vw;
+    height: 100vh;
+    position: absolute;
+    right: 0vw;
+    overflow-y: scroll; 
+    overflow-x: hidden;
+    z-index: 1;
+}
+#info img{
+    width:100%;
+}
+.mapInfo {
+    background: white;
+    margin: 0;
+    padding: 0px 0px 200px 0px;
+    width: 25vw;
+    height: 100vh;
+    position: absolute;
+    right: 25vw;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    opacity: 0;
+    z-index: -1;
+}
+
+.placeIcon {
+    width: 5vw;
+    height: 5vw;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.placeName {
+    padding-left: 0.1vw;
+    /* padding-top:1.7vw;  */
+    min-height: 5vw;
+    width: 16vw;
+    margin-left: 0.1vw;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.placeIcon img {
+    height: 100%;
 }
 .dayBar{
     font-size: 16px;
@@ -32,7 +104,13 @@
     margin: 0;
     padding: 3px;
 }
-
+.time_place{
+    cursor: pointer;
+    border-bottom: 1px solid lightgray;
+}
+.time_place:hover{
+    color:gray;
+}
 .morning {
     background: linear-gradient(to bottom, #00FFFF, white);
 }
@@ -49,6 +127,72 @@
     background: linear-gradient(to bottom, #28004D, #5A5AAD, white);
     color: white;
 }
+.distance_info{
+    cursor: pointer;
+}
+.distance_info:hover{
+    color: lightgray;
+}
+.distance_detail{
+    cursor: pointer;
+}
+.back{
+    margin: 0px;
+    cursor: pointer;
+    color: slategray;
+    padding: 4px;
+    /* border-radius: 5px; */
+    background-color: lightblue;
+    font-size: 16px;
+}
+@media (max-width: 500px) {
+    #welcomeOption{
+        display: inline-block;
+    }
+    #map1 {
+    width:100vw;
+    height: 100vh;
+   
+}
+
+.tripInfo {
+    width: 100vw;
+    height: 100vh;
+    padding-bottom: 200px;
+}
+.mapInfo {
+    padding: 0px 0px 200px 0px;
+    width: 100vw;
+    height: 100vh;
+    right: 0;
+    overflow-y: scroll;
+    opacity: 0;
+    z-index: -1;
+}
+
+.placeIcon {
+    margin: 0px;
+    width: 13vw;
+    height: 13vw;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.placeName {
+    padding-left: 1vw;
+    /* padding-top:1.7vw;  */
+    min-height: 13vw;
+    width: 78vw;
+    margin:0px 0px 0px 0.1vw;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.placeIcon img {
+    width: 100%;
+}
+
+}
 </style>
 <script type="text/javascript">
 var map1,
@@ -60,6 +204,17 @@ var map1,
     promises=[],
     pagenow=0
 newMap()
+setBtn()
+welcomeOption('地圖',welcomeClick )
+function welcomeClick(e, target){
+    console.log('welcomeOption')
+    target.toggleClass('showNow')
+    if(target.hasClass('showNow')){
+        SetPage('map')
+    }else{
+        SetPage('close_map')
+    }
+}
 //DisplaySchedule();
 function newMap() {
     console.log('newMap,searchBox');
@@ -74,7 +229,6 @@ function newMap() {
             //scrollwheel: false
     })
     service = new google.maps.places.PlacesService(map1)
-    console.log(_display_place)
     $('#panel').html(_display_place)
     let panel = $('#panel'),
         day = panel.find('.time_line').length
@@ -86,17 +240,17 @@ function newMap() {
             first = $(this).attr('placeId'),
             last = panel.find('.time_place').eq(i + 1).attr('placeId')
         del.remove()
-        $(this).find('.select').empty().text(mode)
+        _resetCss($(this),mode)
         if (mode)
             modes.push(mode)
         else
             modes.push('none')     
         places.push(first)
-
         promises.push(placeDetail(first)) 
     })
     Promise.all(promises).then(()=>{
-        console.log(places)
+        //console.log(places)
+        PanelDetail()
         for(let i=0;i<places.length;i++) {
             if(modes[i]!='none'){
                  let first=_findDetail(places[i]),
@@ -106,6 +260,153 @@ function newMap() {
         }
     })
     DayBtn(day)
+}
+function setBtn(){
+    $('#goback').click(function(e){
+        e.preventDefault()
+        SetPage('close_info')
+    })
+}
+function PanelDetail(){
+    $('#panel').find('.time_place').each(function(i){
+        $(this).on('click',function(e){
+            _markInfoPanel(places[i],  $(this).find('img').attr('src'))
+            SetPage('info')
+        })
+    })
+}
+function _markInfoPanel(place_id, src) {
+    let vicinity,
+        website,
+        phone,
+        rating,
+        open = []
+    service.getDetails({ placeId: place_id }, function(result, status) {
+        if (status == 'OK') {
+            $('#info').empty()
+            if (result.photos) {
+                for (let i = 1; i < result.photos.length; i++) {
+                    $('#info').append('<img src="' + result.photos[i].getUrl({ 'maxWidth': 600, 'maxHeight': 600 }) + '" >')
+                }
+            }
+            if (result.opening_hours)
+                open = _openingHour(result.opening_hours)
+            else
+                open[0] = open[1] = '';
+            (result.rating) ?
+                rating = '<strong>評分 : ' + result.rating+'</strong><br>': rating = '';
+            (result.formatted_phone_number) ? 
+                phone = '<span>電話 : ' +result.formatted_phone_number+'</span><br>': phone = '';
+            (result.vicinity) ? 
+                vicinity = '<span>地址 : ' + result.vicinity +'</span><br>': vicinity = '';
+            (result.website) ? 
+                website = '<a href="' + result.website + '">網頁</a><br>': website = '';
+            $('#infoText').empty().prepend('<p>' +
+                rating + 
+                vicinity + 
+                phone + 
+                website +
+                open[0] +
+                open[1] +
+                '</p>')
+            $('#infoText').find('a').click(function(e) {
+                e.preventDefault()
+                let href = $(this).attr('href')
+                window.open(href)
+            })
+            $('#optionTag').html('<span class="placeIcon"><img src="' + src + '"></span>' +
+                '<span class="placeName">' + result.name +'</span>');
+            (result.geometry.viewport)?map1.fitBounds(result.geometry.viewport):map1.fitBounds(result.geometry.location);
+        }
+    })
+
+}
+function SetPage(page){
+    switch(page){
+        case 'info':
+        $('.mapInfo').css('zIndex', '2').animate({ opacity: '1' })
+            if(Window()>500)
+                _resizeMap(50)
+        break
+        case 'close_info':
+        $('.mapInfo').css('zIndex', '-1').animate({ opacity: '0' })
+            if(Window()>500)
+                _resizeMap(75)
+        break
+        case 'map':
+        if(Window()<=500)
+            $('#map1').css('zIndex', '5')
+        break
+        case 'close_map':
+        if(Window()<=500)
+            $('#map1').css('zIndex', '0')
+        break
+    }
+}
+function _resizeMap(num) {
+    let wid=num+'vw'
+    $('#map').css({width:wid})
+    let lastBounds=map1.getBounds()
+    google.maps.event.trigger(map1, "resize")
+    map1.fitBounds(lastBounds)
+    console.log('resize')
+}
+function _openingHour(opening_hours) {
+    let openInfo = [],
+        dayChar = function(day) {
+            let days = [0, 1, 2, 3, 4, 5, 6],
+                char = ['日', '一', '二', '三', '四', '五', '六']
+            for (let i = 0; i < days.length; i++) {
+                if (day == days[i])
+                    return char[i]
+            }
+        };
+    (opening_hours.open_now) ? openInfo[0] = '營業中': openInfo[0] = '休息中';
+    openInfo[1] = ''
+    let exday
+    for (let i = 0; i < opening_hours.periods.length; i++) {
+        let day = opening_hours.periods[i].open.day,
+            time = opening_hours.periods[i].open.time,
+            close;
+        (opening_hours.periods[i].close) ? close = opening_hours.periods[i].close.time: close = '';
+        time = time.substring(0, 2) + ":" + time.substring(2, 4)
+        close = close.substring(0, 2) + ":" + close.substring(2, 4)
+        if (day == exday) {
+            openInfo[1] += ('/' + time + '~' + close)
+        } else
+            openInfo[1] += ('<br>' + dayChar(day) + ':' + time + '~' + close)
+
+        exday = day
+    }
+
+    return openInfo;
+}
+function _resetCss(target,mode){
+    target.find('.select').empty().text(_modeToChi(mode))
+    var detail=target.find('.distance_detail'),
+        info=target.find('.distance_info')
+    info.on('click',function(){
+        detail.toggleClass('show')
+        if(detail.hasClass('show')){
+            detail.css('display','block')
+        } else{
+            detail.css('display','none')
+        }
+    })
+    detail.css('display','none').on('click',function(){
+        info.click()
+    })
+    
+}
+function _modeToChi(mode){
+    eng=['DRIVING','WALKING','TRANSIT'],
+    chi=['汽車','走路','大眾運輸'],
+    tran=''
+    $.map(eng,function(en,i){
+        if(en==mode)
+            tran=chi[i]
+    })
+    return tran
 }
 function _panel(panel,day){
     $('#_schedule_title').text(_display_name+'的行程 :'+_display_title)
@@ -144,13 +445,28 @@ function placeDetail(placeId) {
         service.getDetails({placeId: placeId},function(result,status) {
             if(status=='OK'){
                 console.log('detail')
+                CreateMarker(result)
                 details.push({id:placeId,place:result})
                 resolve()
             }
         })
     })	
 }
-
+function CreateMarker(result){
+    console.log('CreateMarker')
+    var mark=new google.maps.Marker({
+        map:map1,
+        position:result.geometry.location,
+        icon:{
+                url: 'img/blue-dot.png',
+                scaledSize: { width: 40, height: 32 }
+            }
+    }),
+        infowindow=new google.maps.InfoWindow({
+            content:result.name
+        })
+    infowindow.open(map1,mark)
+}
 function DisplayRoutes(first, last, mode) {
     console.log('DisplayRoutes')
     let directions = new google.maps.DirectionsService(),

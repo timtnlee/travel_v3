@@ -194,9 +194,9 @@ function _createList(paramObj) {
         target = paramObj.insertTarget,
         insert = '<div class="time_place" id="' + newId + '" draggable="true" ' +
         'placeId="' + placeId + '" front="" end="">' +
-        '<p class="distance_name">' + content + '</p>' +
-        '<p class="distance_info"></p>' +
-        '<p class="distance_detail"></p></div>'
+        '<div class="distance_name">' + content + '</div>' +
+        '<div class="distance_info"></div>' +
+        '<div class="distance_detail"></div></div>'
 
     
     if (step == 'before') {
@@ -554,6 +554,7 @@ function SaveSchedule() {
 				{name:localStorage.username,title:title,schedule:$('#output').html()},
 				function(res){
 				alert(res)
+                location.href='#personal'
 			})
 		} else {
 			alert('未規劃地點')
