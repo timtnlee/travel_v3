@@ -28,8 +28,8 @@ function setButton() {
         //
     $('#option_bar').find('a').on('click', function(e) {
             e.preventDefault()
-            let key = $(this).attr('key')
-            NearbySearch(key)
+            let key = $(this).attr('key')            
+            NearbySearch(key,$('[name="radius"]:checked').val())          
         })
         //
     $('#infoGotop').click(function() {
@@ -216,7 +216,7 @@ function _markInfo(place) {
     _initMarkInfo()
     let location = place.geometry.location,
         src = 'img/red-dot.png'
-
+    placeNow=place.geometry.location
     map.panTo(location)
     map.setZoom(15)
 
@@ -227,16 +227,18 @@ function _markInfo(place) {
     _markInfoPanel(place.place_id, place.name, src)
 }
 
-function _markInfoPanel(place_id, place_name, src) {
+function _markInfoPanel(place_id) {
     let vicinity,
         website,
         phone,
         rating,
-        open = []
+        open = [],
+        src= 'img/red-dot.png'
     service.getDetails({ placeId: place_id }, function(result, status) {
         if (status == 'OK') {
             if (result.photos) {
                 for (let i = 1; i < result.photos.length; i++) {
+                    src = result.photos[0].getUrl({ 'maxWidth': 100, 'maxHeight': 100 })
                     $('#info').append('<img src="' + result.photos[i].getUrl({ 'maxWidth': 600, 'maxHeight': 600 }) + '" >')
                 }
             }
@@ -271,7 +273,7 @@ function _markInfoPanel(place_id, place_name, src) {
                 add = '<a id="add">已加入</a>'
             }
             $('#optionTag').html('<span class="placeIcon"><img src="' + src + '"></span>' +
-                '<span class="placeName">' + place_name + add + '</span>')
+                '<span class="placeName">' + result.name + add + '</span>')
             if (num == 0)
                 AddToList(result, src,$('#optionTag'))
         }
@@ -443,13 +445,14 @@ function _showListNum() {
         $('#welcomeOption').text('清單(' + num + ')')
 }
 
-function NearbySearch(key) {
+function NearbySearch(key,rate) {
     //radius=1000;
     //console.log('NearbySearch');
+    console.log(rate)
     let request = {
         location: center,
-        radius: '1000',
-        type: key
+        radius: rate,
+        keyword: key
     }
     service.nearbySearch(request, function(places, status) {
         if (status == 'OK') {
@@ -457,3 +460,15 @@ function NearbySearch(key) {
         }
     })
 }
+// function RadarSearch(key){
+//     let request={
+//         location:placeNow,
+//         radius:'200',
+//         keyword:key
+//     }
+//     service.radarSearch(request,function(places, status) {
+//         if (status == 'OK') {
+//             SearchConsole(places)
+//         }
+//     })
+// }

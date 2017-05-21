@@ -413,6 +413,9 @@ function SetPage(step) {
             $('#welcomeOption').attr('class', '')
             $('#schedule').css('zIndex', '-1')
             _editMode('list')
+            $('#planDistance').css('zIndex', '-1').animate({ opacity: '0' })
+            if (Window() > 500)
+                _resizeMap(75)
             break
 
         case 'plan':

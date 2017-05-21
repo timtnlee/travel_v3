@@ -1,10 +1,9 @@
 <div class="pageContainer">
-		<div class="row">
-			<div class="col-sm-6">
-				<div id='map'>123</div>
-			</div>
+			
+			<div id='map'>123</div>
+			
 		
-			<div class="col-sm-6">
+			<div id="mapInfo">
 				<div class="start_page">					
 					<p id='trip_author'></p>
 					<!-- <p id='trip_date'></p> -->
@@ -13,16 +12,15 @@
 				</div>						
 				<div class="trip_page">
 					<div class="trip_bar">
-						<span id="prev" class="btn dayBtn glyphicon glyphicon-triangle-left"></span>
-						<span class="placeTitle">地點</span>
-						<span id="next" class="btn dayBtn glyphicon glyphicon-triangle-right"></span>
+						<span class="placeTitle">地點</span><br>
+						<span id="prev" class="btn btn-link">前一個</span>
+						<span id="next" class="btn btn-link">下一個</span>
 					</div>
 					<div class="trip_content article_content">
 						
 					</div>
 				</div>
 			</div>
-		</div>
 		<div class="message">
 			
 			<div class="row">
@@ -48,9 +46,24 @@
     50% {margin-left: 5px;}
     100%{margin-left: 0px;}
 }
-	#map{
-		width:100%;
-		height: 90vh;
+	#map {
+    z-index: 1;
+    width: 50vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+	}
+
+	#mapInfo {
+    margin: 0;
+    padding: 0px;
+    width: 50vw;
+    height: 100vh;
+    position: absolute;
+   	left: 51vw;
+   	background-color: white;
+    /* overflow-y: scroll; */
+    z-index: 1;
 	}
 	#trip_author{
 		margin-top: 20vh;
@@ -86,8 +99,12 @@
 		width: 95%;
 	}
 	.message{
+	position: absolute;
+	top: 100vh;
+	width: 100%;
 	border-top:1px solid lightgray;
-	margin-top:100px; 
+	margin-top:150px; 
+	padding-bottom: 100px;
 }
 	.message_area p{
 	border-bottom: 1px solid lightgray;
@@ -99,6 +116,28 @@
 	float: right;
 	color: lightgray;
 }
+
+@media (max-width:500px) {
+     #map {
+    width:100vw;
+    height: 100vh;
+   
+}
+#welcomeOption{
+	display: inline-block;
+}
+#mapInfo {
+	left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-bottom: 200px;
+}
+    .message{
+	border-top:1px solid lightgray;
+	margin-top:50px; 
+	padding-bottom: 40px;
+		}
+   }
 </style>
 <script type="text/javascript">
 var map,
@@ -109,6 +148,16 @@ var map,
 	start,
 	bounds;
 newMap()
+welcomeOption('地圖',welcomeClick )
+function welcomeClick(e, target){
+    console.log('welcomeOption')
+    target.toggleClass('showNow')
+    if(target.hasClass('showNow')){
+            $('#map').css('zIndex', '5')        
+    }else{
+            $('#map').css('zIndex', '0')
+    }
+}
 Message($('.message_input'),$('.message_btn'),'message_map',_tripObj.id,'singleTrip')
 function newMap(){
 	console.log('newMap');
@@ -137,17 +186,17 @@ function _btn(length){
 		$('.start_page').css('display','none')
 		$('.trip_page').css('display','block')
 		map.setZoom(14)
-		PageEvent()
+		PageEvent(length)
 	})
 	$('.trip_bar').find('#prev').on('click',function(){
 		if(pageCount!=0)
 			pageCount--
-		PageEvent()
+		PageEvent(length)
 	})
 	$('.trip_bar').find('#next').on('click',function(){
 		if(pageCount!=length-1)
 			pageCount++
-		PageEvent()
+		PageEvent(length)
 	})
 }
 function getPlaces(){
@@ -239,7 +288,15 @@ function CreateArticle(article){
 	})
 	$('.trip_content').html(mapArticle[pageCount])
 }
-function PageEvent(){
+function PageEvent(length){
+	if(pageCount==0)
+		$('#prev').css('display','none')
+	else
+		$('#prev').css('display','inline')
+	if(pageCount==length-1)
+		$('#next').css('display','none')
+	else
+		$('#next').css('display','inline')
 	$('.trip_content').html(mapArticle[pageCount])
 	$('.placeTitle').text(marker[pageCount].name)
 	//map.setZoom(14)

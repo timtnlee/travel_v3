@@ -44,7 +44,7 @@
 .tripInfo {
     background: white;
     margin: 0;
-    padding: 0px;
+    padding: 0px 0px 200px 0px;
     width: 25vw;
     height: 100vh;
     position: absolute;
@@ -108,9 +108,7 @@
     cursor: pointer;
     border-bottom: 1px solid lightgray;
 }
-.time_place:hover{
-    color:gray;
-}
+
 .morning {
     background: linear-gradient(to bottom, #00FFFF, white);
 }
@@ -129,6 +127,9 @@
 }
 .distance_info{
     cursor: pointer;
+}
+.distance_name:hover{
+    color: lightgray;
 }
 .distance_info:hover{
     color: lightgray;
@@ -268,7 +269,7 @@ function setBtn(){
     })
 }
 function PanelDetail(){
-    $('#panel').find('.time_place').each(function(i){
+    $('#panel').find('.distance_name').each(function(i){
         $(this).on('click',function(e){
             _markInfoPanel(places[i],  $(this).find('img').attr('src'))
             SetPage('info')

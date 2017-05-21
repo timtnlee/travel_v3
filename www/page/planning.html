@@ -24,11 +24,18 @@
                 <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>返回
             </p>
             <p id='optionTag'></p>
-            <h4 class="btn btn-link option_bar_btn">附近找</h4>
+            <h4 class="btn-link option_bar_btn">附近找</h4>
+            <form style="margin: 4px;">
+                <input type="radio" name="radius" value="500" checked>附近
+                <input type="radio" name="radius" value="1500">大範圍
+            </form>
+            
             <div id='option_bar'>
                 <a key='restaurant'><i class="fa fa-cutlery" aria-hidden="true"></i>餐廳</a>
+                <a key='hotel'><i class="fa fa-hospital-o" aria-hidden="true"></i>旅館</a> 
                 <a key='cafe'><i class="fa fa-coffee" aria-hidden="true"></i>Cafe'</a>
-                <a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a> 
+                <a key='parking'><i class="fa fa-car" aria-hidden="true"></i>停車場</a>
+                <a key='attrications'><i class="fa fa-tree" aria-hidden="true"></i>景點</a>  
             </div>
             <div id='infoGotop'>
                 <span  class="glyphicon glyphicon-circle-arrow-up"></span>
@@ -124,6 +131,7 @@ var map,
     mark_bounds,
     radius = 500000,
     focusMark,
+    placeNow,
     marker = [],
     list_marker = [],
     center = {

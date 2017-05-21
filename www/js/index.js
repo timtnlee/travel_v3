@@ -82,7 +82,7 @@ function URLset() {
 function reloadPage(ch) {
     let page = ['addArticle','planning', 'schedule',
                  'singleArticle', 'mapArticles', 'singleUser',
-                 'singleTrip','article','trip']
+                 'singleTrip','article','trip','personal']
     for (let i = 0; i < page.length; i++) {
         if (ch == page[i])
             return true
