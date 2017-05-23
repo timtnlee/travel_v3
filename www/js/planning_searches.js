@@ -1,3 +1,62 @@
+   
+//var
+//map
+var map,
+    searchBox,
+    service,
+    DirectionsService,
+    query,
+    bounds,
+    mark_bounds,
+    radius = 500000,
+    focusMark,
+    placeNow,
+    marker = [],
+    list_marker = [],
+    center = {
+        lat: 23.5,
+        lng: 121.2
+    },
+    infowindows, //has 's'
+    //listCount = 0,
+    my_list = []
+    
+//dom
+var hint = document.getElementById('hint'),
+    input = document.getElementById('textSearch'),
+    dragCount = '',
+    temporCount = '',
+    dragId = 0;
+
+//process
+//planning_search
+//EnterSubmit('#searchSubmit');
+//planning_distance
+console.log('search.js')
+    leadToLogin()
+    block();
+    newMap();
+    ResetInput('#textSearch');
+    welcomeOption('清單', showShedule);
+
+    Plan();
+function showShedule(e,target) {
+
+    //var target=$('#welcomeOption')
+    console.log('click'+target.attr('class'))
+    if(target.hasClass('showNow')){
+        SetPage('close_schedule')
+    }else{
+        SetPage('schedule')
+    }
+        
+}
+$('#schedule_block').click(function() {
+    $(this).css('zIndex', '0').animate({
+        top: '55vh'
+    })
+})
+//--------------------------
 function scrollEvent(){
 	$('#allPlaces,#option').on('scroll',function(e){
 		let scroll=$(this).scrollTop()
@@ -111,16 +170,24 @@ function _initPlace() {
 
 function _placeList(place) {
     let src = 'img/red-dot.png',
-        infowindow = new google.maps.InfoWindow()
-        //,add='<a id="add">+加入清單</a>'
+        infowindow = new google.maps.InfoWindow(),
+        add,
+        num=_foundListExist(place.place_id)
+    if(num==0){
+        add='<a id="add">+加入清單</a>'
+    }else{
+        add='<a id="add">已加入</a>'
+    }
     infowindow.setContent(place.name)
         //get photo
+
     if (place.photos)
         src = place.photos[0].getUrl({ 'maxWidth': 100, 'maxHeight': 100 })
     $('#allPlaces').append('<p><span class="placeIcon"><img src="' + src + '"></span>' +
-            '<span class="placeName">' + place.name +'</span></p>')
-    //AddToList(place, src,$('#allPlaces').find('p').last())    
+            '<span class="placeName">' + place.name +add+'</span></p>')    
         //generate bounds
+    if(num==0)
+         AddToList(place, src,$('#allPlaces').find('p').last())
     if (place.geometry.viewport)
         bounds.union(place.geometry.viewport)
     else

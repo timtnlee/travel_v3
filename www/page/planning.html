@@ -1,5 +1,3 @@
-<script src='js/planning_searches.js'></script>
-<script src='js/planning_distances.js'></script>
 <div id='searchArea'>
     <div class="row">
         <div class="col-xs-9">
@@ -118,64 +116,10 @@
 		<option value="BICYCLING">單車</option>
 	</select>
 </div>
+<script src='js/planning_distances.js'></script>
+<script src='js/planning_searches.js'></script>
 <script type="text/javascript">
-leadToLogin()
-//var
-//map
-var map,
-    searchBox,
-    service,
-    DirectionsService,
-    query,
-    bounds,
-    mark_bounds,
-    radius = 500000,
-    focusMark,
-    placeNow,
-    marker = [],
-    list_marker = [],
-    center = {
-        lat: 23.5,
-        lng: 121.2
-    },
-    infowindows, //has 's'
-    //listCount = 0,
-    my_list = []
-    
-//dom
-var hint = document.getElementById('hint'),
-    input = document.getElementById('textSearch'),
-    dragCount = '',
-    temporCount = '',
-    dragId = 0;
 
-//process
-//planning_search
-//EnterSubmit('#searchSubmit');
-block();
-newMap();
-ResetInput('#textSearch');
-welcomeOption('清單', showShedule);
-
-Plan();
-//planning_distance
-
-function showShedule(e,target) {
-
-    //var target=$('#welcomeOption')
-    console.log('click'+target.attr('class'))
-    if(target.hasClass('showNow')){
-    	SetPage('close_schedule')
-    }else{
-    	SetPage('schedule')
-    }
-       	
-}
-$('#schedule_block').click(function() {
-    $(this).css('zIndex', '0').animate({
-        top: '55vh'
-    })
-})
 </script>
 <style type="text/css">
 #searchSubmit{
@@ -258,24 +202,25 @@ $('#schedule_block').click(function() {
     display: none;
 }
 
-.morning {
-	background: linear-gradient(to bottom,#00FFFF ,white );
+.morning {   
+    /*background: linear-gradient(to bottom, #00FFFF, white);*/
+    background-color: #00FFFF;
 }
 
-.noon {
-	background: linear-gradient(to bottom,#FFFFAA ,white );
-   
+.noon {    
+   /* background: linear-gradient(to bottom, #FFFFAA, white);*/
+    background-color: #FFFFAA;
 }
 
 .afternoon {
-	background: linear-gradient(to bottom,#FFC78E ,#FFE4CA,white );
-   
+   /* background: linear-gradient(to bottom, #FFC78E, #FFE4CA, white);*/
+    background-color:#FFE4CA;
 }
 
 .night {
-	background: linear-gradient(to bottom, #28004D,#5A5AAD ,white );
+    /*background: linear-gradient(to bottom, #28004D, #5A5AAD, white);*/
+    background-color:#5A5AAD;
     color: white;
-   
 }
 
 ._container {

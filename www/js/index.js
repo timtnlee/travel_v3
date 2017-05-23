@@ -136,9 +136,11 @@ function Message(input,btn,url,id,page){
         e.preventDefault()
         if(localStorage.logined=='yes'){
             var data=input.val()
-            AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
+            if(data!=''){
+                AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
                 reNewPage(page)
-            })
+             })
+            }            
         }
         
         
