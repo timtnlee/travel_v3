@@ -99,6 +99,7 @@ a{
 		padding: 20px 1vw 40px 1vw;
 	}
 .singleMiddle img{
+	width: 90%;
 	max-width: 56vw
 }
 ._loading{
@@ -154,7 +155,10 @@ a{
 	.singleMiddle{
 		margin: 0px 1vw 0px 1vw;
 		background-color:white;
-		padding: 20px 20px 40px 20px;
+		padding: 20px 1vw 40px 1vw;
+	}
+	.singleMiddle img{
+		width: 96%;
 	}
 	.pageContainer{
 		padding:2px 0px 2px 0px;
