@@ -68,7 +68,7 @@ function getPlaces(){
 			message=res.Message	
 		$.map(message,function(mes){
 			$('.message_area').prepend('<p>'+mes.message+
-							'<small>'+mes.name+' '+
+							'<br><small>'+mes.name+' '+
 							mes.date.toString().substring(0,10)+'</small></p>')
 		})
 		Promise.all(getDetail(place)).then(()=>{

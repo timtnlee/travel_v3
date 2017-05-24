@@ -10,9 +10,10 @@ Message($('.message_input'),$('.message_btn'),'message',_articleObj.id,'singleAr
 					$('#author').text('author: '+_articleObj.author);
 					$('#content').html(content);
 					$.map(message,function(mes){
+						console.log(mes.message)
 						$('.message_area').prepend('<p><span>'+
-							'</span><small>'+mes.name+' '+
-							mes.date.toString().substring(0,10)+'</small></p>').find('span').text(mes.message)
+							'</span><br><small>'+mes.name+' '+
+							mes.date.toString().substring(0,10)+'</small></p>').find('span').first().text(mes.message)
 					})
 					close_block()
 				})		
