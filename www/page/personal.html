@@ -66,7 +66,7 @@ if (localStorage.logined == 'yes') {
                     var title = sche.Title,
                         schedule = sche.Schedule
                     $('#personal_schedule').append(
-                            '<div><span href="#schedule" class="user_info">' + title + '</span><span class="del">刪除</span></div>')
+                            '<p href="#schedule" class="user_info">' + title + '</p>')
                         .find('p').last().on('click', function() {
                             _display_name = localStorage.username
                             _display_title = title
