@@ -31,14 +31,19 @@ if (localStorage.logined == 'yes') {
             } else {
                 $.map(res.articles, function(art) {
                     $('#personal_article')
-                        .append('<p href="#singleArticle" class="user_info">' + art.Title + '</p>')
-                        .find('p').last()
+                        .append(
+                            '<p class="user_info">'+
+                            '<span class="titleName" href="#singleArticle">' + art.Title + '</span>'+
+                            '<span class="del">刪除</span></p>')
+                        .find('p').last().find('.titleName')
                         .click(function() {
                             _articleObj.title = art.Title,
                                 _articleObj.author = art.Username,
                                 _articleObj.date = art.Date,
                                 _articleObj.id = art._id
                             location.href = $(this).attr('href')
+                        }).next('.del').on('click',function(e){
+                            removeArticle(art._id)
                         })
                 })
             }
@@ -47,14 +52,19 @@ if (localStorage.logined == 'yes') {
             }else{
                 $.map(res.mapArticles, function(art) {
                     $('#personal_mapArticle')
-                        .append('<p href="#singleTrip" class="user_info">' + art.Title + '</p>')
-                        .find('p').last()
+                        .append(
+                            '<p class="user_info">'+
+                            '<span class="titleName" href="#singleTrip">' + art.Title + '</span>'+
+                            '<span class="del">刪除</span></p>')
+                        .find('p').last().find('.titleName')
                         .click(function() {
                             _tripObj.title = art.Title,
                             _tripObj.author = art.Username,
                             _tripObj.date = art.Date,
                             _tripObj.id = art._id
                             location.href = $(this).attr('href')
+                        }).next('.del').on('click',function(e){
+                            removeMapArticle(art._id)
                         })
                 })
             }
@@ -66,8 +76,10 @@ if (localStorage.logined == 'yes') {
                     var title = sche.Title,
                         schedule = sche.Schedule
                     $('#personal_schedule').append(
-                            '<p href="#schedule" class="user_info">' + title + '</p>')
-                        .find('p').last().on('click', function() {
+                            '<p class="user_info">'+
+                            '<span class="titleName" href="#schedule">' + title + '</span>'+
+                            '<span class="del">刪除</span></p>')
+                            .find('p').last().find('.titleName').on('click', function() {
                             _display_name = localStorage.username
                             _display_title = title
                             _display_place = schedule
@@ -99,7 +111,31 @@ if (localStorage.logined == 'yes') {
 // 		_display_mode=schObj.mode;
 // }
 function removeSchedule(id){
-    console.log(id)
+    var con=window.confirm('確定刪除?')
+    if(con==true){
+        AjaxPost('user/removeSchedule', {id:id}, function(res){
+            alert(res)
+            reNewPage('personal')
+        })
+    }
+}
+function removeArticle(id){
+    var con=window.confirm('確定刪除?')
+    if(con==true){
+        AjaxPost('user/removeArticle', {id:id}, function(res){
+            alert(res)
+            reNewPage('personal')
+        })
+    }
+}
+function removeMapArticle(id){
+    var con=window.confirm('確定刪除?')
+    if(con==true){
+        AjaxPost('user/removeMapArticle', {id:id}, function(res){
+            alert(res)
+            reNewPage('personal')
+        })
+    }
 }
 function uploadIcon() {
     $('#iconUploadBtn').click(function() {
@@ -157,10 +193,15 @@ function SaveIcon(result) {
     width: 100%;
 }
 .del{
+    font-size: 12px;
+    color: red;
     float: right;
     display: inline-block;
 }
-.user_info:hover {
+.titleName:hover {
     color: black;
+}
+.del:hover{
+    color: orange;
 }
 </style>

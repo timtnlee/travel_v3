@@ -294,7 +294,8 @@ function _markInfo(place) {
     _markInfoPanel(place.place_id, place.name, src)
 }
 
-function _markInfoPanel(place_id) {
+function _markInfoPanel(place_id,name) { 
+    FindMore(name)
     let vicinity,
         website,
         phone,
@@ -303,6 +304,7 @@ function _markInfoPanel(place_id) {
         src= 'img/red-dot.png'
     service.getDetails({ placeId: place_id }, function(result, status) {
         if (status == 'OK') {
+           
             if (result.photos) {
                 for (let i = 1; i < result.photos.length; i++) {
                     src = result.photos[0].getUrl({ 'maxWidth': 100, 'maxHeight': 100 })
@@ -347,7 +349,40 @@ function _markInfoPanel(place_id) {
     })
 
 }
+function FindMore(name){
+    http://140.119.19.40:8080/googleSearcher/search/%E5%8F%B0%E5%8C%97
+    $('#findMore').empty()
+    var ip="http://140.119.19.40:8080/googleSearcher/search/"+name,
+        ipEnc=encodeURI(ip)
 
+        console.log(ip) 
+        console.log(ipEnc)
+        console.log(encodeURI(ipEnc))
+     $.ajax({
+        type:"GET",
+        url:ipEnc,
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        success:function(res){
+            
+            var title=[],
+                url=[],
+                description=[],
+                jdata=JSON.parse(res)
+            for(let i in jdata){
+                title.push(jdata[i].title)
+                url.push(jdata[i].url)
+                description.push(jdata[i].description)
+            }    
+            $.map(title,function(data,i){
+                $('#findMore').append('<a href="'+url[i]+'">'+data+':</a><br>')
+            })  
+            $('#findMore').find('a').unbind().on('click',function(e){
+                e.preventDefault()
+                window.open($(this).attr('href'))
+            })     
+        }
+    })
+}
 function _openingHour(opening_hours) {
     let openInfo = [],
         dayChar = function(day) {

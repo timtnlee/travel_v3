@@ -35,6 +35,36 @@ $(function() {
     //     //     $('.welcome').css({ height: '0px' }).animate({ height: '30px' });
     //     //HeaderButton($(this));
     // })
+    var lat=39.7391536
+    $.ajax({
+        type:"GET",
+        url:"https://maps.googleapis.com/maps/api/elevation/json?locations="+lat+",-104.9847034&key=AIzaSyCdVoiikIt7QWJ2Ea6M2JQ2Nu0suzM5P8A",
+        success:function(res){
+            console.log(res)
+        }
+    })
+    // $.ajax({
+    //     type:"GET",
+    //     url:"http://140.119.19.15:3000/file/test",
+    //     success:function(res){
+    //         console.log('test')
+    //         console.log(res)
+    //     }
+    // })
+    var parm=encodeURI(encodeURI('http://140.119.19.40:8080/googleSearcher/search/韓國'))
+     $.ajax({
+        type:"GET",
+        url:parm,
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        success:function(res){
+            console.log('test2')
+            var jdata=JSON.parse(res)
+            for(let i in jdata){
+                 console.log(jdata[i])
+            }
+           
+        }
+    })
     PhoneButton();
     
 })
@@ -119,8 +149,8 @@ function Window() {
 }
 
 function setIp() {
-//ip = 'http://127.0.0.1:3000/';
-    ip = 'http://140.119.19.15:3000/';
+	ip = 'http://127.0.0.1:3000/';
+    //ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
