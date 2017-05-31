@@ -378,7 +378,8 @@ function FindMore(name){
             })  
             $('#findMore').find('a').unbind().on('click',function(e){
                 e.preventDefault()
-                window.open($(this).attr('href'))
+
+                window.open($(this).attr('href'),'_blank', 'location=yes')
             })     
         }
     })
