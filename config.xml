@@ -12,6 +12,9 @@
     <access origin="*" />
     	<gap:plugin name="cordova-plugin-whitelist" version="1.3.2" source="npm" />
         <gap:plugin name="cordova-plugin-inappbrowser" version="1.7.1" source="npm" />
+        <feature name="InAppBrowser">
+            <param name="android-package" value="org.apache.cordova.InAppBrowser" />
+        </feature>
     	<allow-navigation href="*" />
    	 	<allow-intent href="http://*/*" />
 </widget>
