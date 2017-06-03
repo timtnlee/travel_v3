@@ -20,11 +20,12 @@ var _articleObj = {
     _user_icon
     //Dom events go here
 $(function() {
+    URLset();
     $(window).on('load',function(){
         location.hash='home'
     })
-    LoadHomePage();
-    URLset();
+    
+    LoginOption();
     setIp();
     
     // $('._header').find('a').on('click', function(e) {
@@ -186,7 +187,6 @@ function LoadHomePage() {
             $("#home").html(result);
         }
     });
-    LoginOption();
 }
 
 function LoginOption() {
