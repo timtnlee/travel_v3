@@ -5,11 +5,11 @@ var _articleObj = {
         author: '',
         id: ''
     },
-    _tripObj={
-    	title: '',
+    _tripObj = {
+        title: '',
         date: '',
         author: '',
-        id:''
+        id: ''
     },
     _goback = '',
     _display_user,
@@ -21,16 +21,19 @@ var _articleObj = {
     //Dom events go here
 $(function() {
     URLset();
-    $(window).on('load',function(){
-        location.hash='home'
+    $(window).on('load', function() {
+        if(location.hash == '#home')
+            LoadHomePage()
+        else
+            location.hash = 'home'
     })
     LoginOption();
     setIp();
-    
+
     // $('._header').find('a').on('click', function(e) {
     //     //e.preventDefault();
     //     //if (Window() > 500)
-        
+
     //     // else
     //     //     $('.welcome').css({ height: '0px' }).animate({ height: '30px' });
     //     //HeaderButton($(this));
@@ -62,11 +65,11 @@ $(function() {
     //         for(let i in jdata){
     //              console.log(jdata[i])
     //         }
-           
+
     //     }
     // })
     PhoneButton();
-    
+
 })
 
 function URLset() {
@@ -93,10 +96,10 @@ function URLset() {
             console.log('page')
 
             if (contain.length == 1) {
-                
+
                 contain.css('display', 'block')
             } else {
-               
+
 
                 $.ajax({
                     url: "page/" + page + ".html",
@@ -110,47 +113,51 @@ function URLset() {
 }
 
 function reloadPage(ch) {
-    let page = ['addArticle','planning', 'schedule',
-                 'singleArticle', 'mapArticles', 'singleUser',
-                 'singleTrip','article','trip','personal']
+    let page = ['addArticle', 'planning', 'schedule',
+        'singleArticle', 'mapArticles', 'singleUser',
+        'singleTrip', 'article', 'trip', 'personal'
+    ]
     for (let i = 0; i < page.length; i++) {
         if (ch == page[i])
             return true
     }
     return false
 }
-function _translate(check){
-    let eng='addArticle,article,home,login,mapArticles,personal,'+
-            'planning,register,schedule,signout,singleArticle,'+
-            'singleTrip,singleUser,trip,users',
-        chi='新增文章,文章專區,首頁,登入,編輯地圖故事,個人頁面,'+
-            '行程規劃,註冊,行程,登出,文章,'+
-            '行程,使用者資料,地圖故事,社群',
-        engAry=eng.split(','),
-        chiAry=chi.split(','),
-        reval=''
-    
-    $.map(engAry,function(match,i){
-        if(match==check){
-            reval=chiAry[i]
+
+function _translate(check) {
+    let eng = 'addArticle,article,home,login,mapArticles,personal,' +
+        'planning,register,schedule,signout,singleArticle,' +
+        'singleTrip,singleUser,trip,users',
+        chi = '新增文章,文章專區,首頁,登入,編輯地圖故事,個人頁面,' +
+        '行程規劃,註冊,行程,登出,文章,' +
+        '行程,使用者資料,地圖故事,社群',
+        engAry = eng.split(','),
+        chiAry = chi.split(','),
+        reval = ''
+
+    $.map(engAry, function(match, i) {
+        if (match == check) {
+            reval = chiAry[i]
         }
     })
     return reval
 }
-function leadToLogin(){
-    if(localStorage.logined!='yes'){
+
+function leadToLogin() {
+    if (localStorage.logined != 'yes') {
         alert('請先登入')
-        location.href='#login'
+        location.href = '#login'
     }
 }
+
 function Window() {
     let w = window.innerWidth
     return w
 }
 
 function setIp() {
-	//ip = 'http://127.0.0.1:3000/';
-    ip = 'http://140.119.19.15:3000/';
+    ip = 'http://127.0.0.1:3000/';
+    //ip = 'http://140.119.19.15:3000/';
 }
 
 if (!localStorage.logined)
@@ -158,22 +165,22 @@ if (!localStorage.logined)
 if (!localStorage.username)
     localStorage.username = '';
 
-function Message(input,btn,url,id,page){
-    
-    
-    btn.click(function(e){
+function Message(input, btn, url, id, page) {
+
+
+    btn.click(function(e) {
         leadToLogin()
         e.preventDefault()
-        if(localStorage.logined=='yes'){
-            var data=input.val()
-            if(data!=''){
-                AjaxPost('article/'+url, {message:data,id:id,date:new Date(),name:localStorage.username}, function(res){
-                reNewPage(page)
-             })
-            }            
+        if (localStorage.logined == 'yes') {
+            var data = input.val()
+            if (data != '') {
+                AjaxPost('article/' + url, { message: data, id: id, date: new Date(), name: localStorage.username }, function(res) {
+                    reNewPage(page)
+                })
+            }
         }
-        
-        
+
+
     })
 }
 
@@ -216,19 +223,19 @@ function welcomeOption(text, func) { //can only be used in reload pages
 }
 
 function reNewPage(href) {
-    page=href
+    page = href
     reload = $('._reloadPage')
     $('._content').find('._pages').css('display', 'none');
     reload.html();
-       
-            console.log('reloadPage')
-            $.ajax({
-                url: "page/" + page + ".html",
-                success: function(result) {
-                    reload.html(result)
-                }
-            })
-            reload.css('display', 'block')
+
+    console.log('reloadPage')
+    $.ajax({
+        url: "page/" + page + ".html",
+        success: function(result) {
+            reload.html(result)
+        }
+    })
+    reload.css('display', 'block')
 }
 
 function InsertImg(ele, insert) {
@@ -245,41 +252,41 @@ function InsertImg(ele, insert) {
     })
 }
 // function HeaderButton(target,text){
-// 	var href=target.attr('href'),
-// 		reload=target.attr('reload'),
-// 		option=target.attr('optional')
-// 	if(!text)
-// 		var text=target.text();
-// 	$("[name='title']").text(href);
-// 	$('._content').find('._pages').css('display','none');
-// 	$('._reloadPages').remove();
-// 	if(option&&localStorage.logined=='no')
-// 		href=option;
-// 	var id='#'+href;
-// 	if(reload=='true'){		
-// 		$("._content").prepend('<div id="'+href+'" class="_reloadPages"></div>');
-// 		$.ajax({
-// 			url: "page/"+href+".html", 
-// 			success: function(result){        	
-//         		$(id).html(result);
-// 				}
-// 			});
-// 	}
+//  var href=target.attr('href'),
+//      reload=target.attr('reload'),
+//      option=target.attr('optional')
+//  if(!text)
+//      var text=target.text();
+//  $("[name='title']").text(href);
+//  $('._content').find('._pages').css('display','none');
+//  $('._reloadPages').remove();
+//  if(option&&localStorage.logined=='no')
+//      href=option;
+//  var id='#'+href;
+//  if(reload=='true'){     
+//      $("._content").prepend('<div id="'+href+'" class="_reloadPages"></div>');
+//      $.ajax({
+//          url: "page/"+href+".html", 
+//          success: function(result){          
+//              $(id).html(result);
+//              }
+//          });
+//  }
 
-// 	else{
-// 		if(document.getElementById(href)){
-// 			$(id).css('display','block');
-// 		}
-// 		else{
-// 		$("._content").prepend('<div id="'+href+'" class="_pages"></div>');
-// 		$.ajax({
-// 			url: "page/"+href+".html", 
-// 			success: function(result){        	
-//         		$(id).html(result);
-// 				}
-// 			});
-// 		}
-// 	}	
+//  else{
+//      if(document.getElementById(href)){
+//          $(id).css('display','block');
+//      }
+//      else{
+//      $("._content").prepend('<div id="'+href+'" class="_pages"></div>');
+//      $.ajax({
+//          url: "page/"+href+".html", 
+//          success: function(result){          
+//              $(id).html(result);
+//              }
+//          });
+//      }
+//  }   
 // }
 function PhoneButton() {
     $('#menuBar').click(function() {
