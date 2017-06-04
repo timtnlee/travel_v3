@@ -295,7 +295,9 @@ function _markInfo(place) {
 }
 
 function _markInfoPanel(place_id,name) { 
-    FindMore(name)
+    $('.toMore').unbind().on('click',function(){
+        FindMore(name)
+    })
     let vicinity,
         website,
         phone,

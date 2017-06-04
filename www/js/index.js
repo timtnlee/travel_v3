@@ -24,7 +24,6 @@ $(function() {
     $(window).on('load',function(){
         location.hash='home'
     })
-    
     LoginOption();
     setIp();
     
